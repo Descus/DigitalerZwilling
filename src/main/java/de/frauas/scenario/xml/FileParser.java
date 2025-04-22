@@ -1,4 +1,4 @@
-﻿package de.frauas.scenario.xml;
+package de.frauas.scenario.xml;
 
 public class FileParser {
 }
