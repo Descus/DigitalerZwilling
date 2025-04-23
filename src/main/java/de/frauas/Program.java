@@ -22,6 +22,7 @@ public class Program {
         scene.addDrawable(new Vec2(0, 100));
         scene.addDrawable(new Vec2(50, 100));
         scene.addDrawable(new Vec2(150, 100));
+        scene.addDrawable(new Vec2(1000, 100));
         RoadTrace roadTrace = new RoadTrace();
         roadTrace.addPoint(new Vec2(100, 100));
         roadTrace.addPoint(new Vec2(100, 200));
