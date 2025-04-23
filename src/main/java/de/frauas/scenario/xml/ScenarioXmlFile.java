@@ -2,9 +2,9 @@ package de.frauas.scenario.xml;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import de.frauas.scenario.components.Car;
+import de.frauas.scenario.xml.dto.Scenario;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 public class ScenarioXmlFile {
@@ -20,15 +20,15 @@ public class ScenarioXmlFile {
         File file = new File(ClassLoader.getSystemResource("Scenario/example.xml").getFile());
 
         XmlMapper xmlMapper = new XmlMapper();
-        Car car = xmlMapper.readValue(file, Car.class);
-        System.out.println(car);
+        Scenario scenario = xmlMapper.readValue(file, Scenario.class);
+        System.out.println(scenario);
     }
 
     public static void main(String[] args) throws IOException {
         File file = new File(ClassLoader.getSystemResource("Scenario/example.xml").getFile());
         XmlMapper xmlMapper = new XmlMapper();
-        Car car = xmlMapper.readValue(file, Car.class);
-        System.out.println(car);
+        Scenario scenario = xmlMapper.readValue(file, Scenario.class);
+        System.out.println(scenario);
 
     }
 
