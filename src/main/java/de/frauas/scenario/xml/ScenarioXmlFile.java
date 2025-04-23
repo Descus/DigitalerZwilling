@@ -1,7 +1,5 @@
 package de.frauas.scenario.xml;
 
-import java.io.FileInputStream;
-
 public class ScenarioXmlFile {
     private final String filePath;
     
