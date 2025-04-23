@@ -17,7 +17,7 @@ public class ScenarioXmlFile {
     }
     
     void read() throws IOException {
-        File file = new File("/Users/geera/IdeaProjects/DigitalerZwilling/src/main/java/de/frauas/scenario/xml/example.xml");
+        File file = new File(ClassLoader.getSystemResource("Scenario/example.xml").getFile());
 
         XmlMapper xmlMapper = new XmlMapper();
         Car car = xmlMapper.readValue(file, Car.class);
@@ -25,8 +25,7 @@ public class ScenarioXmlFile {
     }
 
     public static void main(String[] args) throws IOException {
-        ScenarioXmlFile scenarioXmlFile = new ScenarioXmlFile("/Users/geera/IdeaProjects/DigitalerZwilling/src/main/java/de/frauas/scenario/xml/example.xml");
-        File file = new File("scenario_example.xml");
+        File file = new File(ClassLoader.getSystemResource("Scenario/example.xml").getFile());
         XmlMapper xmlMapper = new XmlMapper();
         Car car = xmlMapper.readValue(file, Car.class);
         System.out.println(car);
