@@ -1,6 +1,5 @@
 package de.frauas.scenario.components;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import de.frauas.scenario.primitives.Line2;
 import de.frauas.scenario.primitives.Vec2;
 import de.frauas.scenario.primitives.Vec2F;
@@ -9,7 +8,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@JacksonXmlRootElement(localName = "Trace")
+
 public class RoadTrace implements Drawable{
     private final List<Vec2> points = new ArrayList<>();
     private final List<Line2> lines = new ArrayList<>();

@@ -1,18 +1,19 @@
 package de.frauas.scenario.components;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import de.frauas.scenario.primitives.Vec2;
 import de.frauas.scenario.primitives.Vec2F;
+import lombok.Getter;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
-@JacksonXmlRootElement(localName = "StartPosition")
+import static de.frauas.Settings.CAR_SIZE;
+
+@Getter
 public class Car implements Drawable{
-    public static final Vec2 CAR_SIZE = new Vec2(50, 80);
     
-    public Vec2 position;
-    float rotation;
+    private Vec2 position;
+    private float rotation;
     
     public Car(Vec2 position, int rotation) {
         this.position = position;
@@ -43,7 +44,7 @@ public class Car implements Drawable{
     }
     
     private void update(float deltaTime){
-        addRotation(deltaTime * 45);
+        
     }
 }
 

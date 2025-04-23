@@ -4,8 +4,10 @@ import de.frauas.scenario.components.Drawable;
 
 import java.awt.*;
 
+import static de.frauas.Settings.LINE_WIDTH;
+
 public record Line2(Vec2 a, Vec2 b) implements Drawable {
-    private static final float LINE_WIDTH = 1f;
+    
 
     @Override
     public void draw(Graphics2D g, Vec2F scale, float deltaTime) {

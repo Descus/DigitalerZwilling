@@ -2,9 +2,11 @@ package de.frauas.scenario.xml.dto;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import lombok.Getter;
 
 import java.util.ArrayList;
 
+@Getter
 @JacksonXmlRootElement(localName = "Scenario")
 public class Scenario {
     @JacksonXmlProperty(isAttribute = true, localName = "Scenario_ID")
@@ -19,4 +21,5 @@ public class Scenario {
     ArrayList<Point> trace;
     @JacksonXmlProperty(localName = "Objects")
     ArrayList<Object> objects;
+
 }

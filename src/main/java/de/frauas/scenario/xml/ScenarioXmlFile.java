@@ -1,9 +1,12 @@
 package de.frauas.scenario.xml;
+
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import de.frauas.scenario.xml.dto.Scenario;
-
 import java.io.File;
 import java.io.IOException;
+
+import static de.frauas.Settings.SCENARIO_FILE;
+
 
 public class ScenarioXmlFile {
     private final String filePath;
@@ -21,20 +24,15 @@ public class ScenarioXmlFile {
     
     public static ScenarioXmlFile fromExample(){
         try {
-            return fromPath(ClassLoader.getSystemResource("Scenario/example.xml").getFile());
+            return fromPath(ClassLoader.getSystemResource(SCENARIO_FILE).getFile());
         } catch (IllegalArgumentException e) {
             throw new RuntimeException(e);
         }
     }
     
-    Scenario read() throws IOException {
+    public Scenario read() throws IOException {
         File file = new File(filePath);
         XmlMapper xmlMapper = new XmlMapper();
         return xmlMapper.readValue(file, Scenario.class);
     }
-
-    public static void main(String[] args) throws IOException {
-        Scenario scenario = ScenarioXmlFile.fromExample().read();
-    }
-
 }
