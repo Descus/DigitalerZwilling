@@ -20,11 +20,14 @@ public class Obstacle implements Drawable {
     public void draw(Graphics2D g, Vec2F scale, float deltaTime) {
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setColor(Color.magenta);
-        g2d.fillRect((int) (position.x() * scale.x()), 
+        
+        g2d.fillRect(
+                (int) (position.x() * scale.x()), 
                 (int) (-position.y() * scale.y()), 
                 (int) (size.x() * scale.x()), 
                 (int) (size.y() * scale.y()));
         g2d.setColor(Color.black);
+        
         g2d.drawString("" + height, 
                 (int) ((position.x() + size.x() / 2f) * scale.x()), 
                 (int) ((-position.y() + size.y() / 2f) * scale.y()));

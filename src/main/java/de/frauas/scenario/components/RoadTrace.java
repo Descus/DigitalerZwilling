@@ -22,7 +22,7 @@ public class RoadTrace implements Drawable{
         createLines();
     }
     
-    public List<Vec2> GetPoints() {
+    public List<Vec2> getPoints() {
         return new ArrayList<>(points);
     }
     
