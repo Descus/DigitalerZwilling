@@ -1,15 +1,21 @@
 package de.frauas;
 
+
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import de.frauas.scenario.components.Car;
 import de.frauas.scenario.components.Obstacle;
 import de.frauas.scenario.components.RoadTrace;
 import de.frauas.scenario.components.Scene;
 import de.frauas.scenario.primitives.Line2;
 import de.frauas.scenario.primitives.Vec2;
+import de.frauas.scenario.xml.ScenarioXmlFile;
 
 import javax.sound.sampled.Line;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+
 
 public class Program {
     public static void main(String[] args) {
@@ -33,5 +39,9 @@ public class Program {
         scene.Add(car);
         frame.getContentPane().add(scene);
         frame.setVisible(true);
+
+
+
+
     }
 }

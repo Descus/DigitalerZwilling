@@ -1,10 +1,12 @@
 package de.frauas.scenario.components;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import de.frauas.scenario.primitives.Vec2;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
+@JacksonXmlRootElement(localName = "StartPosition")
 public class Car implements Drawable{
     public static final Vec2<Integer> CAR_SIZE = new Vec2<>(50, 80);
     
@@ -32,3 +34,5 @@ public class Car implements Drawable{
         g2d.dispose();
     }
 }
+
+

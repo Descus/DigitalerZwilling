@@ -1,9 +1,11 @@
 package de.frauas.scenario.components;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import de.frauas.scenario.primitives.Vec2;
 
 import java.awt.*;
 
+@JacksonXmlRootElement(localName = "Objects")
 public class Obstacle implements Drawable {
     public Vec2<Integer> position;
     public Vec2<Integer> size;
