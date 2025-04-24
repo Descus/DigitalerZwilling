@@ -5,13 +5,18 @@
 image: maven:latest
 
 variables:
-  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
-  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  MAVEN_CLI_OPTS: "--batch-mode"
 
 cache:
   paths:
     - .m2/repository/
-    - target/
+      
+test:
+  stage: test
+  script:
+    - mvn $MAVEN_CLI_OPTS test
+  rules:
+    - if: '$CI_COMMIT_REF_NAME != "master" && $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
 
 build:
   stage: build
@@ -20,9 +25,3 @@ build:
   rules:
     - if: '$CI_COMMIT_REF_NAME != "master" && $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
 
-test:
-  stage: test
-  script:
-    - mvn $MAVEN_CLI_OPTS test
-  rules:
-    - if: '$CI_COMMIT_REF_NAME != "master" && $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
