@@ -13,7 +13,7 @@ public class Settings {
     public static final Vec2 SCENE_CANVAS = new Vec2(1000, 500);
     public static final Vec2 CAR_SIZE = new Vec2(20, 40);
 
-    public static final float LINE_WIDTH = 1f;
+    public static final float LINE_WIDTH = 4f;
 
     public static final boolean DEBUG = false;
     public static final int POINT_DEBUG_RADIUS = 10;
