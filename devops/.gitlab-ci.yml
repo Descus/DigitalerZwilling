@@ -13,6 +13,8 @@ cache:
       
 test:
   stage: test
+  tags:
+    - ubuntu:22.04
   script:
     - mvn $MAVEN_CLI_OPTS test
   rules:
@@ -20,6 +22,8 @@ test:
 
 build:
   stage: build
+  tags:
+    - ubuntu:22.04
   script:
     - mvn $MAVEN_CLI_OPTS compile
   rules:
