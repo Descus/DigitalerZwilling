@@ -20,7 +20,7 @@ before_script:
 build:
   stage: build
   tags:
-    - ubuntu:22.04
+    - dev
   script:
     - mvn $MAVEN_CLI_OPTS clean compile
   only:
@@ -30,7 +30,7 @@ build:
 test:
   stage: test
   tags:
-    - ubuntu:22.04
+    - dev
   script:
     - mvn $MAVEN_CLI_OPTS test
   only:
