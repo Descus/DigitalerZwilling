@@ -1,28 +1,34 @@
-﻿stages:
+stages:
   - build
   - test
 
-image: maven:latest
-
 variables:
-  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
+  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode --errors --fail-at-end"
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
 cache:
+  key: "${CI_PROJECT_ID}"
   paths:
-    - .m2/repository/
-    - target/
+    - .m2/repository
+
+before_script:
+  - echo "Using Java version:"
+  - java -version
+  - echo "Using Maven version:"
+  - mvn -version
 
 build:
   stage: build
   script:
-    - mvn $MAVEN_CLI_OPTS compile
-  rules:
-    - if: '$CI_COMMIT_REF_NAME != "master" && $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+    - mvn $MAVEN_CLI_OPTS clean compile
+  only:
+    - merge_requests
+    - pushes
 
 test:
   stage: test
   script:
     - mvn $MAVEN_CLI_OPTS test
-  rules:
-    - if: '$CI_COMMIT_REF_NAME != "master" && $CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+  only:
+    - merge_requests
+    - pushes
