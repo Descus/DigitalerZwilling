@@ -20,6 +20,7 @@ public class AxisPanel extends JPanel {
 
     // points in data coords (mm):
     private final List<Point2D.Double> points = new ArrayList<>();
+    private Obstacle obstacle;
     private static final int POINT_RADIUS = 10;
 
 
@@ -108,6 +109,18 @@ public class AxisPanel extends JPanel {
                 g2.drawLine(x0p, y0p, x1p, y1p);
             }
         }
+
+        // draw Obstacle
+        g2.setColor(Color.BLACK);
+        int xs= x0 + (int) (200 *scale);
+        int ys= y0 - (int) (50*scale);
+        int xe= x0 +(int) (400*scale);
+        int ye= y0- (int) (100*scale);
+        g2.drawLine(xs,ys,xs,ye);
+        g2.drawLine(xs,ye,xe,ye);
+
+
+
 
         g2.dispose();
     }

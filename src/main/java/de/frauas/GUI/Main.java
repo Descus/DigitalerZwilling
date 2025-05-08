@@ -13,6 +13,7 @@ public class Main {
         AxisPanel axisPanel = new AxisPanel();
         axisPanel.addPoint(new  Point(200,370));
         axisPanel.addPoint(new Point(894,256));
+
         frame.add(axisPanel);
 
 
