@@ -15,8 +15,6 @@ cache:
     - .m2/repository
 
 before_script:
-  - apt update
-  - apt install openjdk-24-jdk
   - echo "Using Java version:"
   - java -version
   - echo "Using Maven version:"
