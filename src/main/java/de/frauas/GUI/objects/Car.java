@@ -1,5 +1,6 @@
 package de.frauas.GUI.objects;
 
+import javax.swing.*;
 import java.awt.geom.Point2D;
 
 public class Car {
@@ -8,6 +9,7 @@ public class Car {
     private final double velocity = 100;
     private Point2D.Double positionPoint; // current data-coordinates (mm)
     private double headingRad = 0;
+    private String status;
 
     public Point2D.Double getPositionPoint() {return positionPoint;}
     public double getWidth() { return width;}
