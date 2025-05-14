@@ -2,6 +2,7 @@ package de.frauas.GUI.objects;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.ArrayList;
@@ -21,11 +22,13 @@ public class AxisPanel extends JPanel {
 
     // points in data coords (mm):
     private final List<Point2D.Double> points = new ArrayList<>();
-    private Obstacle obstacle;
     private static final int POINT_RADIUS = 10;
 
     // Obstacles list
     private List<Obstacle> obstacles = new ArrayList<>();
+
+    //Car
+    private Car car;
 
 
     @Override
@@ -127,6 +130,28 @@ public class AxisPanel extends JPanel {
 
         }
 
+        //draw Car
+
+        Point2D.Double startPoint = car.getPositionPoint();
+        startPoint = toPixel(startPoint);
+        Point2D.Double drawPoint = new Point2D.Double();
+        drawPoint.x = startPoint.x - (car.getWidth() / 2);
+        drawPoint.y = startPoint.y - (car.getHeight() / 2);
+
+        AffineTransform old = g2.getTransform();
+        double theta = Math.toRadians(car.getHeadingRad());
+        g2.rotate(theta,startPoint.x, startPoint.y);
+
+
+        g2.setColor(Color.RED);
+        g2.drawRect((int) drawPoint.x, (int) drawPoint.y, (int) car.getWidth(), (int) car.getHeight());
+        g2.setColor(Color.BLACK);
+        g2.fillOval(
+                (int) (startPoint.x - POINT_RADIUS/2),
+                (int) (startPoint.y - POINT_RADIUS/2),
+                POINT_RADIUS,
+                POINT_RADIUS
+        );
 
         g2.dispose();
     }
@@ -147,6 +172,12 @@ public class AxisPanel extends JPanel {
     // Add obstacle
     public void addObstacle(Obstacle obstacle) {
         this.obstacles.add(obstacle);
+        repaint();
+    }
+
+    //add Car
+    public void addCar(Car car) {
+        this.car = car;
         repaint();
     }
 
