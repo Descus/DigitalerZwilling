@@ -2,7 +2,6 @@ package de.frauas.GUI.objects;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.ArrayList;
@@ -14,6 +13,8 @@ public class AxisPanel extends JPanel {
     private static int NUM_X_TICKS = 20;
     private static int NUM_Y_TICKS = 10;
 
+    private double scale;
+    private int x0, y0, x1, y1;
     // Data range in millimeters
     private static double X_MAX = 1000;
     private static double Y_MAX = 500;
@@ -22,6 +23,9 @@ public class AxisPanel extends JPanel {
     private final List<Point2D.Double> points = new ArrayList<>();
     private Obstacle obstacle;
     private static final int POINT_RADIUS = 10;
+
+    // Obstacles list
+    private List<Obstacle> obstacles = new ArrayList<>();
 
 
     @Override
@@ -35,14 +39,14 @@ public class AxisPanel extends JPanel {
         // Uniform scale between X and Y
         double drawableWidth = width - 2 * MARGIN;
         double drawableHeight = height - 2 * MARGIN;
-        double scale = Math.min(drawableWidth / X_MAX, drawableHeight / Y_MAX);
+        scale = Math.min(drawableWidth / X_MAX, drawableHeight / Y_MAX);
 
         // Define drawing corners in coords
-        int x0 = MARGIN;
-        int y0 = height - MARGIN;
+        x0 = MARGIN;
+        y0 = height - MARGIN;
         // Endpoint of each axis depend on the scale
-        int x1 = x0 + (int)( X_MAX* scale);
-        int y1 = y0 - (int)(Y_MAX * scale);
+        x1 = x0 + (int)(X_MAX* scale);
+        y1 = y0 - (int)(Y_MAX * scale);
 
         // Draw axes
         g2.drawLine(x0, y0, x1, y0); // X-axis
@@ -86,11 +90,10 @@ public class AxisPanel extends JPanel {
         // draw points
         g2.setColor(Color.BLACK);
         for (Point2D.Double p : points) {
-            int px = x0 + (int)(p.x * scale);
-            int py = y0 - (int)(p.y * scale);
+            Point2D.Double point = toPixel(p);
             g2.fillOval(
-                    px - POINT_RADIUS/2,
-                    py - POINT_RADIUS/2,
+                    (int) (point.x - POINT_RADIUS/2),
+                    (int) (point.y - POINT_RADIUS/2),
                     POINT_RADIUS,
                     POINT_RADIUS
             );
@@ -100,34 +103,50 @@ public class AxisPanel extends JPanel {
         g2.setColor(Color.RED);
         if (points.size() >= 2) {
             for (int i = 1; i < points.size(); i++) {
-                Point2D.Double p0 = points.get(i - 1);
-                Point2D.Double p1 = points.get(i);
-                int x0p = x0 + (int) (p0.x * scale);
-                int y0p = y0 - (int) (p0.y * scale);
-                int x1p = x0 + (int) (p1.x * scale);
-                int y1p = y0 - (int) (p1.y * scale);
-                g2.drawLine(x0p, y0p, x1p, y1p);
+                Point2D.Double point = toPixel(points.get(i - 1));
+                Point2D.Double pointNext = toPixel(points.get(i));
+                g2.drawLine((int) point.x, (int) point.y, (int) pointNext.x, (int) pointNext.y);
             }
         }
 
         // draw Obstacle
-        g2.setColor(Color.BLACK);
-        int xs= x0 + (int) (200 *scale);
-        int ys= y0 - (int) (50*scale);
-        int xe= x0 +(int) (400*scale);
-        int ye= y0- (int) (100*scale);
-        g2.drawLine(xs,ys,xs,ye);
-        g2.drawLine(xs,ye,xe,ye);
+        for (Obstacle obs : obstacles) {
 
+            // map data→pixel
+            Point2D.Double startPoint = toPixel(obs.getStartPoint());
+            Point2D.Double endPoint = toPixel(obs.getEndPoint());
 
+            int rx = (int) startPoint.x;
+            int ry = (int) endPoint.y;
+            int w = (int) Math.abs(endPoint.x - startPoint.x);
+            int h = (int) Math.abs(endPoint.y - startPoint.y);
+
+            // set Obstacle color
+            g2.setColor(Color.BLACK);
+            g2.fillRect(rx, ry, w, h);
+
+        }
 
 
         g2.dispose();
     }
 
+    // convert to Pixel with x0,y0 base
+    private Point2D.Double toPixel(Point2D.Double oldPoint) {
+        int px = x0 + (int)(oldPoint.x * scale);
+        int py = y0 - (int)(oldPoint.y * scale);
+        return new Point2D.Double(px, py);
+    }
+
     // Add a point
-    public void addPoint(Point point) {
+    public void addPoint(Point2D.Double point) {
         points.add(new Point2D.Double(point.x, point.y));
+        repaint();
+    }
+
+    // Add obstacle
+    public void addObstacle(Obstacle obstacle) {
+        this.obstacles.add(obstacle);
         repaint();
     }
 
