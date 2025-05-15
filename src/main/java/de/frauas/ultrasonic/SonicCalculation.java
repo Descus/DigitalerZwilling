@@ -1,4 +1,4 @@
-﻿package de.frauas.ultrasonic;
+package de.frauas.ultrasonic;
 
 import de.frauas.scenario.components.Obstacle;
 import de.frauas.scenario.primitives.Vec2;
