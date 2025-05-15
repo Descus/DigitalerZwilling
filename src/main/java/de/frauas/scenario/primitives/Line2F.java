@@ -4,7 +4,7 @@ import de.frauas.scenario.components.Drawable;
 
 import java.awt.*;
 
-public record Line2(Vec2F a, Vec2F b) implements Drawable {
+public record Line2F(Vec2F a, Vec2F b) implements Drawable {
     private static final float LINE_WIDTH = 1f;
 
     @Override
