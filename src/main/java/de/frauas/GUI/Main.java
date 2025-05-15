@@ -40,5 +40,10 @@ public class Main {
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        XMLScenarioLoader.loadScenario("scenario.xml", axisPanel); // Ensure path is correct
+
+        frame.add(axisPanel);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
 }
