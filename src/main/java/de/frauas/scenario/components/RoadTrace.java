@@ -1,7 +1,6 @@
 package de.frauas.scenario.components;
 
 import de.frauas.scenario.primitives.Line2;
-import de.frauas.scenario.primitives.Vec2;
 import de.frauas.scenario.primitives.Vec2F;
 
 import java.awt.*;
@@ -9,20 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RoadTrace implements Drawable{
-    private final List<Vec2> points = new ArrayList<>();
+    private final List<Vec2F> points = new ArrayList<>();
     private final List<Line2> lines = new ArrayList<>();
     
-    public void addPoint(Vec2 point) {
+    public void addPoint(Vec2F point) {
         points.add(point);
         createLines();
     }
     
-    public void removePoint(Vec2 point) {
+    public void removePoint(Vec2F point) {
         points.remove(point);
         createLines();
     }
     
-    public List<Vec2> getPoints() {
+    public List<Vec2F> getPoints() {
         return new ArrayList<>(points);
     }
     
