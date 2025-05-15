@@ -22,7 +22,7 @@ public class XMLScenarioLoader {
 
             Car car = new Car();
             car.setPositionPoint(x, y);
-            car.setHeadingRad(heading);
+            car.setHeadingDegree(heading);
             panel.addCar(car);
 
             // Load path points
