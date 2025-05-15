@@ -65,6 +65,7 @@ public class SonicCalculation {
 
             return angleDeg <= 15;
         }
+
         return false;
     }
 }
