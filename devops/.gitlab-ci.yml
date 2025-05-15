@@ -1,0 +1,41 @@
+default:
+  image: maven:3.9.9-eclipse-temurin-24
+
+stages:
+  - build
+  - test
+
+variables:
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+cache:
+  key: "${CI_PROJECT_ID}"
+  paths:
+    - .m2/repository
+
+before_script:
+  - echo "Using Java version:"
+  - java -version
+  - echo "Using Maven version:"
+  - mvn -version
+
+build:
+  stage: build
+  tags:
+    - dev
+  script:
+    - mvn $MAVEN_CLI_OPTS clean compile
+  only:
+    - merge_requests
+    - pushes
+
+test:
+  stage: test
+  tags:
+    - dev
+  script:
+    - mvn $MAVEN_CLI_OPTS test
+  only:
+    - merge_requests
+    - pushes
