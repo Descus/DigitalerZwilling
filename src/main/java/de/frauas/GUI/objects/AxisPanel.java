@@ -2,7 +2,8 @@ package de.frauas.GUI.objects;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.ArrayList;
@@ -30,9 +31,16 @@ public class AxisPanel extends JPanel {
     //Car
     private Car car;
 
+    //Moving Car
+    private Timer carTimer;
+    private int segIndex = 0;
+    private double segDistance = 0;
+    private static int TIMER_DELAY = 40;
+
 
     @Override
     protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
         // Define the dimension of the frame
@@ -131,24 +139,23 @@ public class AxisPanel extends JPanel {
         }
 
         //draw Car
-
-        Point2D.Double startPoint = car.getPositionPoint();
-        startPoint = toPixel(startPoint);
+        Point2D.Double carPosition = car.getPositionPoint();
+        carPosition = toPixel(carPosition);
+        double carP_Width = car.getWidth() * scale;
+        double carP_Height = car.getHeight() * scale;
         Point2D.Double drawPoint = new Point2D.Double();
-        drawPoint.x = startPoint.x - (car.getWidth() / 2);
-        drawPoint.y = startPoint.y - (car.getHeight() / 2);
-
-        AffineTransform old = g2.getTransform();
-        double theta = Math.toRadians(car.getHeadingRad());
-        g2.rotate(theta,startPoint.x, startPoint.y);
+        drawPoint.x = carPosition.x - (carP_Width/ 2);
+        drawPoint.y = carPosition.y - (carP_Height / 2);
+        double radian = Math.toRadians(car.getHeadingDegree());
+        g2.rotate(radian,carPosition.x, carPosition.y);
 
 
         g2.setColor(Color.RED);
-        g2.drawRect((int) drawPoint.x, (int) drawPoint.y, (int) car.getWidth(), (int) car.getHeight());
+        g2.drawRect((int) drawPoint.x, (int) drawPoint.y, (int) carP_Width, (int) carP_Height);
         g2.setColor(Color.BLACK);
         g2.fillOval(
-                (int) (startPoint.x - POINT_RADIUS/2),
-                (int) (startPoint.y - POINT_RADIUS/2),
+                (int) (carPosition.x - POINT_RADIUS/2),
+                (int) (carPosition.y - POINT_RADIUS/2),
                 POINT_RADIUS,
                 POINT_RADIUS
         );
@@ -179,6 +186,63 @@ public class AxisPanel extends JPanel {
     public void addCar(Car car) {
         this.car = car;
         repaint();
+    }
+
+    //start a Car
+    public void startCar(Car car) {
+        this.car = car;
+        segIndex = 0;
+        segDistance = 0;
+        Point2D.Double startPoint = points.get(0);
+        car.setPositionPoint(startPoint.x,startPoint.y);
+        if (carTimer != null && carTimer.isRunning()){
+            carTimer.stop();
+        }
+        carTimer = new Timer(TIMER_DELAY, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                movingCar();
+            }
+        });
+        carTimer.start();
+    }
+
+    private void movingCar(){
+        // moving distance
+        double distToMove = car.getVelocity() * (TIMER_DELAY/1000.0);
+
+        while (distToMove > 0 && segIndex < points.size()-1) {
+            Point2D.Double indexPoint = points.get(segIndex);
+            Point2D.Double nextPoint = points.get(segIndex +1);
+            double deltaX =  nextPoint.x -indexPoint.x ;
+            double deltaY =  nextPoint.y - indexPoint.y ;
+            double segLength = Math.sqrt(Math.pow(deltaX,2) + Math.pow(deltaY,2));
+            double remain = segLength - segDistance;
+
+            double heading = Math.toDegrees(Math.atan2(deltaX, deltaY));
+            car.setHeadingDegree(heading);
+
+            if (distToMove < remain){
+                segDistance += distToMove;
+                double ratio = segDistance / segLength;
+                car.setPositionPoint(indexPoint.x + deltaX * ratio, indexPoint.y +deltaY * ratio);
+                distToMove = 0;
+            } else {
+                car.setPositionPoint(nextPoint.x,nextPoint.y);
+                distToMove -= remain;
+                segIndex++;
+                segDistance = 0;
+            }
+        }
+        repaint();
+        // stop when we reach the end of the path
+        if (segIndex >= points.size() - 1) {
+            carTimer.stop();
+        }
+    }
+
+    public List<Obstacle> getObstacles() {
+        return obstacles;
     }
 
 
