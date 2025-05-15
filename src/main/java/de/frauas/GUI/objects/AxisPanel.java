@@ -8,20 +8,22 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class AxisPanel extends JPanel {
-    private static int MARGIN = 60;
+    private static int MARGIN = 60; // Padding around the drawable area so axis labels don’t get cut off
     private static int LABEL_MARGIN = 25;
     private static int TICK_Size = 5;
-    private static int NUM_X_TICKS = 20;
-    private static int NUM_Y_TICKS = 10;
+    private static int NUM_X_TICKS = 20; // X axis with ticks
+    private static int NUM_Y_TICKS = 10; // Y axis with ticks
 
     private double scale;
     private int x0, y0, x1, y1;
     // Data range in millimeters
-    private static double X_MAX = 1000;
+    private static double X_MAX = 1000; // Define the physical size of the virtual environment (in mm).
     private static double Y_MAX = 500;
 
     // points in data coords (mm):
-    private final List<Point2D.Double> points = new ArrayList<>();
+    private final List<Point2D.Double> points = new ArrayList<>(); // A list of (x,y) coordinates representing the robot’s path.
+
+
     private static final int POINT_RADIUS = 10;
 
     // Obstacles list
@@ -42,6 +44,7 @@ public class AxisPanel extends JPanel {
         // Uniform scale between X and Y
         double drawableWidth = width - 2 * MARGIN;
         double drawableHeight = height - 2 * MARGIN;
+        // Calculates scaling to convert real-world mm into pixels.
         scale = Math.min(drawableWidth / X_MAX, drawableHeight / Y_MAX);
 
         // Define drawing corners in coords
@@ -90,7 +93,7 @@ public class AxisPanel extends JPanel {
             g2.drawString(label, x0 - LABEL_MARGIN - labelWidth, y + labelWidth/2);
         }
 
-        // draw points
+        // draw points(Robot´s path)
         g2.setColor(Color.BLACK);
         for (Point2D.Double p : points) {
             Point2D.Double point = toPixel(p);
@@ -163,7 +166,7 @@ public class AxisPanel extends JPanel {
         return new Point2D.Double(px, py);
     }
 
-    // Add a point
+    // Add a point and repaint panel
     public void addPoint(Point2D.Double point) {
         points.add(new Point2D.Double(point.x, point.y));
         repaint();
