@@ -1,7 +1,6 @@
 package de.frauas.scenario.components;
 
-import de.frauas.scenario.primitives.Line2;
-import de.frauas.scenario.primitives.Vec2;
+import de.frauas.scenario.primitives.Line2F;
 import de.frauas.scenario.primitives.Vec2F;
 
 import java.awt.*;
@@ -10,27 +9,27 @@ import java.util.List;
 
 
 public class RoadTrace implements Drawable{
-    private final List<Vec2> points = new ArrayList<>();
-    private final List<Line2> lines = new ArrayList<>();
+    private final List<Vec2F> points = new ArrayList<>();
+    private final List<Line2F> lines = new ArrayList<>();
     
-    public void addPoint(Vec2 point) {
+    public void addPoint(Vec2F point) {
         points.add(point);
         createLines();
     }
     
-    public void removePoint(Vec2 point) {
+    public void removePoint(Vec2F point) {
         points.remove(point);
         createLines();
     }
     
-    public List<Vec2> GetPoints() {
+    public List<Vec2F> getPoints() {
         return new ArrayList<>(points);
     }
     
     @Override
     public void draw(Graphics2D g, Vec2F scale, float deltaTime) {
         Graphics2D g2d = (Graphics2D) g.create();
-        for (Line2 line : lines) {
+        for (Line2F line : lines) {
             line.draw(g2d, scale, deltaTime);
         }
         g2d.dispose();
@@ -38,7 +37,7 @@ public class RoadTrace implements Drawable{
     
     private void createLines(){
         for (int i = 0; i < points.size() - 1; i++) {
-            lines.add(new Line2(points.get(i), points.get(i + 1)));
+            lines.add(new Line2F(points.get(i), points.get(i + 1)));
         }
     }
 }
