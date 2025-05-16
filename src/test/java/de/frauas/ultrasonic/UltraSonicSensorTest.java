@@ -3,14 +3,14 @@ package de.frauas.ultrasonic;
 import de.frauas.scenario.components.Obstacle;
 import de.frauas.scenario.primitives.SDF;
 import de.frauas.scenario.primitives.Vec2F;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class UltraSonicSensorTest {
