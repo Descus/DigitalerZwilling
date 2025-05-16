@@ -14,7 +14,7 @@ import static de.frauas.Settings.POINT_DEBUG_RADIUS;
 
 @Setter
 @Getter
-public class Obstacle implements Drawable {
+public class Obstacle implements Drawable, SDF {
     private Vec2F position;
     private Vec2F dimension;
     private int height;

@@ -1,6 +1,6 @@
 package de.frauas;
 
-import de.frauas.scenario.primitives.Vec2;
+import de.frauas.scenario.primitives.Vec2F;
 
 public class Settings {
     
@@ -10,8 +10,8 @@ public class Settings {
     public static final int TARGET_FPS = 60;
     
     public static final String SCENARIO_FILE = "Scenario/example.xml";
-    public static final Vec2 SCENE_CANVAS = new Vec2(1000, 500);
-    public static final Vec2 CAR_SIZE = new Vec2(20, 40);
+    public static final Vec2F SCENE_CANVAS = new Vec2F(1000, 500);
+    public static final Vec2F CAR_SIZE = new Vec2F(20, 40);
 
     public static final float LINE_WIDTH = 4f;
 

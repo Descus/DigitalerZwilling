@@ -9,7 +9,6 @@ import de.frauas.scenario.xml.dto.Scenario;
 import de.frauas.scenario.xml.ScenarioXmlFile;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -26,14 +25,14 @@ public class Program {
             Scene scene = new Scene(Settings.SCENE_CANVAS);
             Scenario scenario = ScenarioXmlFile.fromExample().read();
             Car car = new Car(
-                    new Vec2(scenario.getStartPosition().getXPosition(),
+                    new Vec2F(scenario.getStartPosition().getXPosition(),
                              scenario.getStartPosition().getYPosition()),
                     scenario.getStartPosition().getHeading());
             RoadTrace roadTrace = new RoadTrace();
-            roadTrace.addPoint(new Vec2(
+            roadTrace.addPoint(new Vec2F(
                                     scenario.getStartPosition().getXPosition(),
                                     scenario.getStartPosition().getYPosition()));
-            scenario.getTrace().forEach(p -> roadTrace.addPoint(new Vec2(p.getXPosition(), p.getYPosition())));
+            scenario.getTrace().forEach(p -> roadTrace.addPoint(new Vec2F(p.getXPosition(), p.getYPosition())));
 
 
             scene.addDrawable(roadTrace);
@@ -41,9 +40,9 @@ public class Program {
 
             scenario.getObjects().forEach(object -> scene.addDrawable(
                     new Obstacle(
-                        new Vec2(object.getXPositionStart(),
+                        new Vec2F(object.getXPositionStart(),
                                 object.getYPositionStart()),
-                        new Vec2(object.getXPositionEnd() - object.getXPositionStart(),
+                        new Vec2F(object.getXPositionEnd() - object.getXPositionStart(),
                                 object.getYPositionEnd() - object.getYPositionStart()),
                             object.getHeight())));
             try (ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor()) {
