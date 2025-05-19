@@ -10,8 +10,7 @@ public class XMLScenarioLoader {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(new File("C:\\Users\\Asus\\Documents\\digitalerzwilling\\src\\main\\java\\de\\frauas\\scenario_example.xml"));
-            System.out.println(doc);
+            Document doc = builder.parse(new File(xmlFilePath));
             doc.getDocumentElement().normalize();
 
             // Load StartPosition (Car)
@@ -24,6 +23,7 @@ public class XMLScenarioLoader {
             car.setPositionPoint(x, y);
             car.setHeadingDegree(heading);
             panel.addCar(car);
+            panel.addPoint(new Point2D.Double(x, y));
 
             // Load path points
             NodeList pointList = doc.getElementsByTagName("Point");
