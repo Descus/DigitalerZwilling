@@ -1,4 +1,4 @@
-﻿package de.frauas.GUI.controllers;
+package de.frauas.GUI.controllers;
 
 import de.frauas.GUI.objects.AxisPanel;
 
