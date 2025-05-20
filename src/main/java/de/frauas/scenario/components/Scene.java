@@ -1,33 +1,43 @@
 package de.frauas.scenario.components;
 
-import de.frauas.scenario.primitives.Vec2;
+import de.frauas.scenario.primitives.SDF;
 import de.frauas.scenario.primitives.Vec2F;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Scene extends JPanel{
-    public final Vec2 size;
-    public Vec2F coordinateSystemScaleFactor;
+    public final Vec2F size;
     private final List<Drawable> drawStack = new ArrayList<>();
+    private final List<SDF> signedDistanceFields = new ArrayList<>();
     private long last_update = System.nanoTime();
     
-    public Scene(Vec2 size, List<Drawable> drawStack){
+    public Scene(Vec2F size, List<Drawable> drawStack){
         this.size = size;
         this.drawStack.addAll(drawStack);
     }
-    public Scene(Vec2 size){
+    public Scene(Vec2F size){
         this.size = size;
     }
     
     public void addDrawable(Drawable d){
         drawStack.add(d);
     }
-    
+
+    public void addDrawables(Collection<Drawable> d){
+        drawStack.addAll(d);
+    }
+
     public void removeDrawable(Drawable d){
         drawStack.remove(d);
+    }
+
+    public void addObstacle(Obstacle obstacle){
+        drawStack.add(obstacle);
+        signedDistanceFields.add(obstacle);
     }
 
     @Override

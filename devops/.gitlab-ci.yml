@@ -1,9 +1,12 @@
+default:
+  image: maven:3.9.9-eclipse-temurin-24
+
 stages:
   - build
   - test
 
 variables:
-  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode --errors --fail-at-end"
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end"
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
 cache:

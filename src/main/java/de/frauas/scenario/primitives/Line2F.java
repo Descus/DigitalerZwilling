@@ -4,9 +4,9 @@ import de.frauas.scenario.components.Drawable;
 
 import java.awt.*;
 
-public record Line2(Vec2 a, Vec2 b) implements Drawable {
-    private static final float LINE_WIDTH = 1f;
+import static de.frauas.Settings.LINE_WIDTH;
 
+public record Line2F(Vec2F a, Vec2F b) implements Drawable {
     @Override
     public void draw(Graphics2D g, Vec2F scale, float deltaTime) {
         Graphics2D g2d = (Graphics2D) g.create();
@@ -20,9 +20,8 @@ public record Line2(Vec2 a, Vec2 b) implements Drawable {
         g2d.dispose();
     }
     
-    public Vec2 lerp(float t) {
-
-        return new Vec2(
+    public Vec2F lerp(float t) {
+        return new Vec2F(
                 (int) ((1 - t) * a.x() + t * b.x()),
                 (int) ((1 - t) * a.y() + t * b.y()));
     }
