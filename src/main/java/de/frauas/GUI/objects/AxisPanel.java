@@ -274,4 +274,38 @@ public class AxisPanel extends JPanel {
             return "Moving";
         return "Stopped";
     }
+    public void pauseCar() {
+        if (carTimer != null && carTimer.isRunning()) {
+            carTimer.stop();
+        }
+    }
+
+    public void continueCar() {
+        if (carTimer != null && !carTimer.isRunning()) {
+            startTime = System.currentTimeMillis();
+            carTimer.start();
+        }
+    }
+
+    public void stopCar() {
+        if (carTimer != null) {
+            carTimer.stop();
+            segIndex = points.size(); // Skip to end
+            repaint();
+        }
+    }
+
+    public void resetCar() {
+        if (carTimer != null) {
+            carTimer.stop();
+        }
+        if (!points.isEmpty()) {
+            Point2D.Double startPoint = points.get(0);
+            car.setPositionPoint(startPoint.x, startPoint.y);
+            segIndex = 0;
+            segTraveled = 0;
+            totalTime = 0;
+            repaint();
+        }
+    }
 }
