@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<Scenario Scenario_ID="0003" Date="2025-04-14" Version="1.0.0">
+    <StartPosition>
+        <xPosition>950</xPosition>
+        <yPosition>450</yPosition>
+        <heading>270</heading>
+    </StartPosition>
+    <Trace>
+        <Point Number="1">
+            <xPosition>880</xPosition>
+            <yPosition>450</yPosition>
+        </Point>
+        <Point Number="2">
+            <xPosition>850</xPosition>
+            <yPosition>410</yPosition>
+        </Point>
+        <Point Number="3">
+            <xPosition>700</xPosition>
+            <yPosition>250</yPosition>
+        </Point>
+        <Point Number="4">
+            <xPosition>580</xPosition>
+            <yPosition>300</yPosition>
+        </Point>
+        <Point Number="5">
+            <xPosition>450</xPosition>
+            <yPosition>370</yPosition>
+        </Point>
+        <Point Number="6">
+            <xPosition>300</xPosition>
+            <yPosition>350</yPosition>
+        </Point>
+        <Point Number="7">
+            <xPosition>250</xPosition>
+            <yPosition>280</yPosition>
+        </Point>
+        <Point Number="8">
+            <xPosition>150</xPosition>
+            <yPosition>150</yPosition>
+        </Point>
+        <Point Number="9">
+            <xPosition>100</xPosition>
+            <yPosition>100</yPosition>
+        </Point>
+        <Point Number="10">
+            <xPosition>50</xPosition>
+            <yPosition>100</yPosition>
+        </Point>
+    </Trace>
+    <Objects>
+        <Object Number="1">
+            <xPositionStart>200</xPositionStart>
+            <yPositionStart>400</yPositionStart>
+            <xPositionEnd>300</xPositionEnd>
+            <yPositionEnd>450</yPositionEnd>
+            <height>20</height>
+        </Object>
+        <Object Number="2">
+            <xPositionStart>400</xPositionStart>
+            <yPositionStart>150</yPositionStart>
+            <xPositionEnd>500</xPositionEnd>
+            <yPositionEnd>250</yPositionEnd>
+            <height>20</height>
+        </Object>
+        <Object Number="3">
+            <xPositionStart>600</xPositionStart>
+            <yPositionStart>400</yPositionStart>
+            <xPositionEnd>700</xPositionEnd>
+            <yPositionEnd>450</yPositionEnd>
+            <height>5</height>
+        </Object>
+        <Object Number="4">
+            <xPositionStart>800</xPositionStart>
+            <yPositionStart>150</yPositionStart>
+            <xPositionEnd>900</xPositionEnd>
+            <yPositionEnd>250</yPositionEnd>
+            <height>5</height>
+        </Object>
+    </Objects>
+</Scenario>

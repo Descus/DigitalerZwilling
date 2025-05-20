@@ -1,15 +1,19 @@
 package de.frauas.scenario.components;
 
 import de.frauas.scenario.primitives.Vec2F;
+import lombok.Getter;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
+import static de.frauas.Settings.CAR_SIZE;
+
+@Getter
 public class Car implements Drawable{
     public static final Vec2F CAR_SIZE = new Vec2F(50, 80);
     
-    public Vec2F position;
-    float rotation;
+    private Vec2F position;
+    private float rotation;
     
     public Car(Vec2F position, int rotation) {
         this.position = position;
@@ -32,9 +36,9 @@ public class Car implements Drawable{
         g2d.setColor(Color.RED);
         
         Rectangle rect2 = new Rectangle(
-                (int) (position.x() * scale.x() - CAR_SIZE.x() * scale.x() / 2f), 
-                (int) (-position.y() * scale.y() - CAR_SIZE.y() * scale.y() / 2f), 
-                (int) (CAR_SIZE.x() * scale.x()), 
+                (int) (position.x() * scale.x() - CAR_SIZE.x() * scale.x() / 2f),
+                (int) (-position.y() * scale.y() - CAR_SIZE.y() * scale.y() / 2f),
+                (int) (CAR_SIZE.x() * scale.x()),
                 (int) (CAR_SIZE.y() * scale.y()));
         AffineTransform at = new AffineTransform();
         at.rotate(Math.toRadians(rotation), rect2.getX() + rect2.width / 2f, rect2.getY() + rect2.height / 2f);
@@ -44,6 +48,6 @@ public class Car implements Drawable{
     }
     
     private void update(float deltaTime){
-        addRotation(deltaTime * 45);
+
     }
 }
