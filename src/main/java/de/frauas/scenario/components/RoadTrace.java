@@ -7,6 +7,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class RoadTrace implements Drawable{
     private final List<Vec2F> points = new ArrayList<>();
     private final List<Line2F> lines = new ArrayList<>();

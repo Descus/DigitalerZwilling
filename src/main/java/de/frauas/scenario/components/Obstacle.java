@@ -3,17 +3,25 @@ package de.frauas.scenario.components;
 import de.frauas.scenario.primitives.Mat2F;
 import de.frauas.scenario.primitives.SDF;
 import de.frauas.scenario.primitives.Vec2F;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.awt.*;
 
+import static de.frauas.Settings.DEBUG;
+import static de.frauas.Settings.POINT_DEBUG_RADIUS;
+
+
+@Setter
+@Getter
 public class Obstacle implements Drawable, SDF {
-    public Vec2F position;
-    public Vec2F size;
-    public int height;
+    private Vec2F position;
+    private Vec2F dimension;
+    private int height;
     
-    public Obstacle(Vec2F position, Vec2F size, int height) {
+    public Obstacle(Vec2F position, Vec2F dimension, int height) {
         this.position = position;
-        this.size = size;
+        this.dimension = dimension;
         this.height = height;
     }
     
@@ -21,25 +29,32 @@ public class Obstacle implements Drawable, SDF {
     public void draw(Graphics2D g, Vec2F scale, float deltaTime) {
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setColor(Color.magenta);
-        
-        g2d.fillRect(
-                (int) (position.x() * scale.x()), 
-                (int) (-position.y() * scale.y()), 
-                (int) (size.x() * scale.x()), 
-                (int) (size.y() * scale.y()));
+        g2d.fillRect((int) (position.x() * scale.x()),
+                (int) ((-position.y() - dimension.y()) * scale.y()),
+                (int) (dimension.x() * scale.x()),
+                (int) (dimension.y() * scale.y()));
         g2d.setColor(Color.black);
-        
         g2d.drawString("" + height, 
-                (int) ((position.x() + size.x() / 2f) * scale.x()), 
-                (int) ((-position.y() + size.y() / 2f) * scale.y()));
+                (int) ((position.x() + dimension.x() / 2f) * scale.x()),
+                (int) ((-position.y() - dimension.y() / 2f) * scale.y()));
+        if(DEBUG) {
+            g2d.setColor(Color.cyan);
+            g2d.fillOval( (int) ((position.x() - POINT_DEBUG_RADIUS / 2f) * scale.x()),
+                    (int) ((-position.y() - POINT_DEBUG_RADIUS / 2f) * scale.y()),
+                    (int) (POINT_DEBUG_RADIUS * scale.x()), (int) (POINT_DEBUG_RADIUS * scale.y()));
+
+            g2d.fillOval( (int) ((position.x() + dimension.x() - POINT_DEBUG_RADIUS / 2f) * scale.x()),
+                    (int) ((-position.y() - dimension.y() - POINT_DEBUG_RADIUS / 2f) * scale.y()),
+                    (int) (POINT_DEBUG_RADIUS * scale.x()), (int) (POINT_DEBUG_RADIUS * scale.y()));
+        }
         g2d.dispose();
     }
 
     @Override
     public float getSDF(Vec2F otherPosition) {
-        float th = size.y()/2;
+        float th = dimension.y()/2;
         Vec2F a = new Vec2F(position.x(),  position.y() + th);
-        Vec2F b = new Vec2F(position.x() + size.x(), position.y() + th);
+        Vec2F b = new Vec2F(position.x() + dimension.x(), position.y() + th);
         Vec2F dist = b.sub(a);
         float l = dist.length();
         Vec2F  d = dist.scale(1/l);
