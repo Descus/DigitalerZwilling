@@ -11,10 +11,8 @@ import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AxisPanel extends JPanel {
 
@@ -190,12 +188,7 @@ public class AxisPanel extends JPanel {
             carTimer.stop();
         }
         startTime = System.currentTimeMillis();
-        carTimer = new Timer(40, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                movingCar();
-            }
-        });
+        carTimer = new Timer(40, _ -> movingCar());
 
         carTimer.start();
     }

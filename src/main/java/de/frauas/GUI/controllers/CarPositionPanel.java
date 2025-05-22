@@ -13,7 +13,6 @@ public class CarPositionPanel extends JPanel {
     private final JList<String> infoList = new JList<>(model);
 
     private final JTextField intervalField = new JTextField("1000", 5);
-    private final JButton setBtn = new JButton("Set");
     private Timer timer;
 
     public CarPositionPanel(AxisPanel axisPanel) {
@@ -27,6 +26,7 @@ public class CarPositionPanel extends JPanel {
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 2));
         top.add(new JLabel("Update Interval (ms):"));
         top.add(intervalField);
+        JButton setBtn = new JButton("Set");
         top.add(setBtn);
         add(top, BorderLayout.NORTH);
 
@@ -35,7 +35,7 @@ public class CarPositionPanel extends JPanel {
         startTimer(Integer.parseInt(intervalField.getText()));
 
         // Button action to restart timer
-        setBtn.addActionListener(e -> {
+        setBtn.addActionListener(_ -> {
             try {
                 int ms = Integer.parseInt(intervalField.getText());
                 if (ms <= 0) throw new NumberFormatException();
@@ -56,7 +56,7 @@ public class CarPositionPanel extends JPanel {
         if (timer != null && timer.isRunning()) {
             timer.stop();
         }
-        timer = new Timer(intervalMs, e -> updateInfo());
+        timer = new Timer(intervalMs, _ -> updateInfo());
         timer.setInitialDelay(0);
         timer.start();
         axisPanel.startCar();
@@ -66,7 +66,7 @@ public class CarPositionPanel extends JPanel {
         if (timer != null && timer.isRunning()) {
             timer.stop();
         }
-        timer = new Timer(intervalMs, e -> updateInfo());
+        timer = new Timer(intervalMs, _ -> updateInfo());
         timer.setInitialDelay(0);
         timer.start();
     }
