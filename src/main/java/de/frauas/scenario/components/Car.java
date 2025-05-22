@@ -1,18 +1,17 @@
 package de.frauas.scenario.components;
 
-import de.frauas.scenario.primitives.Vec2;
 import de.frauas.scenario.primitives.Vec2F;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
 public class Car implements Drawable{
-    public static final Vec2 CAR_SIZE = new Vec2(50, 80);
+    public static final Vec2F CAR_SIZE = new Vec2F(50, 80);
     
-    public Vec2 position;
+    public Vec2F position;
     float rotation;
     
-    public Car(Vec2 position, int rotation) {
+    public Car(Vec2F position, int rotation) {
         this.position = position;
         this.rotation = rotation;
     }
@@ -22,7 +21,7 @@ public class Car implements Drawable{
         this.rotation %= 360;
     }
     
-    public void addTranslation(Vec2 translation){
+    public void addTranslation(Vec2F translation){
         this.position = this.position.add(translation);
     }
     
