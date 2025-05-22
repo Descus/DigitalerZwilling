@@ -9,26 +9,16 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class AxisPanel extends JPanel {
-    private static int MARGIN = 60; // Padding around the drawable area so axis labels don’t get cut off
-    private static int LABEL_MARGIN = 25;
-    private static int TICK_Size = 5;
-    private static int NUM_X_TICKS = 20; // X axis with ticks
-    private static int NUM_Y_TICKS = 10; // Y axis with ticks
 
     private double scale;
     private int x0, y0, x1, y1;
-    // Data range in millimeters
-    private static double X_MAX = 1000; // Define the physical size of the virtual environment (in mm).
-    private static double Y_MAX = 500;
 
     // points in data coords (mm):
     private final List<Point2D.Double> points = new ArrayList<>(); // A list of (x,y) coordinates representing the robot’s path.
-
-
     private static final int POINT_RADIUS = 10;
 
     // Obstacles list
-    private List<Obstacle> obstacles = new ArrayList<>();
+    private final List<Obstacle> obstacles = new ArrayList<>();
 
     //Car
     private Car car;
@@ -36,8 +26,9 @@ public class AxisPanel extends JPanel {
     //Moving Car
     private Timer carTimer;
     private int segIndex = 0;
-    private double segDistance = 0;
-    private static int TIMER_DELAY = 40;
+    private double segTraveled = 0;
+    private long startTime;
+    private double totalTime ;
 
 
     @Override
@@ -50,17 +41,23 @@ public class AxisPanel extends JPanel {
         int height = getHeight();
 
         // Uniform scale between X and Y
+        // Padding around the drawable area so axis labels don’t get cut off
+        int MARGIN = 60;
         double drawableWidth = width - 2 * MARGIN;
         double drawableHeight = height - 2 * MARGIN;
         // Calculates scaling to convert real-world mm into pixels.
-        scale = Math.min(drawableWidth / X_MAX, drawableHeight / Y_MAX);
+        // Data range in millimeters
+        // Define the physical size of the virtual environment (in mm).
+        double x_MAX = 1000;
+        double y_MAX = 500;
+        scale = Math.min(drawableWidth / x_MAX, drawableHeight / y_MAX);
 
         // Define drawing corners in coords
         x0 = MARGIN;
         y0 = height - MARGIN;
         // Endpoint of each axis depend on the scale
-        x1 = x0 + (int)(X_MAX* scale);
-        y1 = y0 - (int)(Y_MAX * scale);
+        x1 = x0 + (int)(x_MAX * scale);
+        y1 = y0 - (int)(y_MAX * scale);
 
         // Draw axes
         g2.drawLine(x0, y0, x1, y0); // X-axis
@@ -70,8 +67,12 @@ public class AxisPanel extends JPanel {
         g2.drawLine(x0, y1, x1, y1); // support X-axis
 
         // X-axis ticks & labels
+        // X axis with ticks
+        int NUM_X_TICKS = 20;
+        int LABEL_MARGIN = 25;
+        int TICK_Size = 5;
         for (int i = 0; i <= NUM_X_TICKS; i++) {
-            double value = i * ( X_MAX/ NUM_X_TICKS);
+            double value = i * ( x_MAX / NUM_X_TICKS);
             int x = x0 + (int)(value * scale);
 
             // tick mark
@@ -86,8 +87,10 @@ public class AxisPanel extends JPanel {
         }
 
         // Y-axis ticks & labels
+        // Y axis with ticks
+        int NUM_Y_TICKS = 10;
         for (int i = 0; i <= NUM_Y_TICKS; i++) {
-            double value = i * (Y_MAX / NUM_Y_TICKS);
+            double value = i * (y_MAX / NUM_Y_TICKS);
             int y = y0 - (int)(value * scale);
 
             // tick mark
@@ -192,50 +195,58 @@ public class AxisPanel extends JPanel {
     }
 
     //start a Car
-    public void startCar(Car car) {
+    public void startCar() {
         this.car = car;
         segIndex = 0;
-        segDistance = 0;
+        segTraveled = 0;
         Point2D.Double startPoint = points.get(0);
         car.setPositionPoint(startPoint.x,startPoint.y);
         if (carTimer != null && carTimer.isRunning()){
             carTimer.stop();
         }
-        carTimer = new Timer(TIMER_DELAY, new ActionListener() {
+        startTime = System.currentTimeMillis();
+        carTimer = new Timer(40, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 movingCar();
             }
         });
+
         carTimer.start();
     }
 
     private void movingCar(){
         // moving distance
-        double distToMove = car.getVelocity() * (TIMER_DELAY/1000.0);
+        double traveled = car.getVelocity() * ((System.currentTimeMillis() - startTime)/1000.0);
 
-        while (distToMove > 0 && segIndex < points.size()-1) {
+        while (traveled > 0 && segIndex < points.size()-1) {
+            totalTime += (System.currentTimeMillis() - startTime)/1000.0;
+            startTime = System.currentTimeMillis();
             Point2D.Double indexPoint = points.get(segIndex);
-            Point2D.Double nextPoint = points.get(segIndex +1);
-            double deltaX =  nextPoint.x -indexPoint.x ;
-            double deltaY =  nextPoint.y - indexPoint.y ;
+            Point2D.Double nextPoint =  points.get(segIndex +1);
+            double deltaX =  (nextPoint.x - indexPoint.x);
+            double deltaY =  (nextPoint.y - indexPoint.y);
             double segLength = Math.sqrt(Math.pow(deltaX,2) + Math.pow(deltaY,2));
-            double remain = segLength - segDistance;
+
+            double remain = segLength - segTraveled;
 
             double heading = Math.toDegrees(Math.atan2(deltaX, deltaY));
             car.setHeadingDegree(heading);
 
-            if (distToMove < remain){
-                segDistance += distToMove;
-                double ratio = segDistance / segLength;
+            if (traveled < remain){
+                segTraveled += traveled;
+                double ratio = segTraveled / segLength;
                 car.setPositionPoint(indexPoint.x + deltaX * ratio, indexPoint.y +deltaY * ratio);
-                distToMove = 0;
+                traveled = 0;
             } else {
                 car.setPositionPoint(nextPoint.x,nextPoint.y);
-                distToMove -= remain;
+                traveled -= remain;
                 segIndex++;
-                segDistance = 0;
+                segTraveled = 0;
             }
+
+            System.out.println( totalTime+ " "+ segTraveled + " " + segLength);
+
         }
         repaint();
         // stop when we reach the end of the path
@@ -248,5 +259,53 @@ public class AxisPanel extends JPanel {
         return obstacles;
     }
 
+    public List<Point2D.Double> getPoints() {
+        return points;
+    }
 
+    public Car getCar() {
+        return car;
+    }
+
+    public String getCarStatus() {
+        if (segIndex >= points.size() - 1)
+            return "Finished";
+        if (carTimer != null && carTimer.isRunning())
+            return "Moving";
+        return "Stopped";
+    }
+    public void pauseCar() {
+        if (carTimer != null && carTimer.isRunning()) {
+            carTimer.stop();
+        }
+    }
+
+    public void continueCar() {
+        if (carTimer != null && !carTimer.isRunning()) {
+            startTime = System.currentTimeMillis();
+            carTimer.start();
+        }
+    }
+
+    public void stopCar() {
+        if (carTimer != null) {
+            carTimer.stop();
+            segIndex = points.size(); // Skip to end
+            repaint();
+        }
+    }
+
+    public void resetCar() {
+        if (carTimer != null) {
+            carTimer.stop();
+        }
+        if (!points.isEmpty()) {
+            Point2D.Double startPoint = points.get(0);
+            car.setPositionPoint(startPoint.x, startPoint.y);
+            segIndex = 0;
+            segTraveled = 0;
+            totalTime = 0;
+            repaint();
+        }
+    }
 }

@@ -9,9 +9,8 @@ public class TrackTimePanel extends JPanel{
 
     public TrackTimePanel() {
         setLayout(new BorderLayout(5,5));
-        setBorder(BorderFactory.createTitledBorder("Arrival Times"));
-        add(new JLabel("Point → Arrival", SwingConstants.CENTER),
-                BorderLayout.NORTH);
+        JLabel title = new JLabel("Track Time");
+        add(title, BorderLayout.NORTH);
         add(new JScrollPane(infoList), BorderLayout.CENTER);
         model.addElement("[Example] P1 , time, delta, distance");
     }
