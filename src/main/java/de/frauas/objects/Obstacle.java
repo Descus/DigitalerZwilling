@@ -1,21 +1,35 @@
 package de.frauas.objects;
 
 
+import de.frauas.objects.datastructures.Vec2D;
 import lombok.Getter;
-import lombok.Setter;
 
-import java.awt.geom.Point2D;
+import java.awt.*;
+import java.util.function.Function;
+
 
 @Getter
-@Setter
 public class Obstacle {
-    private Point2D.Double startPoint;
-    private Point2D.Double endPoint;
-    private int height;
+    private final Vec2D startPoint;
+    private final Vec2D endPoint;
+    private final int height;
 
     public Obstacle(int xStart, int yStart, int xEnd, int yEnd, int height) {
-        this.startPoint = new Point2D.Double(xStart, yStart);
-        this.endPoint = new Point2D.Double(xEnd, yEnd);
+        this.startPoint = new Vec2D(xStart, yStart);
+        this.endPoint = new Vec2D(xEnd, yEnd);
         this.height = height;
     }
+
+    public Obstacle(Vec2D startPoint, Vec2D endPoint, int height) {
+        this.startPoint = startPoint;
+        this.endPoint = endPoint;
+        this.height = height;
+    }
+
+    public void draw(Graphics g, Function<Vec2D, Vec2D> transformFunction){
+        Vec2D startPoint = transformFunction.apply(this.startPoint);
+        Vec2D endPoint = transformFunction.apply(this.endPoint);
+        g.drawRect((int) startPoint.getX(), (int) endPoint.getY(), (int) Math.abs(endPoint.getX()-startPoint.getX()), (int) Math.abs(endPoint.getY()-startPoint.getY()));
+    }
+
 }

@@ -1,5 +1,7 @@
 package de.frauas.GUI.controllers;
 
+import de.frauas.objects.datastructures.Vec2D;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -28,16 +30,16 @@ public class PathInfoPanel extends JPanel{
 
     private void init() {
         listModel.clear();
-        List<Point2D.Double> points = axisPanel.getPoints();
+        List<Vec2D> points = axisPanel.getRoadTrace().getPoints();
         System.out.println(points.size());;
         for (int i = 0; i < points.size()-1; i++) {
-            Point2D.Double point = points.get(i);
-            Point2D.Double nextPoint = points.get(i+1);
+            Vec2D point = points.get(i);
+            Vec2D nextPoint = points.get(i+1);
 
-            double distance = Math.sqrt(Math.pow(point.x - nextPoint.x, 2) + Math.pow(point.y - nextPoint.y, 2));
+            double distance = Math.sqrt(Math.pow(point.getX() - nextPoint.getX(), 2) + Math.pow(point.getX() - nextPoint.getY(), 2));
             String info = String.format(
                     "Point %d (%.1f,%.1f) - Point %d (%.1f,%.1f) : %.2f mm",
-                    i, point.x, point.y, i+1, nextPoint.x, nextPoint.y, distance
+                    i, point.getX(), point.getY(), i+1, nextPoint.getX(), nextPoint.getY(), distance
             );
             listModel.addElement(info);
         }

@@ -1,10 +1,10 @@
 package de.frauas.GUI.controllers;
 
 import de.frauas.objects.Obstacle;
+import de.frauas.objects.datastructures.Vec2D;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.util.List;
 
 
@@ -33,8 +33,8 @@ public class ObstacleInfoPanel extends JPanel {
         listModel.clear();
         List<Obstacle> obstacles = axisPanel.getObstacles();
         for (Obstacle o : obstacles) {
-            Point2D.Double startPoint = o.getStartPoint();
-            Point2D.Double endPoint = o.getEndPoint();
+            Vec2D startPoint = o.getStartPoint();
+            Vec2D endPoint = o.getEndPoint();
             String info = String.format(
                     "Start=(%.1f, %.1f), End=(%.1f, %.1f), Height=%d mm",
                     startPoint.getX(), startPoint.getY(),

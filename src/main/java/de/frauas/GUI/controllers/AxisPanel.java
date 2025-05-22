@@ -3,30 +3,36 @@ package de.frauas.GUI.controllers;
 import de.frauas.Settings;
 import de.frauas.objects.Car;
 import de.frauas.objects.Obstacle;
+import de.frauas.objects.RoadTrace;
+import de.frauas.objects.datastructures.Vec2D;
 import de.frauas.scenario.dto.Scenario;
 import de.frauas.scenario.dto.StartPosition;
+import lombok.Getter;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.ArrayList;
 
 public class AxisPanel extends JPanel {
 
     private double scale;
-    private int x0, y0, x1, y1;
+    private int x0, y0;
 
     // points in data coords (mm):
-    private final List<Point2D.Double> points = new ArrayList<>(); // A list of (x,y) coordinates representing the robot’s path.
+    // A list of (x,y) coordinates representing the robot’s path.
+    @Getter
+    private RoadTrace roadTrace;
     private static final int POINT_RADIUS = Settings.POINT_DEBUG_RADIUS;
 
     // Obstacles list
+    @Getter
     private final List<Obstacle> obstacles = new ArrayList<>();
 
     //Car
+    @Getter
     private Car car;
 
     //Moving Car
@@ -54,16 +60,16 @@ public class AxisPanel extends JPanel {
         // Calculates scaling to convert real-world mm into pixels.
         // Data range in millimeters
         // Define the physical size of the virtual environment (in mm).
-        double x_MAX = Settings.SCENE_CANVAS.x;
-        double y_MAX = Settings.SCENE_CANVAS.y;
+        double x_MAX = Settings.SCENE_CANVAS.getX();
+        double y_MAX = Settings.SCENE_CANVAS.getY();
         scale = Math.min(drawableWidth / x_MAX, drawableHeight / y_MAX);
 
         // Define drawing corners in coords
         x0 = MARGIN;
         y0 = height - MARGIN;
         // Endpoint of each axis depend on the scale
-        x1 = x0 + (int)(x_MAX * scale);
-        y1 = y0 - (int)(y_MAX * scale);
+        int x1 = x0 + (int)(x_MAX * scale);
+        int y1 = y0 - (int)(y_MAX * scale);
 
         // Draw axes
         g2.drawLine(x0, y0, x1, y0); // X-axis
@@ -112,62 +118,38 @@ public class AxisPanel extends JPanel {
 
         // draw points(Robot´s path)
         g2.setColor(Color.BLACK);
-        for (Point2D.Double p : points) {
-            Point2D.Double point = toPixel(p);
-            g2.fillOval(
-                    (int) (point.x - POINT_RADIUS/2),
-                    (int) (point.y - POINT_RADIUS/2),
-                    POINT_RADIUS,
-                    POINT_RADIUS
-            );
-        }
+        if (Settings.DEBUG)
+            roadTrace.drawPoints(g2, this::toPixel);
 
         // draw lines between consecutive points
         g2.setColor(Color.RED);
-        if (points.size() >= 2) {
-            for (int i = 1; i < points.size(); i++) {
-                Point2D.Double point = toPixel(points.get(i - 1));
-                Point2D.Double pointNext = toPixel(points.get(i));
-                g2.drawLine((int) point.x, (int) point.y, (int) pointNext.x, (int) pointNext.y);
-            }
-        }
+        roadTrace.drawLines(g2, this::toPixel);
 
         // draw Obstacle
         for (Obstacle obs : obstacles) {
-
-            // map data→pixel
-            Point2D.Double startPoint = toPixel(obs.getStartPoint());
-            Point2D.Double endPoint = toPixel(obs.getEndPoint());
-
-            int rx = (int) startPoint.x;
-            int ry = (int) endPoint.y;
-            int w = (int) Math.abs(endPoint.x - startPoint.x);
-            int h = (int) Math.abs(endPoint.y - startPoint.y);
-
             // set Obstacle color
             g2.setColor(Color.BLACK);
-            g2.fillRect(rx, ry, w, h);
-
+            obs.draw(g2, this::toPixel);
         }
 
         //draw Car
-        Point2D.Double carPosition = car.getPositionPoint();
-        carPosition = toPixel(carPosition);
-        double carP_Width = Settings.CAR_SIZE.x * scale;
-        double carP_Height = Settings.CAR_SIZE.y * scale;
-        Point2D.Double drawPoint = new Point2D.Double();
-        drawPoint.x = carPosition.x - (carP_Width/ 2);
-        drawPoint.y = carPosition.y - (carP_Height / 2);
+        Vec2D carPosition = toPixel(car.getPositionPoint());
+        double carP_Width = Settings.CAR_SIZE.getX() * scale;
+        double carP_Height = Settings.CAR_SIZE.getY() * scale;
+        Vec2D drawPoint = new Vec2D(
+                carPosition.getX() - (carP_Width/ 2),
+                carPosition.getY() - (carP_Height / 2)
+        );
         double radian = Math.toRadians(car.getHeadingDegree());
-        g2.rotate(radian,carPosition.x, carPosition.y);
+        g2.rotate(radian, carPosition.getX(), carPosition.getY());
 
 
         g2.setColor(Color.RED);
-        g2.drawRect((int) drawPoint.x, (int) drawPoint.y, (int) carP_Width, (int) carP_Height);
+        g2.drawRect((int) drawPoint.getX(), (int) drawPoint.getY(), (int) carP_Width, (int) carP_Height);
         g2.setColor(Color.BLACK);
         g2.fillOval(
-                (int) (carPosition.x - POINT_RADIUS/2),
-                (int) (carPosition.y - POINT_RADIUS/2),
+                (int) (carPosition.getX() - (double) POINT_RADIUS /2),
+                (int) (carPosition.getY() - (double) POINT_RADIUS /2),
                 POINT_RADIUS,
                 POINT_RADIUS
         );
@@ -176,15 +158,15 @@ public class AxisPanel extends JPanel {
     }
 
     // convert to Pixel with x0,y0 base
-    private Point2D.Double toPixel(Point2D.Double oldPoint) {
-        int px = x0 + (int)(oldPoint.x * scale);
-        int py = y0 - (int)(oldPoint.y * scale);
-        return new Point2D.Double(px, py);
+    private Vec2D toPixel(Vec2D oldPoint) {
+        int px = x0 + (int)(oldPoint.getX() * scale);
+        int py = y0 - (int)(oldPoint.getY() * scale);
+        return new Vec2D(px, py);
     }
 
     // Add a point and repaint panel
-    public void addPoint(Point2D.Double point) {
-        points.add(new Point2D.Double(point.x, point.y));
+    public void addPoint(Vec2D point) {
+        roadTrace.addPoint(new Vec2D(point.getX(), point.getY()));
         repaint();
     }
 
@@ -202,11 +184,8 @@ public class AxisPanel extends JPanel {
 
     //start a Car
     public void startCar() {
-        this.car = car;
         segIndex = 0;
         segTraveled = 0;
-        Point2D.Double startPoint = points.get(0);
-        car.setPositionPoint(startPoint.x,startPoint.y);
         if (carTimer != null && carTimer.isRunning()){
             carTimer.stop();
         }
@@ -225,13 +204,13 @@ public class AxisPanel extends JPanel {
         // moving distance
         double traveled = car.getVelocity() * ((System.currentTimeMillis() - startTime)/1000.0);
 
-        while (traveled > 0 && segIndex < points.size()-1) {
+        while (traveled > 0 && segIndex < roadTrace.getPoints().size()-1) {
             totalTime += (System.currentTimeMillis() - startTime)/1000.0;
             startTime = System.currentTimeMillis();
-            Point2D.Double indexPoint = points.get(segIndex);
-            Point2D.Double nextPoint =  points.get(segIndex +1);
-            double deltaX =  (nextPoint.x - indexPoint.x);
-            double deltaY =  (nextPoint.y - indexPoint.y);
+            Vec2D indexPoint = roadTrace.getPoints().get(segIndex);
+            Vec2D nextPoint =  roadTrace.getPoints().get(segIndex +1);
+            double deltaX =  (nextPoint.getX() - indexPoint.getX());
+            double deltaY =  (nextPoint.getY() - indexPoint.getY());
             double segLength = Math.sqrt(Math.pow(deltaX,2) + Math.pow(deltaY,2));
 
             double remain = segLength - segTraveled;
@@ -242,10 +221,10 @@ public class AxisPanel extends JPanel {
             if (traveled < remain){
                 segTraveled += traveled;
                 double ratio = segTraveled / segLength;
-                car.setPositionPoint(indexPoint.x + deltaX * ratio, indexPoint.y +deltaY * ratio);
+                car.setPositionPoint(indexPoint.getX() + deltaX * ratio, indexPoint.getY() +deltaY * ratio);
                 traveled = 0;
             } else {
-                car.setPositionPoint(nextPoint.x,nextPoint.y);
+                car.setPositionPoint(nextPoint.getX(), nextPoint.getY());
                 traveled -= remain;
                 segIndex++;
                 segTraveled = 0;
@@ -256,25 +235,13 @@ public class AxisPanel extends JPanel {
         }
         repaint();
         // stop when we reach the end of the path
-        if (segIndex >= points.size() - 1) {
+        if (segIndex >= roadTrace.getPoints().size() - 1) {
             carTimer.stop();
         }
     }
 
-    public List<Obstacle> getObstacles() {
-        return obstacles;
-    }
-
-    public List<Point2D.Double> getPoints() {
-        return points;
-    }
-
-    public Car getCar() {
-        return car;
-    }
-
     public String getCarStatus() {
-        if (segIndex >= points.size() - 1)
+        if (segIndex >= roadTrace.getPoints().size() - 1)
             return "Finished";
         if (carTimer != null && carTimer.isRunning())
             return "Moving";
@@ -296,7 +263,7 @@ public class AxisPanel extends JPanel {
     public void stopCar() {
         if (carTimer != null) {
             carTimer.stop();
-            segIndex = points.size(); // Skip to end
+            segIndex = roadTrace.getPoints().size(); // Skip to end
             repaint();
         }
     }
@@ -305,9 +272,9 @@ public class AxisPanel extends JPanel {
         if (carTimer != null) {
             carTimer.stop();
         }
-        if (!points.isEmpty()) {
-            Point2D.Double startPoint = points.get(0);
-            car.setPositionPoint(startPoint.x, startPoint.y);
+        if (!roadTrace.getPoints().isEmpty()) {
+            Vec2D startPoint = roadTrace.first();
+            car.setPositionPoint(startPoint.getX(), startPoint.getY());
             segIndex = 0;
             segTraveled = 0;
             totalTime = 0;
@@ -320,8 +287,9 @@ public class AxisPanel extends JPanel {
 
         this.addCar(new Car(startPosition.getX(), startPosition.getY(), startPosition.getHeading()));
 
-        this.addPoint(new Point2D.Double(startPosition.getX(), startPosition.getY()));
-        scenario.getTrace().forEach(point -> this.addPoint(new Point2D.Double(point.getX(), point.getY())));
+        this.roadTrace = new RoadTrace(new ArrayList<>());
+        this.addPoint(new Vec2D(startPosition.getX(), startPosition.getY()));
+        scenario.getTrace().forEach(point -> this.addPoint(new Vec2D(point.getX(), point.getY())));
 
         scenario.getObjects().forEach(object -> this.addObstacle(new Obstacle(object.getXStart(), object.getYStart(), object.getXEnd(), object.getYEnd(), object.getHeight())));
     }

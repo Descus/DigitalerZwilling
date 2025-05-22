@@ -1,8 +1,9 @@
 package de.frauas.GUI.controllers;
 
+import de.frauas.objects.datastructures.Vec2D;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -72,12 +73,12 @@ public class CarPositionPanel extends JPanel {
 
     private void updateInfo() {
         String status = axisPanel.getCarStatus();
-        Point2D.Double pos = axisPanel.getCar().getPositionPoint();
+        Vec2D pos = axisPanel.getCar().getPositionPoint();
         SimpleDateFormat timeFmt = new SimpleDateFormat("ss:SSS");
         String timestamp = timeFmt.format(new Date());
         String entry = String.format(
                 "%s - %s - (%.1f, %.1f)",
-                timestamp, status, pos.x, pos.y
+                timestamp, status, pos.getX(), pos.getY()
         );
         model.addElement(entry);
         // Scroll to the latest entry
