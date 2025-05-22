@@ -1,6 +1,5 @@
 package de.frauas.objects.datastructures;
 
-import de.frauas.GUI.shapes.Circle;
 import de.frauas.Settings;
 import lombok.Getter;
 

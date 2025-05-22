@@ -4,13 +4,11 @@ import de.frauas.objects.datastructures.Vec2D;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.util.List;
 
 public class PathInfoPanel extends JPanel{
     private final AxisPanel axisPanel;
     private final DefaultListModel<String> listModel = new DefaultListModel<>();
-    private final JList<String> infoList = new JList<>(listModel);
 
     public PathInfoPanel(AxisPanel axisPanel) {
         this.axisPanel = axisPanel;
@@ -22,6 +20,7 @@ public class PathInfoPanel extends JPanel{
         add(title, BorderLayout.NORTH);
 
         // List in center
+        JList<String> infoList = new JList<>(listModel);
         add(new JScrollPane(infoList), BorderLayout.CENTER);
 
         // Initial population
@@ -31,7 +30,7 @@ public class PathInfoPanel extends JPanel{
     private void init() {
         listModel.clear();
         List<Vec2D> points = axisPanel.getRoadTrace().getPoints();
-        System.out.println(points.size());;
+        System.out.println(points.size());
         for (int i = 0; i < points.size()-1; i++) {
             Vec2D point = points.get(i);
             Vec2D nextPoint = points.get(i+1);

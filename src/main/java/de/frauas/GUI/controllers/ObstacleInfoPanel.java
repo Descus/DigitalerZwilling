@@ -11,7 +11,6 @@ import java.util.List;
 public class ObstacleInfoPanel extends JPanel {
     private final AxisPanel axisPanel;
     private final DefaultListModel<String> listModel = new DefaultListModel<>();
-    private final JList<String> infoList = new JList<>(listModel);
 
     public ObstacleInfoPanel(AxisPanel axisPanel) {
         this.axisPanel = axisPanel;
@@ -23,6 +22,7 @@ public class ObstacleInfoPanel extends JPanel {
         add(title, BorderLayout.NORTH);
 
         // List in center
+        JList<String> infoList = new JList<>(listModel);
         add(new JScrollPane(infoList), BorderLayout.CENTER);
 
         // Initial population

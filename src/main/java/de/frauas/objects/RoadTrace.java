@@ -25,11 +25,6 @@ public class RoadTrace {
         createLines();
     }
 
-    public void removePoint(Vec2D point) {
-        points.remove(point);
-        createLines();
-    }
-
     public Vec2D first(){
         return points.getFirst();
     }

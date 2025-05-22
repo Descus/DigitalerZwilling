@@ -4,8 +4,6 @@ import de.frauas.objects.datastructures.Vec2D;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.awt.geom.Point2D;
-
 
 @Getter
 @Setter

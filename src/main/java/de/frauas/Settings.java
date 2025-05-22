@@ -2,8 +2,6 @@ package de.frauas;
 
 import de.frauas.objects.datastructures.Vec2D;
 
-import java.awt.geom.Point2D;
-
 public class Settings {
     
     public static final String TITLE = "Digitaler Zwilling";
