@@ -1,8 +1,13 @@
-package de.frauas.GUI.objects;
+package de.frauas.objects;
 
+
+import lombok.Getter;
+import lombok.Setter;
 
 import java.awt.geom.Point2D;
 
+@Getter
+@Setter
 public class Obstacle {
     private Point2D.Double startPoint;
     private Point2D.Double endPoint;
@@ -13,9 +18,4 @@ public class Obstacle {
         this.endPoint = new Point2D.Double(xEnd, yEnd);
         this.height = height;
     }
-
-    public Point2D.Double getStartPoint() {return startPoint;}
-    public Point2D.Double getEndPoint() {return endPoint;}
-    public int getHeight() { return height; }
-
 }

@@ -1,4 +1,10 @@
-package de.frauas.GUI.objects;
+package de.frauas.GUI.controllers;
+
+import de.frauas.Settings;
+import de.frauas.objects.Car;
+import de.frauas.objects.Obstacle;
+import de.frauas.scenario.dto.Scenario;
+import de.frauas.scenario.dto.StartPosition;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +21,7 @@ public class AxisPanel extends JPanel {
 
     // points in data coords (mm):
     private final List<Point2D.Double> points = new ArrayList<>(); // A list of (x,y) coordinates representing the robot’s path.
-    private static final int POINT_RADIUS = 10;
+    private static final int POINT_RADIUS = Settings.POINT_DEBUG_RADIUS;
 
     // Obstacles list
     private final List<Obstacle> obstacles = new ArrayList<>();
@@ -48,8 +54,8 @@ public class AxisPanel extends JPanel {
         // Calculates scaling to convert real-world mm into pixels.
         // Data range in millimeters
         // Define the physical size of the virtual environment (in mm).
-        double x_MAX = 1000;
-        double y_MAX = 500;
+        double x_MAX = Settings.SCENE_CANVAS.x;
+        double y_MAX = Settings.SCENE_CANVAS.y;
         scale = Math.min(drawableWidth / x_MAX, drawableHeight / y_MAX);
 
         // Define drawing corners in coords
@@ -147,8 +153,8 @@ public class AxisPanel extends JPanel {
         //draw Car
         Point2D.Double carPosition = car.getPositionPoint();
         carPosition = toPixel(carPosition);
-        double carP_Width = car.getWidth() * scale;
-        double carP_Height = car.getHeight() * scale;
+        double carP_Width = Settings.CAR_SIZE.x * scale;
+        double carP_Height = Settings.CAR_SIZE.y * scale;
         Point2D.Double drawPoint = new Point2D.Double();
         drawPoint.x = carPosition.x - (carP_Width/ 2);
         drawPoint.y = carPosition.y - (carP_Height / 2);
@@ -307,5 +313,16 @@ public class AxisPanel extends JPanel {
             totalTime = 0;
             repaint();
         }
+    }
+    
+    public void populate(Scenario scenario) {
+        StartPosition startPosition = scenario.getStartPosition();
+
+        this.addCar(new Car(startPosition.getX(), startPosition.getY(), startPosition.getHeading()));
+
+        this.addPoint(new Point2D.Double(startPosition.getX(), startPosition.getY()));
+        scenario.getTrace().forEach(point -> this.addPoint(new Point2D.Double(point.getX(), point.getY())));
+
+        scenario.getObjects().forEach(object -> this.addObstacle(new Obstacle(object.getXStart(), object.getYStart(), object.getXEnd(), object.getYEnd(), object.getHeight())));
     }
 }

@@ -1,7 +1,6 @@
 package de.frauas.GUI.controllers;
 
-import de.frauas.GUI.objects.AxisPanel;
-import de.frauas.GUI.objects.Obstacle;
+import de.frauas.objects.Obstacle;
 
 import javax.swing.*;
 import java.awt.*;

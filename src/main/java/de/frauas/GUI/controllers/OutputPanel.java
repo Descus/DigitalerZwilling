@@ -1,7 +1,5 @@
 package de.frauas.GUI.controllers;
 
-import de.frauas.GUI.objects.*;
-
 import javax.swing.*;
 
 public class OutputPanel extends JPanel {

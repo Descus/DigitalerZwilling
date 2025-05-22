@@ -1,7 +1,5 @@
 package de.frauas.GUI.controllers;
 
-import de.frauas.GUI.objects.*;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;

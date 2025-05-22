@@ -1,8 +1,5 @@
 package de.frauas.GUI.controllers;
 
-import de.frauas.GUI.objects.AxisPanel;
-import de.frauas.GUI.objects.Obstacle;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
