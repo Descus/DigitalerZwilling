@@ -12,12 +12,15 @@ import java.util.function.Function;
 @Getter
 public class RoadTrace {
 
-    private final List<Vec2D> points = new ArrayList<>();
-    private final List<Line2D> lines = new ArrayList<>();
+    protected final List<Vec2D> points = new ArrayList<>();
+    protected final List<Line2D> lines = new ArrayList<>();
 
     public RoadTrace(List<Vec2D> points) {
         this.points.addAll(points);
         createLines();
+    }
+
+    public RoadTrace() {
     }
 
     public void addPoint(Vec2D point) {
