@@ -18,8 +18,8 @@ public class CarPositionPanel extends JPanel {
     public CarPositionPanel(AxisPanel axisPanel) {
         this.axisPanel = axisPanel;
         setLayout(new BorderLayout(5, 5));
-        JLabel titel = new JLabel("Track Car");
-        add(titel, BorderLayout.NORTH);
+        JLabel title = new JLabel("Track Car");
+        add(title, BorderLayout.NORTH);
 
 
         // Top: update interval control
