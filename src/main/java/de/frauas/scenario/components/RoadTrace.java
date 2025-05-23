@@ -12,10 +12,13 @@ import java.util.List;
 public class RoadTrace implements Drawable {
     protected final List<Vec2F> points = new ArrayList<>();
     protected final List<Line2F> lines = new ArrayList<>();
+    protected final List<Line2F> upperLines = new ArrayList<>();
+    protected final List<Line2F> lowerLines = new ArrayList<>();
 
     public void addPoint(Vec2F point) {
         points.add(point);
         createLines();
+        createUpperLines();
     }
 
     public void removePoint(Vec2F point) {
@@ -30,10 +33,21 @@ public class RoadTrace implements Drawable {
     @Override
     public void draw(Graphics2D g, Vec2F scale, float deltaTime) {
         Graphics2D g2d = (Graphics2D) g.create();
+        Graphics2D g2dUpperLine = (Graphics2D) g2d.create();
+        Graphics2D g2dLowerLine = (Graphics2D) g2d.create();
         for (Line2F line : lines) {
             line.draw(g2d, scale, deltaTime);
         }
+        for (Line2F upperLine : upperLines) {
+            upperLine.draw(g2dUpperLine, scale, deltaTime);
+        }
+        for (Line2F lowerLine : lowerLines) {
+            lowerLine.draw(g2dLowerLine, scale, deltaTime);
+        }
         g2d.dispose();
+        g2dUpperLine.dispose();
+        g2dLowerLine.dispose();
+
     }
 
     public void createLines() {
@@ -43,53 +57,60 @@ public class RoadTrace implements Drawable {
             lines.add(new Line2F(points.get(i), points.get(i + 1)));
         }
     }
-}
+    public void createUpperLines() {
+        upperLines.clear();
+        lowerLines.clear(); // Falls du auch eine untere Linie erstellen möchtest
+
+        float offset = 10.0f; // Verschiebungslänge in Einheiten oder Pixeln
+
+        for (int i = 0; i < points.size() - 1; i++) {
+            Vec2F a = points.get(i);
+            Vec2F b = points.get(i + 1);
 
 
-//    private void createBezierLines() {
+            float dx = b.x() - a.x();
+            float dy = b.y() - a.y();
+
+
+            float normalX = -dy;
+            float normalY = dx;
+
+
+            float length = (float) Math.sqrt(normalX * normalX + normalY * normalY);
+            float unitX = normalX / length;
+            float unitY = normalY / length;
+
+
+            Vec2F shiftedA = new Vec2F(a.x() + unitX * offset, a.y() + unitY * offset);
+            Vec2F shiftedB = new Vec2F(b.x() + unitX * offset, b.y() + unitY * offset);
+
+
+            upperLines.add(new Line2F(shiftedA, shiftedB));
+
+
+//            Vec2F shiftedALower = new Vec2F(a.x() - unitX * offset, a.y() - unitY * offset);
+//            Vec2F shiftedBLower = new Vec2F(b.x() - unitX * offset, b.y() - unitY * offset);
+//            lowerLines.add(new Line2F(shiftedALower, shiftedBLower));
+        }
+    }
+
+
+
+//        for (int i = 0; i < points.size() - 1; i++) {
+//            Vec2F a = points.get(i);
+//            Vec2F b = points.get(i + 1);
 //
-//        if (points.size() < 4) {
-//            for (int i = 0; i < points.size() - 1; i++) {
-//                lines.add(new Line2F(points.get(i), points.get(i + 1)));
-//            }
-//            return;
+//            Vec2F distance = b.subtract(a);
+//
+//            Vec2F normal = new Vec2F(-distance.y(), distance.x());
+//
+//            float len = (float) Math.sqrt(normal.x() * normal.x() + normal.y() * normal.y());
+//            Vec2F unitNormal = new Vec2F(normal.x() / len, normal.y() / len);
+//            Vec2F shift = new Vec2F(unitNormal.x() * offsetLower, unitNormal.y() * offsetLower);
+//
+//            Vec2F shiftedA = a.add(shift);
+//            Vec2F shiftedB = b.add(shift);
+//
+//            lowerLines.add(new Line2F(shiftedA, shiftedB));
 //        }
-//
-//        int sample = 4;
-//        List<Vec2F> interpolatedPoints = CatmullRom(points);
-//
-//        for (int i = 0; i < interpolatedPoints.size() - 1; i++) {
-//            lines.add(new Line2F(interpolatedPoints.get(i), interpolatedPoints.get(i + 1)));
-//        }
-//    }
-//
-//    private List<Vec2F> CatmullRom(List<Vec2F> originalPoints) {
-//        List<Vec2F> newPoints = new ArrayList<>();
-//
-//        for (int i = 1; i < originalPoints.size() - 2; i++) {
-//            Vec2F p0 = originalPoints.get(i - 1);
-//            Vec2F p1 = originalPoints.get(i);
-//            Vec2F p2 = originalPoints.get(i + 1);
-//            Vec2F p3 = originalPoints.get(i + 2);
-//
-//            for (int j = 0; j <= ROAD_TRACE_BEZIER; j++) {
-//                float t = j / (float) ROAD_TRACE_BEZIER;
-//                float t2 = t * t;
-//                float t3 = t2 * t;
-//
-//                float x = 0.5f * ((2 * p1.x())
-//                        + (-p0.x() + p2.x()) * t
-//                        + (2 * p0.x() - 5 * p1.x() + 4 * p2.x() - p3.x()) * t2
-//                        + (-p0.x() + 3 * p1.x() - 3 * p2.x() + p3.x()) * t3);
-//
-//                float y = 0.5f * ((2 * p1.y())
-//                        + (-p0.y() + p2.y()) * t
-//                        + (2 * p0.y() - 5 * p1.y() + 4 * p2.y() - p3.y()) * t2
-//                        + (-p0.y() + 3 * p1.y() - 3 * p2.y() + p3.y()) * t3);
-//
-//                newPoints.add(new Vec2F(x, y));
-//            }
-//        }
-//        return newPoints;
-//    }
-//}
+    }

@@ -39,7 +39,7 @@ public class Program {
                     scenario.getStartPosition().getYPosition()));
             scenario.getTrace().forEach(p -> bezierRoadTrace.addPoint(new Vec2F(p.getXPosition(), p.getYPosition())));
 
-            scene.addDrawable(bezierRoadTrace);
+            //scene.addDrawable(bezierRoadTrace);
             scene.addDrawable(roadTrace);
             scene.addDrawable(car);
 
