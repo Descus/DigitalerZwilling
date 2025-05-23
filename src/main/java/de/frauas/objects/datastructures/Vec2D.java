@@ -47,7 +47,7 @@ public class Vec2D {
         //TODO
     }
     
-    public Vec2D perpendicuar(){
+    public Vec2D perpendicular(){
         //TODO
     }
 }
