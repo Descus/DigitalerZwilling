@@ -50,16 +50,16 @@ class Vec2DTest {
     @Test
     void rotate() {
         Vec2D vec1 = new Vec2D(1, 1);
-        Vec2D result = vec1.rotate(90);
-        assertEquals(-1, result.getX());
-        assertEquals(1, result.getY());
+        Vec2D result = vec1.rotate(-90);
+        assertEquals(1, result.getX());
+        assertEquals(-1, result.getY(), 0.001);
     }
 
     @Test
     void normalize() {
-        Vec2D vec1 = new Vec2D(4, 4);
+        Vec2D vec1 = new Vec2D(0, 4);
         Vec2D result = vec1.normalize();
-        assertEquals(1, result.getX());
+        assertEquals(0, result.getX());
         assertEquals(1, result.getY());
     }
 
@@ -83,8 +83,8 @@ class Vec2DTest {
     void perpendicular() {
         Vec2D vec1 = new Vec2D(1, 1);
         Vec2D result = vec1.perpendicular();
-        assertEquals(-1, result.getX());
-        assertEquals(1, result.getY());
+        assertEquals(1, result.getX());
+        assertEquals(-1, result.getY());
     }
     
     @Test

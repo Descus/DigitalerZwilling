@@ -6,7 +6,6 @@ import lombok.Getter;
 public class Vec2D {
     private final double x, y;
 
-
     public Vec2D(double x, double y) {
         this.x = x;
         this.y = y;
@@ -25,28 +24,23 @@ public class Vec2D {
     }
 
     public double dotProd(Vec2D other){
-        double result = this.x * other.x + this.y * other.y;
-        return result;
+        return this.x * other.x + this.y * other.y;
 
     }
 
     public double length() {
-            double result = Math.sqrt(this.x * this.x + this.y * this.y);
-            return result;
+        return Math.sqrt(lengthSq());
     }
 
     public double lengthSq(){
-        double result = this.x * this.x + this.y * this.y;
-        return result;
+        return this.x * this.x + this.y * this.y;
     }
 
-    public Vec2D rotate(double angle) {
+    public Vec2D rotate(double angleDeg) {
+        double angle = Math.toRadians(angleDeg);
         double cosA = Math.cos(angle);
         double sinA = Math.sin(angle);
-        double newX = this.x * cosA - this.y * sinA;
-        double newY = this.x * sinA + this.y * cosA;
-        Vec2D result = new Vec2D(newX, newY);
-        return result;
+        return new Vec2D( this.x * cosA - this.y * sinA, this.x * sinA + this.y * cosA);
     }
 
     public Vec2D normalize() {
