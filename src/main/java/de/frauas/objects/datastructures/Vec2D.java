@@ -60,7 +60,7 @@ public class Vec2D {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    public Vec2D perpendicuar(){
+    public Vec2D perpendicular(){
         //TODO
         throw new UnsupportedOperationException("Not yet implemented");
     }
@@ -68,5 +68,9 @@ public class Vec2D {
     public void draw(Graphics g, Function<Vec2D, Vec2D> transformFunction){
         Vec2D transformedPoint = transformFunction.apply(this);
         g.fillOval((int) transformedPoint.getX(), (int) transformedPoint.getY(), Settings.POINT_DEBUG_RADIUS, Settings.POINT_DEBUG_RADIUS);
+    }
+    
+    public String toString(){
+        return String.format("(%.1f, %.1f)", x, y);
     }
 }

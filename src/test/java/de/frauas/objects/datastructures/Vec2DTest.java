@@ -80,9 +80,9 @@ class Vec2DTest {
     }
     
     @Test
-    void perpendicuar() {
+    void perpendicular() {
         Vec2D vec1 = new Vec2D(1, 1);
-        Vec2D result = vec1.perpendicuar();
+        Vec2D result = vec1.perpendicular();
         assertEquals(-1, result.getX());
         assertEquals(1, result.getY());
     }
