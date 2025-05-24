@@ -17,7 +17,7 @@ public class Vec2D {
 
     public Vec2D add(Vec2D other) {
         //TODO
-        throw new UnsupportedOperationException("Not yet implemented");
+        return new Vec2D(x + other.x, y + other.y);
     }
 
     public Vec2D subtract(Vec2D other){

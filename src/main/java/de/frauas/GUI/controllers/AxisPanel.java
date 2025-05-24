@@ -282,7 +282,7 @@ public class AxisPanel extends JPanel {
 
         this.addCar(new Car(startPosition.getX(), startPosition.getY(), startPosition.getHeading()));
 
-        this.roadTrace = new RoadTrace(new ArrayList<>());
+        this.roadTrace = new CatmullRom( new ArrayList<>());
         this.addPoint(new Vec2D(startPosition.getX(), startPosition.getY()));
         scenario.getTrace().forEach(point -> this.addPoint(new Vec2D(point.getX(), point.getY())));
 

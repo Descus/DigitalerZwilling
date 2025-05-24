@@ -3,23 +3,29 @@ package de.frauas.objects;
 import de.frauas.Settings;
 import de.frauas.objects.datastructures.Vec2D;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import static de.frauas.Settings.CATMULL_ROM_INTERPOLATION_SIZE;
 
 public class CatmullRom extends RoadTrace {
-    private List<Vec2D> CatmullRom(List<Vec2D> originalPoints) {
 
+    public CatmullRom(List<Vec2D> points) {
+        super(points);
+    }
+
+    @Override
+    public void createLines(){
         List<Vec2D> calcPoints = new ArrayList<>();
 
-        for (int i = 1; i < originalPoints.size() - 2; i++) {
+        for (int i = 1; i < points.size() - 2; i++) {
 
             //Catmull Rom Algorithm needs 2 points
             // in addition it needs the point before and after the distance of 2 points
-            Vec2D p0 = originalPoints.get(i - 1);
-            Vec2D p1 = originalPoints.get(i);
-            Vec2D p2 = originalPoints.get(i + 1);
-            Vec2D p3 = originalPoints.get(i + 2);
+            Vec2D p0 = points.get(i - 1);
+            Vec2D p1 = points.get(i);
+            Vec2D p2 = points.get(i + 1);
+            Vec2D p3 = points.get(i + 2);
 
             for (int j = 0; j < CATMULL_ROM_INTERPOLATION_SIZE; j++) {
                 float t1 = j / (float) CATMULL_ROM_INTERPOLATION_SIZE;
@@ -42,6 +48,6 @@ public class CatmullRom extends RoadTrace {
                 calcPoints.add(calcPoints.getLast());
             }
         }
-        return calcPoints;
+        //return calcPoints;
     }
 }
