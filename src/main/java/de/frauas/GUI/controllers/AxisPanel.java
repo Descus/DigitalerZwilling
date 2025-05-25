@@ -2,10 +2,10 @@ package de.frauas.GUI.controllers;
 
 import de.frauas.Settings;
 import de.frauas.objects.Car;
-import de.frauas.objects.CatmullRom;
 import de.frauas.objects.Obstacle;
-import de.frauas.objects.RoadTrace;
 import de.frauas.objects.datastructures.Vec2D;
+import de.frauas.objects.trace.CatmullRomTrace;
+import de.frauas.objects.trace.RoadTrace;
 import de.frauas.scenario.dto.Scenario;
 import de.frauas.scenario.dto.StartPosition;
 import lombok.Getter;
@@ -24,7 +24,7 @@ public class AxisPanel extends JPanel {
     // A list of (x,y) coordinates representing the robot’s path.
     @Getter
     private RoadTrace roadTrace;
-    private CatmullRom catmullRom;
+
     private static final int POINT_RADIUS = Settings.POINT_DEBUG_RADIUS;
 
     // Obstacles list
@@ -166,7 +166,7 @@ public class AxisPanel extends JPanel {
 
     // Add a point and repaint panel
     public void addPoint(Vec2D point) {
-        catmullRom.addPoint(new Vec2D(point.getX(), point.getY()));
+        roadTrace.addPoint(new Vec2D(point.getX(), point.getY()));
         repaint();
     }
 
@@ -282,7 +282,7 @@ public class AxisPanel extends JPanel {
 
         this.addCar(new Car(startPosition.getX(), startPosition.getY(), startPosition.getHeading()));
 
-        this.roadTrace = new RoadTrace(new ArrayList<>());
+        this.roadTrace = new CatmullRomTrace();
         this.addPoint(new Vec2D(startPosition.getX(), startPosition.getY()));
         scenario.getTrace().forEach(point -> this.addPoint(new Vec2D(point.getX(), point.getY())));
 

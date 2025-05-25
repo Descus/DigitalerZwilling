@@ -91,4 +91,16 @@ public class Vec2D {
         Vec2D transformedPoint = transformFunction.apply(this);
         g.fillOval((int) transformedPoint.getX(), (int) transformedPoint.getY(), Settings.POINT_DEBUG_RADIUS, Settings.POINT_DEBUG_RADIUS);
     }
+
+    public boolean equals(Vec2D other){
+        return this.x == other.x && this.y == other.y;
+    }
+
+    public Vec2D reflect(Vec2D p){
+        return p.scale(2).subtract(this);
+    }
+
+    public static Vec2D select(Vec2D a, Vec2D b, boolean isA){
+        return isA ? a : b;
+    }
 }
