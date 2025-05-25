@@ -38,8 +38,8 @@ public class NavigationController {
             System.out.println("RIGHT");
             rotateRight();
         } else if (s[0] == 0 && s[1] == 0 && s[2] == 1) {
-            System.out.println("LEFT");
-            rotateLeft();
+            System.out.println("RIGHT");
+            rotateRight();
         } else if (s[0] == 1 && s[1] == 1 && s[2] == 1) {
             System.out.println("STRAIGHT");
             moveForward();

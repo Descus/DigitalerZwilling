@@ -74,7 +74,7 @@ public class InfraredSensorSimulator {
             float distance = Math.abs(cross) / (float) Math.sqrt(lenSq);
 
             // Wenn Abstand zur Linie klein genug ist => Punkt liegt im Streifen
-            if (distance <= 0.5f) return true;
+            if (distance <= 1.5f) return true;
         }
         return false;
     }
