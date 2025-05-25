@@ -59,4 +59,8 @@ public class BezierRoadTrace extends RoadTrace implements Drawable {
             lowerLines.add(new Line2F(interpolatedPoints.get(i), interpolatedPoints.get(i + 1)));
         }
     }
+
+    public List<Line2F> getLines() {
+        return this.lines;
+    }
 }
