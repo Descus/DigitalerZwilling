@@ -22,6 +22,16 @@ public record Vec2F(float x, float y) implements Drawable {
             g2d.dispose();
         }
     }
+
+    public Vec2F addition(Vec2F other) {
+        return new Vec2F(this.x + other.x, this.y + other.y);
+    }
+
+    public Vec2F subtract(Vec2F other) {
+        return new Vec2F(this.x - other.x, this.y - other.y);
+    }
+
+
     
     public Vec2F add(Vec2F other){
         return new Vec2F(x + other.x, y + other.y);
@@ -70,4 +80,6 @@ public record Vec2F(float x, float y) implements Drawable {
     public float y() {
         return y;
     }
+
 }
+
