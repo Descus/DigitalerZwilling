@@ -8,6 +8,14 @@ import java.util.function.Function;
 
 @Getter
 public class Vec2D {
+
+    public static final Vec2D zero = new Vec2D(0, 0);
+    public static final Vec2D one = new Vec2D(1, 1);
+    public static final Vec2D right = new Vec2D(1, 0);
+    public static final Vec2D left = new Vec2D(-1, 0);
+    public static final Vec2D up = new Vec2D(0, 1);
+    public static final Vec2D down = new Vec2D(0, -1);
+
     private final double x, y;
 
     public Vec2D(double x, double y) {
@@ -24,12 +32,11 @@ public class Vec2D {
     }
 
     public Vec2D scale(double factor) {
-        return new Vec2D(this.x * factor , this.y * factor);
+        return new Vec2D(this.x * factor, this.y * factor);
     }
 
     public double dotProd(Vec2D other){
         return this.x * other.x + this.y * other.y;
-
     }
 
     public double length() {
@@ -38,6 +45,26 @@ public class Vec2D {
 
     public double lengthSq(){
         return this.x * this.x + this.y * this.y;
+    }
+
+    public Vec2D abs() {
+        return new Vec2D(Math.abs(this.x), Math.abs(this.y));
+    }
+
+    public Vec2D max(Vec2D other) {
+        return new Vec2D(Math.max(this.x, other.x), Math.max(this.y, other.y));
+    }
+
+    public Vec2D min(Vec2D other) {
+        return new Vec2D(Math.min(this.x, other.x), Math.min(this.y, other.y));
+    }
+
+    public double maxComponent() {
+        return Math.max(this.x, this.y);
+    }
+
+    public double minComponent() {
+        return Math.min(this.x, this.y);
     }
 
     public Vec2D rotate(double angleDeg) {
