@@ -15,6 +15,7 @@ public class Mat2D {
 
     public static final Mat2D IDENTITY = new Mat2D(1, 0, 0, 1);
     public static final Mat2D ZERO = new Mat2D(0, 0, 0, 0);
+    public static final Mat2D ONE = new Mat2D(1, 1, 1, 1);
 
     public Mat2D add(Mat2D other){
         return new Mat2D(m00 + other.m00, m01 + other.m01, m10 + other.m10, m11 + other.m11);

@@ -35,13 +35,12 @@ public class PathInfoPanel extends JPanel{
             Vec2D point = points.get(i);
             Vec2D nextPoint = points.get(i+1);
 
-            double distance = Math.sqrt(Math.pow(point.getX() - nextPoint.getX(), 2) + Math.pow(point.getX() - nextPoint.getY(), 2));
+            double distance = nextPoint.subtract(point).length();
             String info = String.format(
                     "Point %d (%.1f,%.1f) - Point %d (%.1f,%.1f) : %.2f mm",
                     i, point.getX(), point.getY(), i+1, nextPoint.getX(), nextPoint.getY(), distance
             );
             listModel.addElement(info);
         }
-
     }
 }

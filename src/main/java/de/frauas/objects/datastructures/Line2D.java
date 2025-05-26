@@ -19,9 +19,18 @@ public class Line2D {
         return start.add(end.subtract(start).scale(t));
     }
 
+    public double length(){
+        return 0;
+        //return end.subtract(start).length();
+    }
+    
     public void draw(Graphics g, Function<Vec2D, Vec2D> transformFunction) {
         Vec2D start = transformFunction.apply(this.start);
         Vec2D end = transformFunction.apply(this.end);
         g.drawLine((int) start.getX(), (int) start.getY(), (int) end.getX(), (int) end.getY());
+    }
+    
+    public String toString(){
+        return String.format("%s -> %s", start.toString(), end.toString());
     }
 }
