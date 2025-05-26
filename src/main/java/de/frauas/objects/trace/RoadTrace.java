@@ -1,4 +1,4 @@
-package de.frauas.objects;
+package de.frauas.objects.trace;
 
 import de.frauas.objects.datastructures.Line2D;
 import de.frauas.objects.datastructures.Vec2D;
@@ -12,12 +12,15 @@ import java.util.function.Function;
 @Getter
 public class RoadTrace {
 
-    private final List<Vec2D> points = new ArrayList<>();
-    private final List<Line2D> lines = new ArrayList<>();
+    protected final List<Vec2D> points = new ArrayList<>();
+    protected final List<Line2D> lines = new ArrayList<>();
 
     public RoadTrace(List<Vec2D> points) {
         this.points.addAll(points);
         createLines();
+    }
+
+    public RoadTrace() {
     }
 
     public void addPoint(Vec2D point) {
@@ -48,7 +51,7 @@ public class RoadTrace {
         points.forEach(p -> p.draw(g, transformFunction));
     }
 
-    private void createLines(){
+    protected void createLines(){
         lines.clear();
         for (int i = 0; i < points.size() - 1; i++) {
             lines.add(new Line2D(points.get(i), points.get(i + 1)));
