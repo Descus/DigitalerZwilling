@@ -8,7 +8,8 @@ public class NavigationController {
     private Vec2F currentPosition;
     private double currentRotationDeg;
 
-    private static final double STEP_DISTANCE_CM = 2.8; //0.28;
+    private static final double STEP_DISTANCE_CM = 2.8;
+    //28 wäre richtig vermutlich da 28mm -> 2.8cm
     private static final double STEP_DISTANCE_TURN_CM = 1.4;
     private static final double ROTATION_LEFT_DEG = 0.7;
     private static final double ROTATION_RIGHT_DEG = 0.7;
@@ -48,7 +49,6 @@ public class NavigationController {
             // nichts tun
         } else {
             System.out.println("STOP");
-            //
         }
     }
 
@@ -61,18 +61,18 @@ public class NavigationController {
 
     private void rotateLeft() {
         currentRotationDeg = (currentRotationDeg - ROTATION_LEFT_DEG) % 360;
-        double angleRad = Math.toRadians(currentRotationDeg);
-        float dx = (float)(Math.sin(angleRad) * STEP_DISTANCE_TURN_CM);
-        float dy = (float)(Math.cos(angleRad) * STEP_DISTANCE_TURN_CM);
-        currentPosition = new Vec2F(currentPosition.x() + dx, currentPosition.y() + dy);
+        //double angleRad = Math.toRadians(currentRotationDeg);
+        //float dx = (float)(Math.sin(angleRad) * STEP_DISTANCE_TURN_CM);
+        //float dy = (float)(Math.cos(angleRad) * STEP_DISTANCE_TURN_CM);
+        //currentPosition = new Vec2F(currentPosition.x() + dx, currentPosition.y() + dy);
     }
 
     private void rotateRight() {
         currentRotationDeg = (currentRotationDeg + ROTATION_RIGHT_DEG + 360) % 360;
-        double angleRad = Math.toRadians(currentRotationDeg);
-        float dx = (float)(Math.sin(angleRad) * STEP_DISTANCE_TURN_CM);
-        float dy = (float)(Math.cos(angleRad) * STEP_DISTANCE_TURN_CM);
-        currentPosition = new Vec2F(currentPosition.x() + dx, currentPosition.y() + dy);
+        //double angleRad = Math.toRadians(currentRotationDeg);
+        //float dx = (float)(Math.sin(angleRad) * STEP_DISTANCE_TURN_CM);
+        //float dy = (float)(Math.cos(angleRad) * STEP_DISTANCE_TURN_CM);
+        //currentPosition = new Vec2F(currentPosition.x() + dx, currentPosition.y() + dy);
     }
 
     public Vec2F getCurrentPosition() {

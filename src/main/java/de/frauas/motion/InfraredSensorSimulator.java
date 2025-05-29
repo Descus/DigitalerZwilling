@@ -10,13 +10,18 @@ public class InfraredSensorSimulator {
 
     // Sensorpositionen relativ zur Fahrzeugmitte (in cm)
     private static final Vec2F SENSOR_LEFT = new Vec2F(-1.3f, 0f);
-    //y normaly at -4,35f
     private static final Vec2F SENSOR_CENTER = new Vec2F(0.0f, 0f);
     private static final Vec2F SENSOR_RIGHT = new Vec2F(1.3f, 0f);
+    /*
+    Problem beim Offset, die funktionen können nicht damit umgehen und verwechseln den
+    linken mit dem rechten Sensor(ab 270 odere 180g), das ist auch der Grund weshalb beim Run Rechts angezeigt
+    wird, obwohl der Trace nach Links verläuft. bedeutet rotateAndTranslate ist nicht passend. wenn ich LEFT auf
+    1.3 setze und RIGHT auf -1.3 funktoniert es kurz zeitig
+     */
 
     private Vec2F carPosition;
     private double carRotationDeg;
-    private List<Vec2F[]> traceSegments; // jedes Element ist ein Paar [left, right]
+    private List<Vec2F[]> traceSegments;
 
     public InfraredSensorSimulator(Vec2F carPosition, double carRotationDeg, List<Line2F> lineSegments) {
         this.carPosition = carPosition;
@@ -38,6 +43,11 @@ public class InfraredSensorSimulator {
         return result;
     }
 
+    /*
+    rotateAndTranslate funktoniert nicht, die Sensoren bekommen nicht richtige x,y werte.
+    die xy werte verlkaufen oftmals von oben nach unten obwohl sie von links nach rechst verlaufen sollten
+    komplette funktion überarbeiten
+     */
     private Vec2F rotateAndTranslate(Vec2F local) {
         double angleRad = Math.toRadians(carRotationDeg);
         double cosA = Math.cos(angleRad);
@@ -48,7 +58,10 @@ public class InfraredSensorSimulator {
 
         return new Vec2F(carPosition.x() + xRot, carPosition.y() + yRot);
     }
-
+    /*
+    Jeder trace punkt wird verglichen -> der nähste trace punkt ist oftmals nicht aus dem links,rechts segement sondern
+    irgendein anderer, wie kann man nur das aktuelle segment aus 2 punkten mit den Sensoren vergleichen?
+     */
     private boolean isWithinLine(Vec2F sensorGlobal) {
         for (Vec2F[] edgePair : traceSegments) {
             Vec2F left = edgePair[0];
@@ -80,27 +93,14 @@ public class InfraredSensorSimulator {
     }
 
 
-
-    private double pointToSegmentDistance(Vec2F p, Vec2F a, Vec2F b) {
-        double dx = b.x() - a.x();
-        double dy = b.y() - a.y();
-
-        if (dx == 0 && dy == 0) return Math.hypot(p.x() - a.x(), p.y() - a.y());
-
-        double t = ((p.x() - a.x()) * dx + (p.y() - a.y()) * dy) / (dx * dx + dy * dy);
-        t = Math.max(0, Math.min(1, t));
-
-        double projX = a.x() + t * dx;
-        double projY = a.y() + t * dy;
-
-        return Math.hypot(p.x() - projX, p.y() - projY);
-    }
-
     public void updateCarState(Vec2F position, double rotationDeg) {
         this.carPosition = position;
         this.carRotationDeg = rotationDeg;
     }
 
+    /*
+    scheint mir richtig zu funktonieren
+     */
     private List<Vec2F[]> generateEdgeSegments(List<Line2F> lineSegments) {
         List<Vec2F[]> segments = new ArrayList<>();
         for (Line2F line : lineSegments) {
@@ -112,13 +112,13 @@ public class InfraredSensorSimulator {
             double length = Math.hypot(dx, dy);
             if (length == 0) continue;
 
-            // Normale berechnen
             double nx = -dy / length;
             double ny = dx / length;
 
             // ±1.5 cm versetzt zum Mittelpunkt a
-            Vec2F left = new Vec2F((float)(a.x() + nx * 1.5), (float)(a.y() + ny * 1.5));
-            Vec2F right = new Vec2F((float)(a.x() - nx * 1.5), (float)(a.y() - ny * 1.5));
+            Vec2F left = new Vec2F((float)(a.x() + nx * 15), (float)(a.y() + ny * 15));
+            Vec2F right = new Vec2F((float)(a.x() - nx * 15), (float)(a.y() - ny * 15));
+            //vorher war 1,5mm -> Falsch jetzt 15mm(1,5cm)
 
             segments.add(new Vec2F[] { left, right });
         }
