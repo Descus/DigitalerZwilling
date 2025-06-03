@@ -4,15 +4,11 @@ import de.frauas.GUI.controllers.AxisPanel;
 import de.frauas.GUI.controllers.ControlPanel;
 import de.frauas.GUI.controllers.InputPanel;
 import de.frauas.GUI.controllers.OutputPanel;
-import de.frauas.objects.Car;
-import de.frauas.objects.Obstacle;
 import de.frauas.scenario.dto.Scenario;
-import de.frauas.scenario.dto.StartPosition;
 import de.frauas.scenario.xml.ScenarioXmlFile;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Point2D;
 
 public class Main {
     public static void main(String[] args) {
@@ -32,7 +28,6 @@ public class Main {
             e.printStackTrace();
         }
         
-
         InputPanel infoIn = new InputPanel(axisPanel);
         OutputPanel infoOut = new OutputPanel(axisPanel);
         ControlPanel controlPanel = new ControlPanel(axisPanel);
