@@ -10,30 +10,16 @@ import java.util.List;
 import java.util.function.Function;
 
 @Getter
-public class RoadTrace {
-
-    protected final List<Vec2D> points = new ArrayList<>();
+public class RoadTrace extends Trace {
+    
     protected final List<Line2D> lines = new ArrayList<>();
 
-    public RoadTrace(List<Vec2D> points) {
-        this.points.addAll(points);
-        createLines();
+    public RoadTrace(ArrayList<Vec2D> points) {
+        super(points);
     }
-
+    
     public RoadTrace() {
-    }
-
-    public void addPoint(Vec2D point) {
-        points.add(point);
-        createLines();
-    }
-
-    public Vec2D first(){
-        return points.getFirst();
-    }
-
-    public Vec2D last(){
-        return points.getLast();
+        super();
     }
 
     public Vec2D lerp(double t){
@@ -43,14 +29,12 @@ public class RoadTrace {
         return lines.get(segment).lerp(t - segment);
     }
 
+    @Override
     public void drawLines(Graphics g, Function<Vec2D, Vec2D> transformFunction){
         lines.forEach(l -> l.draw(g, transformFunction));
     }
 
-    public void drawPoints(Graphics g, Function<Vec2D, Vec2D> transformFunction){
-        points.forEach(p -> p.draw(g, transformFunction));
-    }
-
+    @Override
     protected void createLines(){
         lines.clear();
         for (int i = 0; i < points.size() - 1; i++) {
