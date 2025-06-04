@@ -15,14 +15,12 @@ public abstract class Trace {
 
     public Trace(List<Vec2D> points) {
         this.points.addAll(points);
-        createLines();
     }
 
     public Trace() {}
 
     public void addPoint(Vec2D point) {
         points.add(point);
-        createLines();
     }
 
     public Vec2D first(){

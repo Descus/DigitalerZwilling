@@ -4,7 +4,6 @@ import de.frauas.objects.datastructures.Line2D;
 import de.frauas.objects.datastructures.Vec2D;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static de.frauas.Settings.SPLINE_INTERPOLATION_SIZE;
 
@@ -12,14 +11,16 @@ public class CatmullRomTrace extends RoadTrace {
     
     public CatmullRomTrace(ArrayList<Vec2D> points) {
         super(points);
+        createLines();
     }
 
     public CatmullRomTrace() {
         super();
+        createLines();
     }
 
     @Override
-    protected void createLines() {
+    public void createLines() {
         lines.clear();
 
         if (points.size() < 2) {

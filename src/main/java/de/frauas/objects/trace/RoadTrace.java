@@ -11,15 +11,17 @@ import java.util.function.Function;
 
 @Getter
 public class RoadTrace extends Trace {
-    
+
     protected final List<Line2D> lines = new ArrayList<>();
 
     public RoadTrace(ArrayList<Vec2D> points) {
         super(points);
+        createLines();
     }
-    
+
     public RoadTrace() {
         super();
+        createLines();
     }
 
     public Vec2D lerp(double t){
