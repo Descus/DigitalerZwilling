@@ -89,6 +89,7 @@ public class Vec2D {
 
     public void draw(Graphics g, Function<Vec2D, Vec2D> transformFunction){
         Vec2D transformedPoint = transformFunction.apply(this);
+        transformedPoint = transformedPoint.subtract(new Vec2D((double) Settings.POINT_DEBUG_RADIUS / 2, (double) Settings.POINT_DEBUG_RADIUS / 2));
         g.fillOval((int) transformedPoint.getX(), (int) transformedPoint.getY(), Settings.POINT_DEBUG_RADIUS, Settings.POINT_DEBUG_RADIUS);
     }
 

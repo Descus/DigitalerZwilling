@@ -4,6 +4,8 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import de.frauas.scenario.dto.Scenario;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 import static de.frauas.Settings.SCENARIO_FILE;
 
@@ -23,11 +25,11 @@ public class ScenarioXmlFile {
     }
     
     public static ScenarioXmlFile fromExample(){
-        try {
-            return fromPath(ClassLoader.getSystemResource(SCENARIO_FILE).getFile());
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException(e);
+        URL resource = ScenarioXmlFile.class.getClassLoader().getResource(SCENARIO_FILE);
+        if (resource == null) {
+            throw new IllegalArgumentException("File not found!");
         }
+        return fromPath(resource.getFile());
     }
     
     public Scenario read() throws IOException {
