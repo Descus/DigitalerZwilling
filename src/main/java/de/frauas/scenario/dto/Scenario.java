@@ -1,4 +1,4 @@
-package de.frauas.scenario.xml.dto;
+package de.frauas.scenario.dto;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -21,5 +21,4 @@ public class Scenario {
     ArrayList<Point> trace;
     @JacksonXmlProperty(localName = "Objects")
     ArrayList<Object> objects;
-
 }

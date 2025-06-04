@@ -1,14 +1,14 @@
-package de.frauas.scenario.xml.dto;
+package de.frauas.scenario.dto;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import lombok.Getter;
 
 @Getter
 public class StartPosition {
-    @JacksonXmlProperty
-    int xPosition;
-    @JacksonXmlProperty
-    int yPosition;
+    @JacksonXmlProperty(localName = "xPosition")
+    int x;
+    @JacksonXmlProperty(localName = "yPosition")
+    int y;
     @JacksonXmlProperty
     int heading;
 }
