@@ -1,6 +1,9 @@
 package de.frauas;
 
-import de.frauas.scenario.components.*;
+import de.frauas.scenario.components.Car;
+import de.frauas.scenario.components.Obstacle;
+import de.frauas.scenario.components.RoadTrace;
+import de.frauas.scenario.components.Scene;
 import de.frauas.scenario.primitives.Vec2F;
 import de.frauas.scenario.xml.dto.Scenario;
 import de.frauas.scenario.xml.ScenarioXmlFile;
@@ -11,7 +14,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static de.frauas.Settings.TARGET_FPS;
-
 
 public class Program {
     public static void main(String[] args) {
@@ -26,20 +28,13 @@ public class Program {
                     new Vec2F(scenario.getStartPosition().getXPosition(),
                              scenario.getStartPosition().getYPosition()),
                     scenario.getStartPosition().getHeading());
-
             RoadTrace roadTrace = new RoadTrace();
             roadTrace.addPoint(new Vec2F(
                                     scenario.getStartPosition().getXPosition(),
                                     scenario.getStartPosition().getYPosition()));
             scenario.getTrace().forEach(p -> roadTrace.addPoint(new Vec2F(p.getXPosition(), p.getYPosition())));
 
-            BezierRoadTrace bezierRoadTrace = new BezierRoadTrace();
-            bezierRoadTrace.addPoint(new Vec2F(
-                    scenario.getStartPosition().getXPosition(),
-                    scenario.getStartPosition().getYPosition()));
-            scenario.getTrace().forEach(p -> bezierRoadTrace.addPoint(new Vec2F(p.getXPosition(), p.getYPosition())));
 
-            //scene.addDrawable(bezierRoadTrace);
             scene.addDrawable(roadTrace);
             scene.addDrawable(car);
 
