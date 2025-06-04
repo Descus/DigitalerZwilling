@@ -1,12 +1,14 @@
 package de.frauas.objects.trace;
 
 import de.frauas.objects.datastructures.Vec2D;
+import lombok.Getter;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+@Getter
 public abstract class Trace {
 
     protected final List<Vec2D> points = new ArrayList<>();
@@ -16,8 +18,7 @@ public abstract class Trace {
         createLines();
     }
 
-    public Trace() {
-    }
+    public Trace() {}
 
     public void addPoint(Vec2D point) {
         points.add(point);
