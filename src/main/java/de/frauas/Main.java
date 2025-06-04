@@ -4,6 +4,7 @@ import de.frauas.GUI.controllers.AxisPanel;
 import de.frauas.GUI.controllers.ControlPanel;
 import de.frauas.GUI.controllers.InputPanel;
 import de.frauas.GUI.controllers.OutputPanel;
+import de.frauas.objects.trace.ShiftedTrace;
 import de.frauas.scenario.dto.Scenario;
 import de.frauas.scenario.xml.ScenarioXmlFile;
 
@@ -27,7 +28,7 @@ public class Main {
         }catch (Exception e){
             e.printStackTrace();
         }
-        
+
         InputPanel infoIn = new InputPanel(axisPanel);
         OutputPanel infoOut = new OutputPanel(axisPanel);
         ControlPanel controlPanel = new ControlPanel(axisPanel);
@@ -45,6 +46,8 @@ public class Main {
         frame.add(axisPanel);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
+        ShiftedTrace shiftedTrace = new ShiftedTrace();
 
         // axisPanel.startCar(); the "Start" button will handle that now.
     }

@@ -6,6 +6,8 @@ import de.frauas.objects.Obstacle;
 import de.frauas.objects.datastructures.Vec2D;
 import de.frauas.objects.trace.CatmullRomTrace;
 import de.frauas.objects.trace.RoadTrace;
+import de.frauas.objects.trace.ShiftedTrace;
+import de.frauas.objects.trace.Trace;
 import de.frauas.scenario.dto.Scenario;
 import de.frauas.scenario.dto.StartPosition;
 import lombok.Getter;
@@ -24,6 +26,9 @@ public class AxisPanel extends JPanel {
     // A list of (x,y) coordinates representing the robot’s path.
     @Getter
     private RoadTrace roadTrace;
+
+    @Getter
+    private Trace shiftedTrace;
 
     private static final int POINT_RADIUS = Settings.POINT_DEBUG_RADIUS;
 
@@ -63,6 +68,17 @@ public class AxisPanel extends JPanel {
         double x_MAX = Settings.SCENE_CANVAS.getX();
         double y_MAX = Settings.SCENE_CANVAS.getY();
         scale = Math.min(drawableWidth / x_MAX, drawableHeight / y_MAX);
+
+        g2.setColor(Color.BLUE); // oder eine andere Farbe deiner Wahl
+        if (shiftedTrace != null) {
+            shiftedTrace.drawLines(g2, this::toPixel);
+            if (Settings.DEBUG) {
+                shiftedTrace.drawPoints(g2, this::toPixel);
+            }
+        }
+
+
+
 
         // Define drawing corners in coords
         x0 = MARGIN;
@@ -285,6 +301,9 @@ public class AxisPanel extends JPanel {
         this.roadTrace = new CatmullRomTrace();
         this.addPoint(new Vec2D(startPosition.getX(), startPosition.getY()));
         scenario.getTrace().forEach(point -> this.addPoint(new Vec2D(point.getX(), point.getY())));
+
+        ArrayList<Vec2D> points = new ArrayList<>(roadTrace.getPoints());
+        this.shiftedTrace = new ShiftedTrace(points);
 
         scenario.getObjects().forEach(object -> this.addObstacle(new Obstacle(object.getXStart(), object.getYStart(), object.getXEnd(), object.getYEnd(), object.getHeight())));
     }
