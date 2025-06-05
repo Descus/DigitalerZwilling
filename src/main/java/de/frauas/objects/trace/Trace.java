@@ -17,8 +17,7 @@ public abstract class Trace {
         this.points.addAll(points);
     }
 
-    public Trace() {
-    }
+    public Trace() {}
 
     public void addPoint(Vec2D point) {
         points.add(point);
