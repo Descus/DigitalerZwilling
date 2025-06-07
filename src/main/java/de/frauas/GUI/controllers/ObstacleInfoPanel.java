@@ -1,7 +1,7 @@
 package de.frauas.GUI.controllers;
 
 import de.frauas.objects.Obstacle;
-import de.frauas.objects.datastructures.Vec2D;
+import de.frauas.objects.datastructures.Vec3D;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,10 +31,10 @@ public class ObstacleInfoPanel extends JPanel {
 
     private void init() {
         listModel.clear();
-        List<Obstacle> obstacles = axisPanel.getObstacles();
+        List<Obstacle> obstacles = axisPanel.getObstacles(); //TODO Let Scene return info about all obstacles 
         for (Obstacle o : obstacles) {
-            Vec2D startPoint = o.getStartPoint();
-            Vec2D endPoint = o.getEndPoint();
+            Vec3D startPoint = o.getStartPoint();
+            Vec3D endPoint = o.getEndPoint();
             String info = String.format(
                     "Start=(%.1f, %.1f), End=(%.1f, %.1f), Height=%d mm",
                     startPoint.getX(), startPoint.getY(),

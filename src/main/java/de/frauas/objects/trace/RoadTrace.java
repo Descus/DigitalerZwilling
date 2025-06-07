@@ -1,7 +1,8 @@
 package de.frauas.objects.trace;
 
-import de.frauas.objects.datastructures.Line2D;
-import de.frauas.objects.datastructures.Vec2D;
+import de.frauas.objects.Scene;
+import de.frauas.objects.datastructures.Line3D;
+import de.frauas.objects.datastructures.Vec3D;
 import lombok.Getter;
 
 import java.awt.*;
@@ -12,19 +13,19 @@ import java.util.function.Function;
 @Getter
 public class RoadTrace extends Trace {
 
-    protected final List<Line2D> lines = new ArrayList<>();
+    protected final List<Line3D> lines = new ArrayList<>();
 
-    public RoadTrace(ArrayList<Vec2D> points) {
-        super(points);
+    public RoadTrace(Scene parent, ArrayList<Vec3D> points) {
+        super(parent, points);
         createLines();
     }
 
-    public RoadTrace() {
-        super();
+    public RoadTrace(Scene parent) {
+        super(parent);
         createLines();
     }
 
-    public Vec2D lerp(double t){
+    public Vec3D lerp(double t){
         int segment = (int) t;
         if(t > lines.size() - 1)
             return last();
@@ -32,15 +33,15 @@ public class RoadTrace extends Trace {
     }
 
     @Override
-    public void drawLines(Graphics g, Function<Vec2D, Vec2D> transformFunction){
-        lines.forEach(l -> l.draw(g, transformFunction));
+    public void drawLines(Graphics g){
+        lines.forEach(l -> l.draw(g));
     }
 
     @Override
     protected void createLines(){
         lines.clear();
         for (int i = 0; i < points.size() - 1; i++) {
-            lines.add(new Line2D(points.get(i), points.get(i + 1)));
+            lines.add(new Line3D(points.get(i), points.get(i + 1)));
         }
     }
 }

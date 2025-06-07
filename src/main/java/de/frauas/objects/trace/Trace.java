@@ -1,6 +1,8 @@
 package de.frauas.objects.trace;
 
-import de.frauas.objects.datastructures.Vec2D;
+import de.frauas.objects.Scene;
+import de.frauas.objects.Transformable;
+import de.frauas.objects.datastructures.Vec3D;
 import lombok.Getter;
 
 import java.awt.*;
@@ -9,33 +11,36 @@ import java.util.List;
 import java.util.function.Function;
 
 @Getter
-public abstract class Trace {
+public abstract class Trace extends Transformable {
 
-    protected final List<Vec2D> points = new ArrayList<>();
+    protected final List<Vec3D> points = new ArrayList<>();
 
-    public Trace(List<Vec2D> points) {
+    public Trace(Scene parent, List<Vec3D> points) {
+        this.parent = parent;
         this.points.addAll(points);
     }
 
-    public Trace() {}
+    public Trace(Scene parent) {
+        this.parent = parent;
+    }
 
-    public void addPoint(Vec2D point) {
+    public void addPoint(Vec3D point) {
         points.add(point);
     }
 
-    public Vec2D first(){
+    public Vec3D first(){
         return points.getFirst();
     }
 
-    public Vec2D last(){
+    public Vec3D last(){
         return points.getLast();
     }
     
     protected abstract void createLines();
     
-    public abstract void drawLines(Graphics g, Function<Vec2D, Vec2D> transformFunction);
+    public abstract void drawLines(Graphics g);
     
-    public void drawPoints(Graphics g, Function<Vec2D, Vec2D> transformFunction) {
-            points.forEach(p -> p.draw(g, transformFunction));
+    public void drawPoints(Graphics g) {
+            points.forEach(p -> transformPoint(p).draw(g));
     }
 }

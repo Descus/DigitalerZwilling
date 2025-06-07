@@ -1,6 +1,6 @@
 package de.frauas.GUI.controllers;
 
-import de.frauas.objects.datastructures.Vec2D;
+import de.frauas.objects.datastructures.Vec3D;
 
 import javax.swing.*;
 import java.awt.*;
@@ -73,7 +73,7 @@ public class CarPositionPanel extends JPanel {
 
     private void updateInfo() {
         String status = axisPanel.getCarStatus();
-        Vec2D pos = axisPanel.getCar().getPositionPoint();
+        Vec3D pos = axisPanel.getScene().getTransform().getPosition(); //TODO let scene return a car information object to get information from
         SimpleDateFormat timeFmt = new SimpleDateFormat("ss:SSS");
         String timestamp = timeFmt.format(new Date());
         String entry = String.format(

@@ -1,21 +1,22 @@
 package de.frauas.objects.datastructures;
 
 
+import de.frauas.objects.Transformable;
 import lombok.Getter;
 
 import java.awt.*;
 import java.util.function.Function;
 
 @Getter
-public class Line2D {
-    private final Vec2D start, end;
+public class Line3D {
+    private final Vec3D start, end;
 
-    public Line2D(Vec2D start, Vec2D end) {
+    public Line3D(Vec3D start, Vec3D end) {
         this.start = start;
         this.end = end;
     }
 
-    public Vec2D lerp(double t) {
+    public Vec3D lerp(double t) {
         return start.add(end.subtract(start).scale(t));
     }
 
@@ -23,15 +24,15 @@ public class Line2D {
         return end.subtract(start).length();
     }
     
-    public void draw(Graphics g, Function<Vec2D, Vec2D> transformFunction) {
-        Vec2D start = transformFunction.apply(this.start);
-        Vec2D end = transformFunction.apply(this.end);
+    public void draw(Graphics g, Function<Vec3D, Vec3D> transformFunction) {
+        Vec3D start = transformFunction.apply(this.start);
+        Vec3D end = transformFunction.apply(this.end);
         g.drawLine((int) start.getX(), (int) start.getY(), (int) end.getX(), (int) end.getY());
     }
     
-    public boolean rightOfLine(Vec2D point) {
-        Vec2D ap = point.subtract(start);
-        Vec2D abPerp = end.subtract(start).perpendicular();
+    public boolean rightOfLine(Vec3D point) {
+        Vec3D ap = point.subtract(start);
+        Vec3D abPerp = end.subtract(start).perpendicular();
         return ap.dotProd(abPerp) >= 0;
     }
     

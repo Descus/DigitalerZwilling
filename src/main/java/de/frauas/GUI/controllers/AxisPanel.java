@@ -3,42 +3,24 @@ package de.frauas.GUI.controllers;
 import de.frauas.Settings;
 import de.frauas.objects.Car;
 import de.frauas.objects.Obstacle;
-import de.frauas.objects.datastructures.Vec2D;
-import de.frauas.objects.trace.CatmullRomTrace;
-import de.frauas.objects.trace.RoadTrace;
-import de.frauas.objects.trace.ShiftedTrace;
-import de.frauas.objects.trace.Trace;
+import de.frauas.objects.Scene;
+import de.frauas.objects.datastructures.Vec3D;
 import de.frauas.scenario.dto.Scenario;
-import de.frauas.scenario.dto.StartPosition;
 import lombok.Getter;
+
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class AxisPanel extends JPanel {
 
     private double scale;
     private int x0, y0;
 
-    // points in data coords (mm):
-    // A list of (x,y) coordinates representing the robot’s path.
     @Getter
-    private RoadTrace roadTrace;
-
-    @Getter
-    private Trace shiftedTrace;
-
+    private Scene scene;
     private static final int POINT_RADIUS = Settings.POINT_DEBUG_RADIUS;
-
-    // Obstacles list
-    @Getter
-    private final List<Obstacle> obstacles = new ArrayList<>();
-
-    //Car
-    @Getter
-    private Car car;
 
     //Moving Car
     private Timer carTimer;
@@ -46,8 +28,7 @@ public class AxisPanel extends JPanel {
     private double segTraveled = 0;
     private long startTime;
     private double totalTime ;
-
-
+    
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -70,16 +51,7 @@ public class AxisPanel extends JPanel {
         scale = Math.min(drawableWidth / x_MAX, drawableHeight / y_MAX);
 
         g2.setColor(Color.BLUE); // oder eine andere Farbe deiner Wahl
-        if (shiftedTrace != null) {
-            shiftedTrace.drawLines(g2, this::toPixel);
-            if (Settings.DEBUG) {
-                shiftedTrace.drawPoints(g2, this::toPixel);
-            }
-        }
-
-
-
-
+        
         // Define drawing corners in coords
         x0 = MARGIN;
         y0 = height - MARGIN;
@@ -133,30 +105,31 @@ public class AxisPanel extends JPanel {
         }
 
         // draw points(Robot´s path)
-        g2.setColor(Color.BLACK);
+        g2.setColor(Color.RED);
         if (Settings.DEBUG)
-            roadTrace.drawPoints(g2, this::toPixel);
+            scene.getTrace().drawPoints(g);
 
         // draw lines between consecutive points
-        g2.setColor(Color.RED);
-        roadTrace.drawLines(g2, this::toPixel);
+        g2.setColor(Color.BLACK);
+        scene.getTrace().drawLines(g2);
 
+        g2.setColor(Color.BLACK);
         // draw Obstacle
-        for (Obstacle obs : obstacles) {
+        for (Obstacle obs : scene.getObstacles()) {
             // set Obstacle color
-            g2.setColor(Color.BLACK);
-            obs.draw(g2, this::toPixel);
+            obs.draw(g2);
         }
 
         //draw Car
-        Vec2D carPosition = toPixel(car.getPositionPoint());
+        Vec3D carPosition = toPixel(car.getTransform().getPosition());
         double carP_Width = Settings.CAR_SIZE.getX() * scale;
         double carP_Height = Settings.CAR_SIZE.getY() * scale;
-        Vec2D drawPoint = new Vec2D(
+        Vec3D drawPoint = new Vec3D(
                 carPosition.getX() - (carP_Width/ 2),
-                carPosition.getY() - (carP_Height / 2)
+                carPosition.getY() - (carP_Height / 2),
+                0
         );
-        double radian = Math.toRadians(car.getHeadingDegree());
+        double radian = Math.toRadians(car.getTransform().getRotation());
         g2.rotate(radian, carPosition.getX(), carPosition.getY());
 
 
@@ -174,15 +147,15 @@ public class AxisPanel extends JPanel {
     }
 
     // convert to Pixel with x0,y0 base
-    private Vec2D toPixel(Vec2D oldPoint) {
+    private Vec3D toPixel(Vec3D oldPoint) {
         int px = x0 + (int)(oldPoint.getX() * scale);
         int py = y0 - (int)(oldPoint.getY() * scale);
-        return new Vec2D(px, py);
+        return new Vec3D(px, py, 1);
     }
 
     // Add a point and repaint panel
-    public void addPoint(Vec2D point) {
-        roadTrace.addPoint(new Vec2D(point.getX(), point.getY()));
+    public void addPoint(Vec3D point) {
+        roadTrace.addPoint(point);
         repaint();
     }
 
@@ -212,14 +185,16 @@ public class AxisPanel extends JPanel {
     }
 
     private void movingCar(){
+        //TODO remove Linear interpolated movement and replace with sensor based decision making 
+        
         // moving distance
         double traveled = car.getVelocity() * ((System.currentTimeMillis() - startTime)/1000.0);
 
         while (traveled > 0 && segIndex < roadTrace.getPoints().size()-1) {
             totalTime += (System.currentTimeMillis() - startTime)/1000.0;
             startTime = System.currentTimeMillis();
-            Vec2D indexPoint = roadTrace.getPoints().get(segIndex);
-            Vec2D nextPoint =  roadTrace.getPoints().get(segIndex +1);
+            Vec3D indexPoint = roadTrace.getPoints().get(segIndex);
+            Vec3D nextPoint =  roadTrace.getPoints().get(segIndex +1);
             double deltaX =  (nextPoint.getX() - indexPoint.getX());
             double deltaY =  (nextPoint.getY() - indexPoint.getY());
             double segLength = Math.sqrt(Math.pow(deltaX,2) + Math.pow(deltaY,2));
@@ -227,15 +202,17 @@ public class AxisPanel extends JPanel {
             double remain = segLength - segTraveled;
 
             double heading = Math.toDegrees(Math.atan2(deltaX, deltaY));
-            car.setHeadingDegree(heading);
+            car.getTransform().rotate(heading);
 
             if (traveled < remain){
                 segTraveled += traveled;
                 double ratio = segTraveled / segLength;
-                car.setPositionPoint(indexPoint.getX() + deltaX * ratio, indexPoint.getY() +deltaY * ratio);
+                //TODO use Relative translation instead of absolute translation
+                car.getTransform().translate(indexPoint.getX() + deltaX * ratio, indexPoint.getY() +deltaY * ratio);
                 traveled = 0;
             } else {
-                car.setPositionPoint(nextPoint.getX(), nextPoint.getY());
+                //TODO use Relative translation instead of absolute translation
+                car.getTransform().translate(nextPoint.getX(), nextPoint.getY());
                 traveled -= remain;
                 segIndex++;
                 segTraveled = 0;
@@ -258,6 +235,7 @@ public class AxisPanel extends JPanel {
             return "Moving";
         return "Stopped";
     }
+    
     public void pauseCar() {
         if (carTimer != null && carTimer.isRunning()) {
             carTimer.stop();
@@ -284,8 +262,8 @@ public class AxisPanel extends JPanel {
             carTimer.stop();
         }
         if (!roadTrace.getPoints().isEmpty()) {
-            Vec2D startPoint = roadTrace.first();
-            car.setPositionPoint(startPoint.getX(), startPoint.getY());
+            Vec3D startPoint = roadTrace.first();
+            car.getTransform().setPosition(startPoint);
             segIndex = 0;
             segTraveled = 0;
             totalTime = 0;
@@ -294,17 +272,6 @@ public class AxisPanel extends JPanel {
     }
     
     public void populate(Scenario scenario) {
-        StartPosition startPosition = scenario.getStartPosition();
-
-        this.addCar(new Car(startPosition.getX(), startPosition.getY(), startPosition.getHeading()));
-
-        this.roadTrace = new CatmullRomTrace();
-        this.addPoint(new Vec2D(startPosition.getX(), startPosition.getY()));
-        scenario.getTrace().forEach(point -> this.addPoint(new Vec2D(point.getX(), point.getY())));
-
-        ArrayList<Vec2D> points = new ArrayList<>(roadTrace.getPoints());
-        this.shiftedTrace = new ShiftedTrace(points);
-
-        scenario.getObjects().forEach(object -> this.addObstacle(new Obstacle(object.getXStart(), object.getYStart(), object.getXEnd(), object.getYEnd(), object.getHeight())));
+        scene = new Scene(scenario);
     }
 }

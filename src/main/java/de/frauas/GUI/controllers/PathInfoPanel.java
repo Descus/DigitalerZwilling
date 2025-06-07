@@ -1,6 +1,6 @@
 package de.frauas.GUI.controllers;
 
-import de.frauas.objects.datastructures.Vec2D;
+import de.frauas.objects.datastructures.Vec3D;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,11 +29,11 @@ public class PathInfoPanel extends JPanel{
 
     private void init() {
         listModel.clear();
-        List<Vec2D> points = axisPanel.getRoadTrace().getPoints();
+        List<Vec3D> points = axisPanel.getRoadTrace().getPoints(); //TODO Let Scene return info about the trace
         System.out.println(points.size());
         for (int i = 0; i < points.size()-1; i++) {
-            Vec2D point = points.get(i);
-            Vec2D nextPoint = points.get(i+1);
+            Vec3D point = points.get(i);
+            Vec3D nextPoint = points.get(i+1);
 
             double distance = nextPoint.subtract(point).length();
             String info = String.format(

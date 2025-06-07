@@ -1,7 +1,8 @@
 package de.frauas.objects.trace;
 
-import de.frauas.objects.datastructures.Line2D;
-import de.frauas.objects.datastructures.Vec2D;
+import de.frauas.objects.Scene;
+import de.frauas.objects.datastructures.Line3D;
+import de.frauas.objects.datastructures.Vec3D;
 
 import java.util.ArrayList;
 
@@ -9,13 +10,13 @@ import static de.frauas.Settings.SPLINE_INTERPOLATION_SIZE;
 
 public class CatmullRomTrace extends RoadTrace {
     
-    public CatmullRomTrace(ArrayList<Vec2D> points) {
-        super(points);
+    public CatmullRomTrace(Scene parent, ArrayList<Vec3D> points) {
+        super(parent, points);
         createLines();
     }
 
-    public CatmullRomTrace() {
-        super();
+    public CatmullRomTrace(Scene parent) {
+        super(parent);
         createLines();
     }
 
@@ -27,18 +28,18 @@ public class CatmullRomTrace extends RoadTrace {
             return;
         }
 
-        Vec2D firstControl = points.get(1).reflect(points.getFirst());
-        Vec2D lastControl = points.get(points.size()-2).reflect(points.getLast());
+        Vec3D firstControl = points.get(1).reflect(points.getFirst());
+        Vec3D lastControl = points.get(points.size()-2).reflect(points.getLast());
 
         for (int i = 0; i <= points.size() - 2; i++) {
             //Catmull Rom Algorithm needs 2 points
             // in addition it needs the point before and after the distance of 2 points
-            Vec2D p0 = i > 0 ? points.get(i - 1) : firstControl;
-            Vec2D p1 = points.get(i);
-            Vec2D p2 =  points.get(i + 1);
-            Vec2D p3 = i + 2 < points.size() ? points.get(i + 2) : lastControl;
+            Vec3D p0 = i > 0 ? points.get(i - 1) : firstControl;
+            Vec3D p1 = points.get(i);
+            Vec3D p2 =  points.get(i + 1);
+            Vec3D p3 = i + 2 < points.size() ? points.get(i + 2) : lastControl;
 
-            Vec2D prevPoint = p1;
+            Vec3D prevPoint = p1;
 
             for (int j = 1; j <= SPLINE_INTERPOLATION_SIZE; j++) {
                 double t = j / (double) SPLINE_INTERPOLATION_SIZE;
@@ -57,8 +58,8 @@ public class CatmullRomTrace extends RoadTrace {
                         + (2 * p0.getY() - 5 * p1.getY() + 4 * p2.getY() - p3.getY()) * t2
                         + (-p0.getY() + 3 * p1.getY() - 3 * p2.getY() + p3.getY()) * t3);
 
-                Vec2D point = new Vec2D(x, y);
-                lines.add(new Line2D(prevPoint, point));
+                Vec3D point = new Vec3D(x, y, 0);
+                lines.add(new Line3D(prevPoint, point));
                 prevPoint = point;
             }
         }
