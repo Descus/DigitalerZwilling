@@ -1,5 +1,6 @@
 package de.frauas.objects.datastructures;
 
+import de.frauas.IDrawable;
 import de.frauas.Settings;
 import lombok.Getter;
 
@@ -7,10 +8,11 @@ import java.awt.*;
 import java.util.function.Function;
 
 @Getter
-public class Vec3D {
+public class Vec3D implements IDrawable {
 
     public static final Vec3D zero = new Vec3D(0, 0, 0);
-    public static final Vec3D one = new Vec3D(1, 1, 0);
+    public static final Vec3D identity = new Vec3D(0, 0, 1);
+    public static final Vec3D one = new Vec3D(1, 1, 1);
     public static final Vec3D right = new Vec3D(1, 0, 0);
     public static final Vec3D left = new Vec3D(-1, 0, 0);
     public static final Vec3D up = new Vec3D(0, 1, 0);
@@ -90,11 +92,12 @@ public class Vec3D {
      */
     public Vec3D perpendicular(){
         //noinspection SuspiciousNameCombination
-        return new Vec3D(this.y, this.x * -1, 0);
+        return new Vec3D(this.y, this.x * -1, 1);
     }
 
+    @Override
     public void draw(Graphics g){
-        Vec3D transformedPoint = this.subtract(new Vec3D((double) Settings.POINT_DEBUG_RADIUS / 2, (double) Settings.POINT_DEBUG_RADIUS / 2, 0));
+        Vec3D transformedPoint = this.subtract(new Vec3D((double) Settings.POINT_DEBUG_RADIUS / 2, (double) Settings.POINT_DEBUG_RADIUS / 2, 1));
         g.fillOval((int) transformedPoint.getX(), (int) transformedPoint.getY(), Settings.POINT_DEBUG_RADIUS, Settings.POINT_DEBUG_RADIUS);
     }
     

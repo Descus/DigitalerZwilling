@@ -8,7 +8,6 @@ import lombok.Getter;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 @Getter
 public class RoadTrace extends Trace {
@@ -41,7 +40,7 @@ public class RoadTrace extends Trace {
     protected void createLines(){
         lines.clear();
         for (int i = 0; i < points.size() - 1; i++) {
-            lines.add(new Line3D(points.get(i), points.get(i + 1)));
+            lines.add(new Line3D(this, points.get(i), points.get(i + 1)));
         }
     }
 }

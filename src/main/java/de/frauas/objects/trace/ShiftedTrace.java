@@ -62,14 +62,14 @@ public class ShiftedTrace extends Trace {
         }
 
         for (int i = 0; i < shiftedPointsUp.size() - 1; i++) {
-            upperLine.add(new Line3D(shiftedPointsUp.get(i), shiftedPointsUp.get(i + 1)));
-            lowerLine.add(new Line3D(shiftedPointsDown.get(i), shiftedPointsDown.get(i + 1)));
+            upperLine.add(new Line3D(this, shiftedPointsUp.get(i), shiftedPointsUp.get(i + 1)));
+            lowerLine.add(new Line3D(this, shiftedPointsDown.get(i), shiftedPointsDown.get(i + 1)));
         }
     }
 
     @Override
-    public void drawLines(Graphics g, Function<Vec3D, Vec3D> transformFunction) {
-        upperLine.forEach(l -> l.draw(g, transformFunction));
-        lowerLine.forEach(l -> l.draw(g, transformFunction));
+    public void drawLines(Graphics g) {
+        upperLine.forEach(l -> l.draw(g));
+        lowerLine.forEach(l -> l.draw(g));
     }
 }

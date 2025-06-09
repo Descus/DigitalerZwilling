@@ -8,21 +8,23 @@ class Vec3DTest {
 
     @Test
     void add() {
-        Vec3D vec1 = new Vec3D(1, 1);
-        Vec3D vec2 = new Vec3D(2, 2);
+        Vec3D vec1 = new Vec3D(1, 1, 1);
+        Vec3D vec2 = new Vec3D(2, 3, 1);
         Vec3D result = vec1.add(vec2);
         assertEquals(3, result.getX());
-        assertEquals(3, result.getY());
+        assertEquals(4, result.getY());
+        assertEquals(2, result.getY());
         
     }
 
     @Test
     void subtract() {
-        Vec3D vec1 = new Vec3D(2, 2);
-        Vec3D vec2 = new Vec3D(1, 1);
+        Vec3D vec1 = new Vec3D(2, 2, 1);
+        Vec3D vec2 = new Vec3D(1, 3, 5);
         Vec3D result = vec1.subtract(vec2);
         assertEquals(1, result.getX());
-        assertEquals(1, result.getY());
+        assertEquals(-1, result.getY());
+        assertEquals(-4, result.getZ());
     }
 
     @Test

@@ -46,9 +46,6 @@ public class Main {
         frame.add(axisPanel);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
-        ShiftedTrace shiftedTrace = new ShiftedTrace();
-
         // axisPanel.startCar(); the "Start" button will handle that now.
     }
 }

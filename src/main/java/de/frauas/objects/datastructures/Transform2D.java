@@ -2,15 +2,17 @@ package de.frauas.objects.datastructures;
 
 import lombok.Getter;
 
+import java.awt.geom.AffineTransform;
+
 @Getter
 public class Transform2D {
     private Vec3D translation = Vec3D.zero;
     private double rotation = 0;
     private Vec3D scale = Vec3D.one;
     
-    private Mat3D translationMatrix = Mat3D.IDENTITY;
-    private Mat3D scaleMatrix = Mat3D.IDENTITY;
-    private Mat3D rotationMatrix = Mat3D.IDENTITY;
+    private Mat3x3D translationMatrix = Mat3x3D.IDENTITY;
+    private Mat3x3D scaleMatrix = Mat3x3D.IDENTITY;
+    private Mat3x3D rotationMatrix = Mat3x3D.IDENTITY;
     
     public Transform2D() {}
 
@@ -31,17 +33,17 @@ public class Transform2D {
 
     public void setRotation(double rotation) {
         this.rotation = rotation;
-        this.rotationMatrix = Mat3D.RotationMatrix(rotation);
+        this.rotationMatrix = Mat3x3D.RotationMatrix(rotation);
     }
 
     public void setTranslation(Vec3D translation) {
         this.translation = translation;
-        this.translationMatrix = Mat3D.TranslationMatrix(translation);
+        this.translationMatrix = Mat3x3D.TranslationMatrix(translation);
     }
     
     public void setScale(Vec3D scale) {
         this.scale = scale;
-        this.scaleMatrix = Mat3D.ScaleMatrix(scale);
+        this.scaleMatrix = Mat3x3D.ScaleMatrix(scale);
     }
 
     public Vec3D forward(){
@@ -65,7 +67,27 @@ public class Transform2D {
         setRotation(this.rotation %= 360);
     }
     
-    public Vec3D transform(Vec3D point){
-        return scaleMatrix.mult(rotationMatrix.mult(translationMatrix.mult(point)));
+    public Vec3D transformPoint(Vec3D point){
+        return translatePoint(rotatePoint(scalePoint(point)));
+    }
+
+    public Vec3D scalePoint(Vec3D point){
+        return scaleMatrix.mult(point);
+    }
+
+    public Vec3D translatePoint(Vec3D point){
+        return translationMatrix.mult(point);
+    }
+
+    public Vec3D rotatePoint(Vec3D point){
+        return rotationMatrix.mult(point);
+    }
+
+    public AffineTransform toAffineTransform(){
+        AffineTransform at = new AffineTransform();
+        at.translate(translation.getX(), translation.getY());
+        at.rotate(Math.toRadians(rotation));
+        at.scale(scale.getX(), scale.getY());
+        return at;
     }
 }
