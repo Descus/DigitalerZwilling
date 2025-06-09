@@ -21,7 +21,7 @@ public class Car extends Transformable implements IDrawable {
     public static final int SENSOR_ANGLE = 30;
 
     private CarStatus status = CarStatus.STOPPED;
-    private final List<IUltrasonicSensor> sensors = new ArrayList<>();
+    private final List<IUltrasonicSensor> ultraSonicSensors = new ArrayList<>();
     
     private final ISdf sceneDistanceField;
 
@@ -30,12 +30,12 @@ public class Car extends Transformable implements IDrawable {
         this.sceneDistanceField = parent;
         this.transform = new Transform2D(position, headingDegree);
         Vec3D CarSizeOffset = Settings.CAR_SIZE.scale(0.5);
-        sensors.add(new UltrasonicSensor(this, new Vec3D(-CarSizeOffset.getX(),  CarSizeOffset.getY(), 0), SENSOR_ANGLE));
-        sensors.add(new UltrasonicSensor(this, new Vec3D(0, CarSizeOffset.getY(), 0), 0));
-        sensors.add(new UltrasonicSensor(this, new Vec3D(CarSizeOffset.getX(), CarSizeOffset.getY(), 0), -SENSOR_ANGLE));
-        sensors.add(new UltrasonicSensor(this, new Vec3D(-CarSizeOffset.getX(), -CarSizeOffset.getY(), 0), -SENSOR_ANGLE + 180));
-        sensors.add(new UltrasonicSensor(this, new Vec3D(0, -CarSizeOffset.getY(), 0), 180));
-        sensors.add(new UltrasonicSensor(this, new Vec3D(CarSizeOffset.getX(), -CarSizeOffset.getY(), 0), SENSOR_ANGLE + 180));
+        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(-CarSizeOffset.getX(),  CarSizeOffset.getY(), 0), SENSOR_ANGLE));
+        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(0, CarSizeOffset.getY(), 0), 0));
+        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(CarSizeOffset.getX(), CarSizeOffset.getY(), 0), -SENSOR_ANGLE));
+        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(-CarSizeOffset.getX(), -CarSizeOffset.getY(), 0), -SENSOR_ANGLE + 180));
+        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(0, -CarSizeOffset.getY(), 0), 180));
+        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(CarSizeOffset.getX(), -CarSizeOffset.getY(), 0), SENSOR_ANGLE + 180));
     }
 
     @Override
@@ -64,7 +64,7 @@ public class Car extends Transformable implements IDrawable {
                     POINT_DEBUG_RADIUS,
                     POINT_DEBUG_RADIUS
             );
-            sensors.forEach(s -> s.draw(g2));
+            ultraSonicSensors.forEach(s -> s.draw(g2));
         }
         g2.dispose();
     }
