@@ -37,7 +37,7 @@ public class RoadTrace extends Trace {
     }
 
     @Override
-    protected void createLines(){
+    public void createLines(){
         lines.clear();
         for (int i = 0; i < points.size() - 1; i++) {
             lines.add(new Line2D(points.get(i), points.get(i + 1)));

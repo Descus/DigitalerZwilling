@@ -292,7 +292,7 @@ public class AxisPanel extends JPanel {
             repaint();
         }
     }
-    
+
     public void populate(Scenario scenario) {
         StartPosition startPosition = scenario.getStartPosition();
 
@@ -302,9 +302,15 @@ public class AxisPanel extends JPanel {
         this.addPoint(new Vec2D(startPosition.getX(), startPosition.getY()));
         scenario.getTrace().forEach(point -> this.addPoint(new Vec2D(point.getX(), point.getY())));
 
+        // Wichtig: Linien nach dem Hinzufügen neu erstellen
+        this.roadTrace.createLines();
+
         ArrayList<Vec2D> points = new ArrayList<>(roadTrace.getPoints());
         this.shiftedTrace = new ShiftedTrace(points);
 
-        scenario.getObjects().forEach(object -> this.addObstacle(new Obstacle(object.getXStart(), object.getYStart(), object.getXEnd(), object.getYEnd(), object.getHeight())));
+        scenario.getObjects().forEach(object -> this.addObstacle(
+                new Obstacle(object.getXStart(), object.getYStart(), object.getXEnd(), object.getYEnd(), object.getHeight()))
+        );
     }
+
 }
