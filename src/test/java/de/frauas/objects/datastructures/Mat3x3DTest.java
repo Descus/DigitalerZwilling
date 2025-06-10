@@ -63,6 +63,7 @@ class Mat3x3DTest {
         Mat3x3D rot = Mat3x3D.RotationMatrix(90); // Rotationsmatrix für 90°
         Vec3D vec = new Vec3D(1, 0, 0);       // Vektor auf der X-Achse
         Vec3D rotated = rot.mult(vec);       // Ergebnis sollte (0,1,0) sein
+        Mat3x3D rotM = Mat3x3D.RotationMatrix(60);
 
         // Mit Toleranz wegen Gleitkommazahlen
         assertEquals(0, rotated.getX(), 0.001);

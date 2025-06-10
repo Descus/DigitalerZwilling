@@ -58,8 +58,8 @@ public class CatmullRomTrace extends RoadTrace {
                         + (2 * p0.getY() - 5 * p1.getY() + 4 * p2.getY() - p3.getY()) * t2
                         + (-p0.getY() + 3 * p1.getY() - 3 * p2.getY() + p3.getY()) * t3);
 
-                Vec3D point = new Vec3D(x, y, 0);
-                lines.add(new Line3D(prevPoint, point));
+                Vec3D point = new Vec3D(x, y, 1);
+                lines.add(new Line3D(this, prevPoint, point));
                 prevPoint = point;
             }
         }

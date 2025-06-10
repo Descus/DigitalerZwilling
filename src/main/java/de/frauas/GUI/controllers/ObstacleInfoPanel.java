@@ -31,7 +31,7 @@ public class ObstacleInfoPanel extends JPanel {
 
     private void init() {
         listModel.clear();
-        List<Obstacle> obstacles = axisPanel.getObstacles(); //TODO Let Scene return info about all obstacles 
+        List<Obstacle> obstacles = axisPanel.getScene().getObstacles(); //TODO Let Scene return info about all obstacles
         for (Obstacle o : obstacles) {
             Vec3D startPoint = o.getStartPoint();
             Vec3D endPoint = o.getEndPoint();
