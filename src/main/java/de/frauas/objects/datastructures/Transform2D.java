@@ -8,9 +8,9 @@ public class Transform2D {
     private double rotation = 0;
     private Vec3D scale = Vec3D.one;
     
-    private Mat3D translationMatrix = Mat3D.IDENTITY;
-    private Mat3D scaleMatrix = Mat3D.IDENTITY;
-    private Mat3D rotationMatrix = Mat3D.IDENTITY;
+    private Mat3x3D translationMatrix = Mat3x3D.IDENTITY;
+    private Mat3x3D scaleMatrix = Mat3x3D.IDENTITY;
+    private Mat3x3D rotationMatrix = Mat3x3D.IDENTITY;
     
     public Transform2D() {}
 
@@ -31,17 +31,17 @@ public class Transform2D {
 
     public void setRotation(double rotation) {
         this.rotation = rotation;
-        this.rotationMatrix = Mat3D.RotationMatrix(rotation);
+        this.rotationMatrix = Mat3x3D.RotationMatrix(rotation);
     }
 
     public void setTranslation(Vec3D translation) {
         this.translation = translation;
-        this.translationMatrix = Mat3D.TranslationMatrix(translation);
+        this.translationMatrix = Mat3x3D.TranslationMatrix(translation);
     }
     
     public void setScale(Vec3D scale) {
         this.scale = scale;
-        this.scaleMatrix = Mat3D.ScaleMatrix(scale);
+        this.scaleMatrix = Mat3x3D.ScaleMatrix(scale);
     }
 
     public Vec3D forward(){

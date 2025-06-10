@@ -4,7 +4,7 @@ package de.frauas.objects.datastructures;
 import lombok.Getter;
 
 @Getter // Lombok erzeugt automatisch Getter für alle Felder
-public class Mat3D {
+public class Mat3x3D {
 
     // Die 9 Elemente einer 3x3-Matrix im Zeilen-Major-Format (mZeileSpalte)
     private final double m00, m01, m02;
@@ -12,9 +12,9 @@ public class Mat3D {
     private final double m20, m21, m22;
 
     // Konstruktor für eine benutzerdefinierte Matrix mit 9 Elementen
-    public Mat3D(double m00, double m01, double m02,
-                 double m10, double m11, double m12,
-                 double m20, double m21, double m22) {
+    public Mat3x3D(double m00, double m01, double m02,
+                   double m10, double m11, double m12,
+                   double m20, double m21, double m22) {
         this.m00 = m00;
         this.m01 = m01;
         this.m02 = m02;
@@ -27,29 +27,29 @@ public class Mat3D {
     }
 
     // Konstante Identitätsmatrix: Diagonale = 1, Rest = 0
-    public static final Mat3D IDENTITY = new Mat3D(
+    public static final Mat3x3D IDENTITY = new Mat3x3D(
             1, 0, 0,
             0, 1, 0,
             0, 0, 1
     );
 
     // Konstante Nullmatrix: Alle Werte = 0
-    public static final Mat3D ZERO = new Mat3D(
+    public static final Mat3x3D ZERO = new Mat3x3D(
             0, 0, 0,
             0, 0, 0,
             0, 0, 0
     );
 
     // Konstante Einsmatrix: Alle Werte = 1
-    public static final Mat3D ONE = new Mat3D(
+    public static final Mat3x3D ONE = new Mat3x3D(
             1, 1, 1,
             1, 1, 1,
             1, 1, 1
     );
 
     // Matrix-Addition: Addiert Elementweise die Werte von zwei Matrizen
-    public Mat3D add(Mat3D other) {
-        return new Mat3D(
+    public Mat3x3D add(Mat3x3D other) {
+        return new Mat3x3D(
                 m00 + other.m00, m01 + other.m01, m02 + other.m02,
                 m10 + other.m10, m11 + other.m11, m12 + other.m12,
                 m20 + other.m20, m21 + other.m21, m22 + other.m22
@@ -57,8 +57,8 @@ public class Mat3D {
     }
 
     // Matrix-Subtraktion: Subtrahiert Elementweise die Werte von zwei Matrizen
-    public Mat3D sub(Mat3D other) {
-        return new Mat3D(
+    public Mat3x3D sub(Mat3x3D other) {
+        return new Mat3x3D(
                 m00 - other.m00, m01 - other.m01, m02 - other.m02,
                 m10 - other.m10, m11 - other.m11, m12 - other.m12,
                 m20 - other.m20, m21 - other.m21, m22 - other.m22
@@ -79,12 +79,12 @@ public class Mat3D {
      * Der Winkel wird in Grad übergeben und intern in Bogenmaß umgerechnet.
      * Wird für 2D-Rotation verwendet.
      */
-    public static Mat3D RotationMatrix(double angleDeg) {
+    public static Mat3x3D RotationMatrix(double angleDeg) {
         double angleRad = Math.toRadians(angleDeg); // Umrechnung in Bogenmaß
         double cos = Math.cos(angleRad);
         double sin = Math.sin(angleRad);
 
-        return new Mat3D(
+        return new Mat3x3D(
                 cos, -sin, 0,
                 sin, cos,  0,
                 0,   0,    1
@@ -95,8 +95,8 @@ public class Mat3D {
      * Erzeugt eine Skalierungsmatrix für einen gegebenen Vektor.
      * Skaliert x, y und z separat.
      */
-    public static Mat3D ScaleMatrix(Vec3D scale) {
-        return new Mat3D(
+    public static Mat3x3D ScaleMatrix(Vec3D scale) {
+        return new Mat3x3D(
                 scale.getX(), 0, 0,
                 0, scale.getY(), 0,
                 0, 0, scale.getZ()
@@ -108,8 +108,8 @@ public class Mat3D {
      * Nur für 2D geeignet – z wird ignoriert.
      * Homogene Koordinaten: Translation wird über die dritte Spalte realisiert.
      */
-    public static Mat3D TranslationMatrix(Vec3D translation) {
-        return new Mat3D(
+    public static Mat3x3D TranslationMatrix(Vec3D translation) {
+        return new Mat3x3D(
                 1, 0, translation.getX(),
                 0, 1, translation.getY(),
                 0, 0, 1
