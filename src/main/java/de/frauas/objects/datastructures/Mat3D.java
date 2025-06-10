@@ -1,12 +1,20 @@
+
 package de.frauas.objects.datastructures;
 
 import lombok.Getter;
 
-@Getter
+@Getter // Lombok erzeugt automatisch Getter für alle Felder
 public class Mat3D {
-    private final double m00, m01, m02, m10, m11, m12, m20, m21, m22;
 
-    public Mat3D(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22) {
+    // Die 9 Elemente einer 3x3-Matrix im Zeilen-Major-Format (mZeileSpalte)
+    private final double m00, m01, m02;
+    private final double m10, m11, m12;
+    private final double m20, m21, m22;
+
+    // Konstruktor für eine benutzerdefinierte Matrix mit 9 Elementen
+    public Mat3D(double m00, double m01, double m02,
+                 double m10, double m11, double m12,
+                 double m20, double m21, double m22) {
         this.m00 = m00;
         this.m01 = m01;
         this.m02 = m02;
@@ -18,84 +26,93 @@ public class Mat3D {
         this.m22 = m22;
     }
 
-    public static final Mat3D IDENTITY = 
-            new Mat3D(
-                    1, 0, 0,  
-                    0, 1, 0, 
-                    0, 0, 1);
-    
-    public static final Mat3D ZERO = 
-            new Mat3D(
-                    0, 0, 0, 
-                    0, 0, 0,
-                    0,0, 0);
-    
-    public static final Mat3D ONE = 
-            new Mat3D(
-                    1, 1, 1, 
-                    1, 1, 1,
-                    1, 1, 1);
+    // Konstante Identitätsmatrix: Diagonale = 1, Rest = 0
+    public static final Mat3D IDENTITY = new Mat3D(
+            1, 0, 0,
+            0, 1, 0,
+            0, 0, 1
+    );
 
-    public Mat3D add(Mat3D other){
+    // Konstante Nullmatrix: Alle Werte = 0
+    public static final Mat3D ZERO = new Mat3D(
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0
+    );
+
+    // Konstante Einsmatrix: Alle Werte = 1
+    public static final Mat3D ONE = new Mat3D(
+            1, 1, 1,
+            1, 1, 1,
+            1, 1, 1
+    );
+
+    // Matrix-Addition: Addiert Elementweise die Werte von zwei Matrizen
+    public Mat3D add(Mat3D other) {
         return new Mat3D(
-                m00 + other.m00, m01 + other.m01, m02 + other.m02, 
-                m10 + other.m10, m11 + other.m11, m12 + other.m12, 
-                m20 + other.m20, m21 + other.m21, m22 + other.m22);
+                m00 + other.m00, m01 + other.m01, m02 + other.m02,
+                m10 + other.m10, m11 + other.m11, m12 + other.m12,
+                m20 + other.m20, m21 + other.m21, m22 + other.m22
+        );
     }
 
-    public Mat3D sub(Mat3D other){
+    // Matrix-Subtraktion: Subtrahiert Elementweise die Werte von zwei Matrizen
+    public Mat3D sub(Mat3D other) {
         return new Mat3D(
-                m00 - other.m00, m01 - other.m01, m02 + other.m02,
-                m10 - other.m10, m11 - other.m11, m12 + other.m12,
-                m20 - other.m20, m21 - other.m21, m22 + other.m22);
+                m00 - other.m00, m01 - other.m01, m02 - other.m02,
+                m10 - other.m10, m11 - other.m11, m12 - other.m12,
+                m20 - other.m20, m21 - other.m21, m22 - other.m22
+        );
     }
 
-    public Vec3D mult(Vec3D other){
+    // Multiplikation mit einem Vektor (3D): Matrix × Vektor = neuer Vektor
+    public Vec3D mult(Vec3D other) {
         return new Vec3D(
-                m00 * other.getX() + m01 * other.getY() + m02 * other.getZ(), 
-                m10 * other.getX() + m11 * other.getY() + m12 * other.getZ(), 
-                m20 * other.getX() + m21 * other.getY() + m22 * other.getZ());
+                m00 * other.getX() + m01 * other.getY() + m02 * other.getZ(),
+                m10 * other.getX() + m11 * other.getY() + m12 * other.getZ(),
+                m20 * other.getX() + m21 * other.getY() + m22 * other.getZ()
+        );
     }
 
     /**
-     * Returns a rotation matrix for the given angle in degrees around the z-axis.
-     * 
-     * x/y-rotations are not needed for our usecase
-     * @param angleDeg
-     * @return
+     * Erzeugt eine Rotationsmatrix für eine Rotation um die Z-Achse.
+     * Der Winkel wird in Grad übergeben und intern in Bogenmaß umgerechnet.
+     * Wird für 2D-Rotation verwendet.
      */
-    public static Mat3D RotationMatrix(double angleDeg){
-        double angleRad = Math.toRadians(angleDeg);
+    public static Mat3D RotationMatrix(double angleDeg) {
+        double angleRad = Math.toRadians(angleDeg); // Umrechnung in Bogenmaß
         double cos = Math.cos(angleRad);
         double sin = Math.sin(angleRad);
+
         return new Mat3D(
-                cos, -sin, 0, 
-                sin, cos, 0, 
-                0, 0, 1);
+                cos, -sin, 0,
+                sin, cos,  0,
+                0,   0,    1
+        );
     }
 
     /**
-     * Returns a Scale matrix for the Given vector.
-     * @param scale
-     * @return
+     * Erzeugt eine Skalierungsmatrix für einen gegebenen Vektor.
+     * Skaliert x, y und z separat.
      */
-    public static Mat3D ScaleMatrix(Vec3D scale){
+    public static Mat3D ScaleMatrix(Vec3D scale) {
         return new Mat3D(
-                scale.getX(), 0, 0, 
-                0, scale.getY(), 0, 
-                0, 0, scale.getZ());
+                scale.getX(), 0, 0,
+                0, scale.getY(), 0,
+                0, 0, scale.getZ()
+        );
     }
 
     /**
-     * Returns a Translation matrix for the Given vector.
-     * This is 2D only, so the z-component of the vector is ignored.
-     * @param translation
-     * @return
+     * Erzeugt eine Translationsmatrix für einen gegebenen Vektor.
+     * Nur für 2D geeignet – z wird ignoriert.
+     * Homogene Koordinaten: Translation wird über die dritte Spalte realisiert.
      */
-    public static Mat3D TranslationMatrix(Vec3D translation){
+    public static Mat3D TranslationMatrix(Vec3D translation) {
         return new Mat3D(
-                1, 0, translation.getX(), 
-                0, 1, translation.getY(), 
-                0, 0, 1);
+                1, 0, translation.getX(),
+                0, 1, translation.getY(),
+                0, 0, 1
+        );
     }
 }
