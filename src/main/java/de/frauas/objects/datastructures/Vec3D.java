@@ -91,7 +91,7 @@ public class Vec3D implements IDrawable {
      */
     public Vec3D perpendicular(){
         //noinspection SuspiciousNameCombination
-        return new Vec3D(this.y, this.x * -1, 1);
+        return new Vec3D(this.y, this.x * -1, 0);
     }
 
     @Override
