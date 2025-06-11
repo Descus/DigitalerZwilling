@@ -1,6 +1,6 @@
 package de.frauas.GUI.controllers;
 
-import de.frauas.objects.datastructures.Vec2D;
+import de.frauas.objects.datastructures.Vec3D;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,7 +39,7 @@ public class CarPositionPanel extends JPanel {
             try {
                 int ms = Integer.parseInt(intervalField.getText());
                 if (ms <= 0) throw new NumberFormatException();
-                axisPanel.startCar();
+                axisPanel.getScene().startCar();
                 restartTimer(ms);
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(
@@ -59,7 +59,7 @@ public class CarPositionPanel extends JPanel {
         timer = new Timer(intervalMs, _ -> updateInfo());
         timer.setInitialDelay(0);
         timer.start();
-        axisPanel.startCar();
+        axisPanel.getScene().startCar();
     }
 
     private void restartTimer(int intervalMs) {
@@ -72,8 +72,8 @@ public class CarPositionPanel extends JPanel {
     }
 
     private void updateInfo() {
-        String status = axisPanel.getCarStatus();
-        Vec2D pos = axisPanel.getCar().getPositionPoint();
+        String status = axisPanel.getScene().getCar().getStatus().toString();
+        Vec3D pos = axisPanel.getScene().getCar().getWorldPosition(); //TODO let scene return a car information object to get information from
         SimpleDateFormat timeFmt = new SimpleDateFormat("ss:SSS");
         String timestamp = timeFmt.format(new Date());
         String entry = String.format(

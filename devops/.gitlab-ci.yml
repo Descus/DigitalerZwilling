@@ -28,7 +28,6 @@ build:
     - mvn $MAVEN_CLI_OPTS clean compile
   only:
     - merge_requests
-    - pushes
 
 test:
   stage: test
@@ -38,4 +37,3 @@ test:
     - mvn $MAVEN_CLI_OPTS test
   only:
     - merge_requests
-    - pushes
