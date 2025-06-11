@@ -306,7 +306,8 @@ public class AxisPanel extends JPanel {
         this.roadTrace.createLines();
 
         ArrayList<Vec2D> points = new ArrayList<>(roadTrace.getPoints());
-        this.shiftedTrace = new ShiftedTrace(points);
+        // HIER ist die Änderung: Wir verwenden jetzt ShiftedCatmullTrace
+        this.shiftedTrace = new de.frauas.objects.trace.ShiftedCatmullTrace(points);
 
         scenario.getObjects().forEach(object -> this.addObstacle(
                 new Obstacle(object.getXStart(), object.getYStart(), object.getXEnd(), object.getYEnd(), object.getHeight()))
