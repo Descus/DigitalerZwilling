@@ -4,8 +4,6 @@ import de.frauas.GUI.controllers.AxisPanel;
 import de.frauas.GUI.controllers.ControlPanel;
 import de.frauas.GUI.controllers.InputPanel;
 import de.frauas.GUI.controllers.OutputPanel;
-import de.frauas.objects.trace.ShiftedCatmullTrace;
-import de.frauas.objects.trace.ShiftedTrace;
 import de.frauas.scenario.dto.Scenario;
 import de.frauas.scenario.xml.ScenarioXmlFile;
 
@@ -47,7 +45,6 @@ public class Main {
         frame.add(axisPanel);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
         // axisPanel.startCar(); the "Start" button will handle that now.
     }
 }
