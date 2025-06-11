@@ -4,7 +4,6 @@ import de.frauas.GUI.controllers.AxisPanel;
 import de.frauas.GUI.controllers.ControlPanel;
 import de.frauas.GUI.controllers.InputPanel;
 import de.frauas.GUI.controllers.OutputPanel;
-import de.frauas.objects.trace.ShiftedTrace;
 import de.frauas.scenario.dto.Scenario;
 import de.frauas.scenario.xml.ScenarioXmlFile;
 

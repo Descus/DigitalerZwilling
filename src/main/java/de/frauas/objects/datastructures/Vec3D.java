@@ -5,7 +5,6 @@ import de.frauas.Settings;
 import lombok.Getter;
 
 import java.awt.*;
-import java.util.function.Function;
 
 @Getter
 public class Vec3D implements IDrawable {

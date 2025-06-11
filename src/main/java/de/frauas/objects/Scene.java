@@ -9,7 +9,6 @@ import de.frauas.scenario.dto.StartPosition;
 import lombok.Getter;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 
