@@ -1,4 +1,4 @@
-package de.frauas.objects;
+package de.frauas.objects.obstacle;
 
 import de.frauas.objects.datastructures.Vec3D;
 

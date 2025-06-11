@@ -1,6 +1,6 @@
 package de.frauas.GUI.controllers;
 
-import de.frauas.objects.Obstacle;
+import de.frauas.objects.obstacle.Obstacle;
 import de.frauas.objects.datastructures.Vec3D;
 
 import javax.swing.*;

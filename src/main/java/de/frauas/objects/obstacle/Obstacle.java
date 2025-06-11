@@ -1,7 +1,9 @@
-package de.frauas.objects;
+package de.frauas.objects.obstacle;
 
 
 import de.frauas.IDrawable;
+import de.frauas.objects.Scene;
+import de.frauas.objects.Transformable;
 import de.frauas.objects.datastructures.Vec3D;
 import lombok.Getter;
 

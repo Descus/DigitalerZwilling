@@ -1,6 +1,8 @@
 package de.frauas.objects;
 
 import de.frauas.objects.datastructures.Vec3D;
+import de.frauas.objects.obstacle.ISdf;
+import de.frauas.objects.obstacle.Obstacle;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
