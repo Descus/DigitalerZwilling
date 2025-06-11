@@ -4,10 +4,7 @@ import de.frauas.Settings;
 import de.frauas.objects.Car;
 import de.frauas.objects.Obstacle;
 import de.frauas.objects.datastructures.Vec2D;
-import de.frauas.objects.trace.CatmullRomTrace;
-import de.frauas.objects.trace.RoadTrace;
-import de.frauas.objects.trace.ShiftedTrace;
-import de.frauas.objects.trace.Trace;
+import de.frauas.objects.trace.*;
 import de.frauas.scenario.dto.Scenario;
 import de.frauas.scenario.dto.StartPosition;
 import lombok.Getter;
@@ -302,12 +299,12 @@ public class AxisPanel extends JPanel {
         this.addPoint(new Vec2D(startPosition.getX(), startPosition.getY()));
         scenario.getTrace().forEach(point -> this.addPoint(new Vec2D(point.getX(), point.getY())));
 
-        // Wichtig: Linien nach dem Hinzufügen neu erstellen
+        //Linien nach dem Hinzufügen neu erstellen
         this.roadTrace.createLines();
 
         ArrayList<Vec2D> points = new ArrayList<>(roadTrace.getPoints());
-        // HIER ist die Änderung: Wir verwenden jetzt ShiftedCatmullTrace
-        this.shiftedTrace = new de.frauas.objects.trace.ShiftedCatmullTrace(points);
+        // ShiftedCatmullTrace
+        this.shiftedTrace = new ShiftedCatmullTrace(points);
 
         scenario.getObjects().forEach(object -> this.addObstacle(
                 new Obstacle(object.getXStart(), object.getYStart(), object.getXEnd(), object.getYEnd(), object.getHeight()))
