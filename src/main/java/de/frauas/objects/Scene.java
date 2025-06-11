@@ -2,7 +2,7 @@ package de.frauas.objects;
 
 import de.frauas.IDrawable;
 import de.frauas.objects.datastructures.Vec3D;
-import de.frauas.objects.trace.ShiftedTrace;
+import de.frauas.objects.trace.ShiftedCatmullTrace;
 import de.frauas.objects.trace.Trace;
 import de.frauas.scenario.dto.Scenario;
 import de.frauas.scenario.dto.StartPosition;
@@ -23,7 +23,7 @@ public class Scene extends Transformable implements ISdf, IDrawable {
     public Scene(Scenario scenario) {
         StartPosition startPosition = scenario.getStartPosition();
         car = new Car(this, new Vec3D(startPosition.getX(), startPosition.getY(), 1), startPosition.getHeading());
-        trace = new ShiftedTrace(this);
+        trace = new ShiftedCatmullTrace(this);
         trace.addPoint(new Vec3D(startPosition.getX(), startPosition.getY(), 1));
         scenario.getTrace().forEach(point -> trace.addPoint(new Vec3D(point.getX(), point.getY(), 1)));
 
