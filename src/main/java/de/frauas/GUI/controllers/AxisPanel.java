@@ -292,7 +292,7 @@ public class AxisPanel extends JPanel {
             repaint();
         }
     }
-    
+
     public void populate(Scenario scenario) {
         StartPosition startPosition = scenario.getStartPosition();
 
@@ -302,9 +302,16 @@ public class AxisPanel extends JPanel {
         this.addPoint(new Vec2D(startPosition.getX(), startPosition.getY()));
         scenario.getTrace().forEach(point -> this.addPoint(new Vec2D(point.getX(), point.getY())));
 
-        ArrayList<Vec2D> points = new ArrayList<>(roadTrace.getPoints());
-        this.shiftedTrace = new ShiftedTrace(points);
+        // Wichtig: Linien nach dem Hinzufügen neu erstellen
+        this.roadTrace.createLines();
 
-        scenario.getObjects().forEach(object -> this.addObstacle(new Obstacle(object.getXStart(), object.getYStart(), object.getXEnd(), object.getYEnd(), object.getHeight())));
+        ArrayList<Vec2D> points = new ArrayList<>(roadTrace.getPoints());
+        // HIER ist die Änderung: Wir verwenden jetzt ShiftedCatmullTrace
+        this.shiftedTrace = new de.frauas.objects.trace.ShiftedCatmullTrace(points);
+
+        scenario.getObjects().forEach(object -> this.addObstacle(
+                new Obstacle(object.getXStart(), object.getYStart(), object.getXEnd(), object.getYEnd(), object.getHeight()))
+        );
     }
+
 }

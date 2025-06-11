@@ -2,6 +2,8 @@ package de.frauas.objects.trace;
 
 import de.frauas.objects.datastructures.Vec2D;
 import de.frauas.objects.datastructures.Line2D;
+import de.frauas.objects.trace.Trace;
+import static de.frauas.Settings.SPLINE_INTERPOLATION_SIZE;
 import lombok.Getter;
 
 import java.awt.*;
@@ -34,7 +36,7 @@ public class ShiftedTrace extends Trace {
         lowerLine.clear();
 
         if (points.size() < 2) return;
-
+        
         double offset = 15.0; // Abstand der orthogonalen Verschiebung
 
         ArrayList<Vec2D> shiftedPointsUp = new ArrayList<>();
@@ -58,7 +60,6 @@ public class ShiftedTrace extends Trace {
             shiftedPointsUp.add(shiftedUp);
             shiftedPointsDown.add(shiftedDown);
         }
-
         for (int i = 0; i < shiftedPointsUp.size() - 1; i++) {
             upperLine.add(new Line2D(shiftedPointsUp.get(i), shiftedPointsUp.get(i + 1)));
             lowerLine.add(new Line2D(shiftedPointsDown.get(i), shiftedPointsDown.get(i + 1)));

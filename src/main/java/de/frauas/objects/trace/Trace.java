@@ -32,9 +32,10 @@ public abstract class Trace {
     }
     
     protected abstract void createLines();
-    
-    public abstract void drawLines(Graphics g, Function<Vec2D, Vec2D> transformFunction);
-    
+
+    public void drawLines(Graphics g, Function<Vec2D, Vec2D> transformFunction) {
+    }
+
     public void drawPoints(Graphics g, Function<Vec2D, Vec2D> transformFunction) {
             points.forEach(p -> p.draw(g, transformFunction));
     }
