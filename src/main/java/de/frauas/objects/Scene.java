@@ -1,7 +1,10 @@
 package de.frauas.objects;
 
 import de.frauas.IDrawable;
+import de.frauas.objects.car.Car;
 import de.frauas.objects.datastructures.Vec3D;
+import de.frauas.objects.obstacle.ISdf;
+import de.frauas.objects.obstacle.Obstacle;
 import de.frauas.objects.trace.ShiftedCatmullTrace;
 import de.frauas.objects.trace.Trace;
 import de.frauas.scenario.dto.Scenario;

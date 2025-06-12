@@ -1,4 +1,4 @@
-package de.frauas.objects;
+package de.frauas.objects.car;
 
 public enum CarStatus {
     STOPPED,

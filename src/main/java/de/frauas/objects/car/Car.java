@@ -1,7 +1,10 @@
-package de.frauas.objects;
+package de.frauas.objects.car;
 
 import de.frauas.IDrawable;
 import de.frauas.Settings;
+import de.frauas.objects.obstacle.ISdf;
+import de.frauas.objects.Scene;
+import de.frauas.objects.Transformable;
 import de.frauas.objects.datastructures.Transform2D;
 import de.frauas.objects.datastructures.Vec3D;
 import de.frauas.objects.interfaces.IUltrasonicSensor;

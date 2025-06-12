@@ -1,7 +1,7 @@
 package de.frauas.objects.parts;
 
 import de.frauas.IDrawable;
-import de.frauas.objects.ISdf;
+import de.frauas.objects.obstacle.ISdf;
 import de.frauas.objects.Transformable;
 import de.frauas.objects.datastructures.Vec3D;
 import de.frauas.objects.interfaces.IUltrasonicSensor;
