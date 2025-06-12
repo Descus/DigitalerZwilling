@@ -13,11 +13,11 @@ public class ControlPanel extends JPanel {
         JButton stopBtn = new JButton("Stop");
         JButton resetBtn = new JButton("Reset");
 
-        startBtn.addActionListener(e -> axisPanel.startCar());
-        pauseBtn.addActionListener(e -> axisPanel.pauseCar());
-        continueBtn.addActionListener(e -> axisPanel.continueCar());
-        stopBtn.addActionListener(e -> axisPanel.stopCar());
-        resetBtn.addActionListener(e -> axisPanel.resetCar());
+        startBtn.addActionListener(e -> axisPanel.getScene().startCar());
+        pauseBtn.addActionListener(e -> axisPanel.getScene().pauseCar());
+        continueBtn.addActionListener(e -> axisPanel.getScene().resumeCar());
+        stopBtn.addActionListener(e -> axisPanel.getScene().stopCar());
+        resetBtn.addActionListener(e -> axisPanel.getScene().resetCar());
 
         add(startBtn);
         add(pauseBtn);
