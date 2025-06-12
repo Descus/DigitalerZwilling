@@ -36,7 +36,8 @@ public class ShiftedTrace extends Trace {
 
         if (points.size() < 2) return;
 
-        double offset = 15.0; // Abstand der orthogonalen Verschiebung
+        // Abstand für die verschobenen Traces zur originalen Trace (15 cm nach oben und unten)
+        double offset = 15.0;
 
         ArrayList<Vec3D> shiftedPointsUp = new ArrayList<>();
         ArrayList<Vec3D> shiftedPointsDown = new ArrayList<>();

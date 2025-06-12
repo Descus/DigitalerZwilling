@@ -8,9 +8,36 @@ import java.util.ArrayList;
 
 import static de.frauas.Settings.SPLINE_INTERPOLATION_SIZE;
 
+/**
+ * Generates the upper and lower lines based on Catmull-Rom spline interpolation
+ * and offsets from the interpolated path. This method performs several steps:
+ * clearing existing data (line), computing interpolated points using Catmull-Rom splines,
+ * calculating displaced points for upper and lower traces, and creating line segments
+ * for the traces.
+ *
+ * The method first interpolates a smooth path based on the given control points
+ * using Catmull-Rom splines. To do so, it considers the start and end tangents
+ * by reflecting the second and second-to-last points around the first and last
+ * control points respectively. It then interpolates intermediate points based
+ * on predefined resolution defined by SPLINE_INTERPOLATION_SIZE.
+ *
+ * Afterwards, for each interpolated point, the method computes normal vectors
+ * and offsets (about 15 cm for each trace) them to generate the shifted points for the upper and lower traces.
+ * These shifted points are displaced in perpendicular directions by an amount
+ * determined by OFFSET, forming parallel paths.
+ *
+ * Finally, the method connects consecutive shifted points to create line segments
+ * for both the upper and lower traces, storing the results in the upperLine and
+ * lowerLine collections.
+ *
+ * If there are fewer than two initial points, this method will return immediately
+ * without generating any lines.
+ */
 public class ShiftedCatmullTrace extends ShiftedTrace {
 
-    private static final double OFFSET = 15.0; // Abstand für die Verschiebung
+
+    // Abstand für die verschobenen Traces zur originalen Trace (15 cm nach oben und unten)
+    private static final double OFFSET = 15.0;
 
     public ShiftedCatmullTrace(Scene scene, ArrayList<Vec3D> points) {
         super(scene, points);
@@ -23,7 +50,7 @@ public class ShiftedCatmullTrace extends ShiftedTrace {
 
     @Override
     public void createLines() {
-        // Zuerst alle Listen leeren
+        // Zuerst alle Daten bzw Listen leeren
         upperLine.clear();
         lowerLine.clear();
 
@@ -31,13 +58,16 @@ public class ShiftedCatmullTrace extends ShiftedTrace {
             return;
         }
 
-        // Interpolierte Punkte berechnen
+        // Interpolierte Punkte werden berechnet
         ArrayList<Vec3D> interpolatedPoints = new ArrayList<>();
         Vec3D firstControl = points.get(1).reflect(points.getFirst());
         Vec3D lastControl = points.get(points.size() - 2).reflect(points.getLast());
 
-        interpolatedPoints.add(points.getFirst()); // Startpunkt hinzufügen
+        // Startpunkt muss seperat ngeholt werden, da es sonst eine Exception gibt
+        interpolatedPoints.add(points.getFirst());
 
+        // Hier werden Traces interpoliert alson "Kurvig" gemacht
+        // SPLINE_INTERPOLATION_SIZE kann man in SETTINGS ÄNDERN
         for (int i = 0; i < points.size() - 1; i++) {
             Vec3D p0 = (i > 0) ? points.get(i - 1) : firstControl;
             Vec3D p1 = points.get(i);
@@ -71,8 +101,12 @@ public class ShiftedCatmullTrace extends ShiftedTrace {
             Vec3D prev = (i > 0) ? interpolatedPoints.get(i - 1) : current;
             Vec3D next = (i < interpolatedPoints.size() - 1) ? interpolatedPoints.get(i + 1) : current;
 
+            // Tangente, direction
             Vec3D tangent = next.subtract(prev).normalize();
-            Vec3D normal = tangent.perpendicular(); // Orthogonaler Vektor
+
+            // Punkte verschieben, jeweils nach unten und oben
+            // Orthogonaler Vektor
+            Vec3D normal = tangent.perpendicular();
 
             shiftedPointsUp.add(current.add(normal.scale(OFFSET)));
             shiftedPointsDown.add(current.add(normal.scale(-OFFSET)));
