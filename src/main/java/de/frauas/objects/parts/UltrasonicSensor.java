@@ -9,6 +9,8 @@ import de.frauas.objects.interfaces.IUltrasonicSensor;
 import java.awt.*;
 import java.util.Random;
 
+import static java.lang.Math.sqrt;
+
 
 public class UltrasonicSensor extends Transformable implements IUltrasonicSensor, IDrawable {
     
@@ -79,4 +81,13 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
         g2d.drawRect(-15, -10, 30, 20);
         g2d.dispose();
     }
+
+    /* calculate the distance from the Sensor to the closest Point*/
+    public int calculateDistance(Vec3D closestPoint, Vec3D sensorPosition){
+        double distance = sqrt((Math.pow(closestPoint.getX()- sensorPosition.getX(),2) + Math.pow(closestPoint.getY() - sensorPosition.getY(),2)));
+        int distanceOutput = (int)distance;
+        return distanceOutput;
+    }
 }
+
+
