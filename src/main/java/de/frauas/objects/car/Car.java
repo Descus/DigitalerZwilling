@@ -106,6 +106,7 @@ public class Car extends Transformable implements IDrawable {
 
             if(sensorStatus[0]==true && sensorStatus[1]==true && sensorStatus[2]==true){
 
+
             }
 
 
