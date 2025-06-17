@@ -1,4 +1,4 @@
-package de.frauas.objects.parts;
+package de.frauas.objects.car.parts;
 
 import de.frauas.IDrawable;
 import de.frauas.objects.obstacle.ISdf;

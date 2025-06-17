@@ -70,7 +70,11 @@ public class Scene extends Transformable implements ISdf, IDrawable {
 
     }
 
-    @Override
+    public void update() {
+        car.update((ShiftedCatmullTrace) trace);
+    }
+
+        @Override
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
         {

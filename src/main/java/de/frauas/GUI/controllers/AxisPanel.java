@@ -112,6 +112,7 @@ public class AxisPanel extends JPanel {
 
     public void populate(Scenario scenario) {
         scene = new Scene(scenario);
+        scene.update();
         timer = new Timer(1000/60, _ -> repaint());
     }
 }
