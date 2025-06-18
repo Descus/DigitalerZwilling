@@ -20,9 +20,13 @@ public class InfraredSensor extends Transformable implements IInfraredSensor, ID
     @Override
     public boolean isOnTrack(Line3D upper, Line3D lower) {
         Vec3D currentPosIR = transformPoint(Vec3D.identity);
-        return  lower.rightOfLine(currentPosIR)
-                && !upper.rightOfLine(currentPosIR);
+        Vec3D p = getWorldPosition();
+        System.out.println("currentPosIR = " + p);
+        return  lower.rightOfLine(p)
+                && !upper.rightOfLine(p);
     }
+
+
 
     @Override
     public void draw(Graphics g) {
