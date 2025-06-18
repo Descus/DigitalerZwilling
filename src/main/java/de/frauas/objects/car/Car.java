@@ -72,5 +72,17 @@ public class Car extends Transformable implements IDrawable {
         g2.dispose();
     }
 
+    public int[] getCurrentSensorDistances() {
+        return new int[]{
+                ultraSonicSensors.get(0).getDistance(),
+                ultraSonicSensors.get(1).getDistance(),
+                ultraSonicSensors.get(2).getDistance(),
+                ultraSonicSensors.get(3).getDistance(),
+                ultraSonicSensors.get(4).getDistance(),
+                ultraSonicSensors.get(5).getDistance()
+        };
+    }
+
+
     //TODO Check / Drive / Stop logic here
 }

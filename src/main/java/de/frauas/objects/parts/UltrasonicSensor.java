@@ -18,6 +18,8 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
     public static final int MAX_ANGLE = 15;
     public double stepSize = 0.1f;
 
+    private int distance;
+
     public UltrasonicSensor(Transformable parent, Vec3D positionOffset, double orientationAngle) {
         this.parent = parent;
         transform.setTranslation(positionOffset);
@@ -43,6 +45,10 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
                 closestPoint = currentPoint;
             }
         }
+
+        Vec3D sensorPos = transformPoint(Vec3D.identity);
+        this.distance = calculateDistance(closestPoint, sensorPos);
+
         return closestPoint;
     }
 
@@ -88,6 +94,13 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
         int distanceOutput = (int)distance;
         return distanceOutput;
     }
+
+    /* get current distance */
+    @Override
+    public int getDistance() {
+        return distance;
+    }
+
 }
 
 
