@@ -2,6 +2,7 @@ package de.frauas.objects;
 
 import de.frauas.IDrawable;
 import de.frauas.objects.car.Car;
+import de.frauas.objects.car.CarStatus;
 import de.frauas.objects.datastructures.Vec3D;
 import de.frauas.objects.obstacle.ISdf;
 import de.frauas.objects.obstacle.Obstacle;
@@ -55,7 +56,7 @@ public class Scene extends Transformable implements ISdf, IDrawable {
     }
 
     public void startCar(){
-
+        this.car.setStatus(CarStatus.RUNNING);
     }
 
     public void stopCar(){
