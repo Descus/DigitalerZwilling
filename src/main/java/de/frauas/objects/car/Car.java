@@ -10,6 +10,7 @@ import de.frauas.objects.datastructures.Vec3D;
 import de.frauas.objects.interfaces.IUltrasonicSensor;
 import de.frauas.objects.parts.UltrasonicSensor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -20,9 +21,10 @@ import static de.frauas.Settings.POINT_DEBUG_RADIUS;
 
 @Getter
 public class Car extends Transformable implements IDrawable {
-    private final double velocity = 100;
+    private final double velocity = 10;
     public static final int SENSOR_ANGLE = 30;
 
+    @Setter
     private CarStatus status = CarStatus.STOPPED;
     private final List<IUltrasonicSensor> ultraSonicSensors = new ArrayList<>();
     
@@ -70,6 +72,20 @@ public class Car extends Transformable implements IDrawable {
             ultraSonicSensors.forEach(s -> s.draw(g2));
         }
         g2.dispose();
+    }
+
+    /**
+     * Moving the car forward based on its velocity and heading.
+     * @param dt Time step in seconds.
+     */
+    public void move(double dt) {
+        if (status != CarStatus.RUNNING) return;
+
+        // Use transform's forward vector for direction:
+        Vec3D direction = transform.forward();
+        Vec3D displacement = direction.scale(velocity * dt);
+
+        transform.translate(displacement);
     }
 
     public int[] getCurrentSensorDistances() {
