@@ -1,7 +1,8 @@
 package de.frauas.objects.car;
 
 public enum CarStatus {
-    STOPPED,
     STARTED,
+    RUNNING,
+    STOPPED,
     FINISHED
 }
