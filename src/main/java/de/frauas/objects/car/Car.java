@@ -43,16 +43,16 @@ public class Car extends Transformable implements IDrawable {
         this.transform = new Transform2D(position, headingDegree);
         Vec3D CarSizeOffset = Settings.CAR_SIZE.scale(0.5);
         Vec3D carCenterWorld = transformPoint(Vec3D.zero);
-        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(-CarSizeOffset.getX(),  CarSizeOffset.getY(), 0), 0));
+        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(-CarSizeOffset.getX(),  CarSizeOffset.getY(), 0), SENSOR_ANGLE));
         ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(0, CarSizeOffset.getY(), 0), 0));
         ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(CarSizeOffset.getX(), CarSizeOffset.getY(), 0), -SENSOR_ANGLE));
         ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(-CarSizeOffset.getX(), -CarSizeOffset.getY(), 0), -SENSOR_ANGLE + 180));
         ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(0, -CarSizeOffset.getY(), 0), 180));
         ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(CarSizeOffset.getX(), -CarSizeOffset.getY(), 0), SENSOR_ANGLE + 180));
 
-        infraredSensors.add(new InfraredSensor(this, new Vec3D(carCenterWorld.getX() + 10 , carCenterWorld.getY()-60, 0)));
-        infraredSensors.add(new InfraredSensor(this, new Vec3D(carCenterWorld.getX() + 0, carCenterWorld.getY()-60, 0)));
-        infraredSensors.add(new InfraredSensor(this, new Vec3D(carCenterWorld.getX() - 10, carCenterWorld.getY()-60, 0)));
+        infraredSensors.add(new InfraredSensor(this, new Vec3D(+10, -60, 0)));
+        infraredSensors.add(new InfraredSensor(this, new Vec3D(  0, -60, 0)));
+        infraredSensors.add(new InfraredSensor(this, new Vec3D(-10, -60, 0)));
 
     }
 
@@ -113,7 +113,7 @@ public class Car extends Transformable implements IDrawable {
             System.out.println("Roatation: " + transform.getRotation());
 
         }
-        String direction = "middle";
+        String direction = getDirection(irHit);
         System.out.println(direction);
 
         //Fahrbefehle ausführen
