@@ -31,9 +31,9 @@ public class Transform2D {
         setTranslation(translation);
     }
 
-    public void setRotation(double rotation) {
-        this.rotation = rotation;
-        this.rotationMatrix = Mat3x3D.RotationMatrix(rotation);
+    public void setRotation(double rotationDegree) {
+        this.rotation = rotationDegree;
+        this.rotationMatrix = Mat3x3D.RotationMatrix(90 - rotation);
     }
 
     public void setTranslation(Vec3D translation) {
