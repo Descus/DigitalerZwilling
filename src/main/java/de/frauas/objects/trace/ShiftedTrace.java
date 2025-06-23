@@ -65,6 +65,20 @@ public class ShiftedTrace extends Trace {
             lowerLine.add(new Line3D(this, shiftedPointsDown.get(i), shiftedPointsDown.get(i + 1)));
         }
     }
+    
+    public boolean isPointBetweenLines(Vec3D point){
+        if (points.size() < 2) return false;
+
+        for (int i = 0; i < upperLine.size(); i++) {
+            Line3D upper = upperLine.get(i);
+            Line3D lower = lowerLine.get(i);
+
+            if (lower.rightOfLine(point) && !upper.rightOfLine(point)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     public void drawLines(Graphics g) {

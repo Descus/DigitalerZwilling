@@ -1,11 +1,13 @@
 package de.frauas.objects;
 
 import de.frauas.IDrawable;
+import de.frauas.Settings;
 import de.frauas.objects.car.Car;
 import de.frauas.objects.datastructures.Vec3D;
 import de.frauas.objects.obstacle.ISdf;
 import de.frauas.objects.obstacle.Obstacle;
 import de.frauas.objects.trace.ShiftedCatmullTrace;
+import de.frauas.objects.trace.ShiftedTrace;
 import de.frauas.objects.trace.Trace;
 import de.frauas.scenario.dto.Scenario;
 import de.frauas.scenario.dto.StartPosition;
@@ -74,7 +76,7 @@ public class Scene extends Transformable implements ISdf, IDrawable {
         car.update((ShiftedCatmullTrace) trace);
     }
 
-        @Override
+    @Override
     public void draw(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
         {
@@ -82,6 +84,17 @@ public class Scene extends Transformable implements ISdf, IDrawable {
             trace.draw(g2);
             obstacles.forEach(obstacle -> obstacle.draw(g2));
             car.draw(g2);
+        }
+
+        if (Settings.DEBUG) {
+            for (int i = 0; i < Settings.WIDTH; i += 2) {
+                for (int j = 0; j < Settings.HEIGHT; j += 2) {
+                    Vec3D pos = new Vec3D(i, j, 1);
+                    pos = transformPoint(pos);
+                    g2.setColor(((ShiftedTrace) trace).isPointBetweenLines(pos) ? Color.green : Color.red);
+                    g2.fillOval((int) pos.getX(), (int) pos.getY(), 1, 1);
+                }
+            }
         }
         g2.dispose();
     }
