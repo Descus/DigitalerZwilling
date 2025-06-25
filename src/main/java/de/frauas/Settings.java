@@ -5,8 +5,8 @@ import de.frauas.objects.datastructures.Vec3D;
 public class Settings {
     
     public static final String TITLE = "Digitaler Zwilling";
-    public static final int WIDTH = 1800;
-    public static final int HEIGHT = 800;
+    public static final int WIDTH = 1600;
+    public static final int HEIGHT = 1000;
     
     public static final String SCENARIO_FILE = "Scenario/example4.xml";
     public static final int SPLINE_INTERPOLATION_SIZE = 5;
