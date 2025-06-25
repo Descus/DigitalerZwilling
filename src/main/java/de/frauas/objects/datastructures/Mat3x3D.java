@@ -98,4 +98,28 @@ public class Mat3x3D {
                 0, 1, translation.getY(),
                 0, 0, 1);
     }
+    
+    public Mat3x3D inverse(){
+        double det = m00 * (m11 * m22 - m12 * m21)
+                - m01 * (m10 * m22 - m12 * m20)
+                + m02 * (m10 * m21 - m11 * m20);
+
+        if (Math.abs(det) < 1e-10) {
+            throw new ArithmeticException("Matrix is not invertible");
+        }
+
+        double invDet = 1.0 / det;
+
+        return new Mat3x3D(
+                (m11 * m22 - m12 * m21) * invDet,
+                (m02 * m21 - m01 * m22) * invDet,
+                (m01 * m12 - m02 * m11) * invDet,
+                (m12 * m20 - m10 * m22) * invDet,
+                (m00 * m22 - m02 * m20) * invDet,
+                (m02 * m10 - m00 * m12) * invDet,
+                (m10 * m21 - m11 * m20) * invDet,
+                (m01 * m20 - m00 * m21) * invDet,
+                (m00 * m11 - m01 * m10) * invDet
+        );
+    }
 }

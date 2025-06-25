@@ -27,7 +27,7 @@ public class Scene extends Transformable implements ISdf, IDrawable {
 
     public Scene(Scenario scenario) {
         StartPosition startPosition = scenario.getStartPosition();
-        car = new Car(this, new Vec3D(startPosition.getX(), startPosition.getY(), 1), startPosition.getHeading());
+        car = new Car(this, new Vec3D(startPosition.getX(), startPosition.getY(), 1), 360 - startPosition.getHeading());
         trace = new ShiftedCatmullTrace(this);
         trace.addPoint(new Vec3D(startPosition.getX(), startPosition.getY(), 1));
         scenario.getTrace().forEach(point -> trace.addPoint(new Vec3D(point.getX(), point.getY(), 1)));
@@ -86,16 +86,16 @@ public class Scene extends Transformable implements ISdf, IDrawable {
             car.draw(g2);
         }
 
-        if (Settings.DEBUG) {
-            for (int i = 0; i < Settings.WIDTH; i += 2) {
-                for (int j = 0; j < Settings.HEIGHT; j += 2) {
-                    Vec3D pos = new Vec3D(i, j, 1);
-                    pos = transformPoint(pos);
-                    g2.setColor(((ShiftedTrace) trace).isPointBetweenLines(pos) ? Color.green : Color.red);
-                    g2.fillOval((int) pos.getX(), (int) pos.getY(), 1, 1);
-                }
-            }
-        }
+//        if (Settings.DEBUG) {
+//            for (int i = 0; i < Settings.WIDTH; i += 2) {
+//                for (int j = 0; j < Settings.HEIGHT; j += 2) {
+//                    Vec3D pos = new Vec3D(i, j, 1);
+//                    pos = toGlobalSpace(pos);
+//                    g2.setColor(((ShiftedTrace) trace).isPointBetweenLines(pos) ? Color.green : Color.red);
+//                    g2.fillOval((int) pos.getX(), (int) pos.getY(), 1, 1);
+//                }
+//            }
+//        }
         g2.dispose();
     }
 }
