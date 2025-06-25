@@ -5,6 +5,7 @@ import de.frauas.objects.Transformable;
 import de.frauas.objects.datastructures.Line3D;
 import de.frauas.objects.datastructures.Vec3D;
 import de.frauas.objects.interfaces.IInfraredSensor;
+import de.frauas.objects.trace.ShiftedTrace;
 
 import javax.sound.midi.Track;
 import java.awt.*;
@@ -18,12 +19,9 @@ public class InfraredSensor extends Transformable implements IInfraredSensor, ID
     }
 
     @Override
-    public boolean isOnTrack(Line3D upper, Line3D lower) {
-        Vec3D currentPosIR = transformPoint(Vec3D.identity);
+    public boolean isOnTrack(ShiftedTrace trace) {
         Vec3D p = getWorldPosition();
-        System.out.println("currentPosIR = " + p);
-        return  lower.rightOfLine(p)
-                && !upper.rightOfLine(p);
+        return trace.isPointBetweenLines(p);
     }
 
 

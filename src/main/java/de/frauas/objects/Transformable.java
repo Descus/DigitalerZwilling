@@ -10,9 +10,10 @@ public abstract class Transformable {
     protected Transform2D transform = new Transform2D();
     
     public Vec3D transformPoint(Vec3D point){
-        if (parent == null)
-            return transform.transformPoint(point);
-        return parent.transformPoint(transform.transformPoint(point));
+        Vec3D transformedPoint = transform.transformPoint(point);
+        return parent == null
+                ? transformedPoint
+                : parent.transformPoint(transformedPoint);
     }
 
     public Vec3D getWorldPosition(){
