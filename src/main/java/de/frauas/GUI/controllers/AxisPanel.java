@@ -1,5 +1,7 @@
 package de.frauas.GUI.controllers;
 
+import de.frauas.GUI.controllers.observer.SimulationModel;
+import de.frauas.GUI.controllers.observer.SimulationObserver;
 import de.frauas.Settings;
 import de.frauas.objects.Scene;
 import de.frauas.objects.car.CarStatus;
@@ -12,13 +14,21 @@ import javax.swing.*;
 import java.awt.*;
 
 
-public class AxisPanel extends JPanel {
-    Timer timer;
+public class AxisPanel extends JPanel implements SimulationObserver {
     @Getter
     private Scene scene;
     private long lastTime = System.currentTimeMillis();
 
-    public AxisPanel(){}
+    public AxisPanel(SimulationModel model, Scene scene){
+        this.scene = scene;
+        model.addObserver(this);
+        setOpaque(false);
+    }
+
+    @Override
+    public void onSimulationUpdate(){
+        repaint();
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -104,18 +114,4 @@ public class AxisPanel extends JPanel {
         g2.dispose();
     }
 
-    public void populate(Scenario scenario) {
-        scene = new Scene(scenario);
-        scene.startCar();
-
-        timer = new Timer(1000/60, e -> {
-            long now = System.currentTimeMillis();
-            double delta = (now - lastTime)/1000.0;
-            lastTime = now;
-            System.out.println(scene.getCar().getTransform().getTranslation());
-            scene.getCar().move(delta);
-            repaint();
-        });
-        timer.start();
-    }
 }
