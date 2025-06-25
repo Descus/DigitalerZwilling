@@ -1,5 +1,6 @@
-package de.frauas.GUI.controllers;
+package de.frauas.GUI.controllers.input;
 
+import de.frauas.GUI.controllers.AxisPanel;
 import de.frauas.objects.datastructures.Vec3D;
 
 import javax.swing.*;
@@ -13,11 +14,6 @@ public class PathInfoPanel extends JPanel{
     public PathInfoPanel(AxisPanel axisPanel) {
         this.axisPanel = axisPanel;
         setLayout(new BorderLayout(10,10));
-
-        // Title
-        JLabel title = new JLabel("Path Info");
-        title.setHorizontalAlignment(SwingConstants.CENTER);
-        add(title, BorderLayout.NORTH);
 
         // List in center
         JList<String> infoList = new JList<>(listModel);

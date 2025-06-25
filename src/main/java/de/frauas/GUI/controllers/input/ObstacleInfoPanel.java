@@ -16,11 +16,6 @@ public class ObstacleInfoPanel extends JPanel {
         this.axisPanel = axisPanel;
         setLayout(new BorderLayout(5, 5));
 
-        // Title
-        JLabel title = new JLabel("Obstacles Info");
-        title.setHorizontalAlignment(SwingConstants.CENTER);
-        add(title, BorderLayout.NORTH);
-
         // List in center
         JList<String> infoList = new JList<>(listModel);
         add(new JScrollPane(infoList), BorderLayout.CENTER);
