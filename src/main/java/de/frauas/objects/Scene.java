@@ -57,19 +57,14 @@ public class Scene extends Transformable implements ISdf, IDrawable {
 
     public void startCar(){
         this.car.setStatus(CarStatus.RUNNING);
-    }
-
-    public void stopCar(){
 
     }
 
-    public void pauseCar(){
+    public void stopCar(){ this.car.setStatus(CarStatus.STOPPED);}
 
-    }
+    public void pauseCar(){ this.car.setStatus(CarStatus.PAUSED);}
 
-    public void resumeCar(){
-
-    }
+    public void resumeCar(){ this.car.setStatus(CarStatus.RUNNING);}
 
     @Override
     public void draw(Graphics g) {
