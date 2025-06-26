@@ -13,7 +13,7 @@ class Vec3DTest {
         Vec3D result = vec1.add(vec2);
         assertEquals(3, result.getX());
         assertEquals(4, result.getY());
-        assertEquals(2, result.getY());
+        assertEquals(2, result.getZ());
         
     }
 
