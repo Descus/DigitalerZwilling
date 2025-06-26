@@ -1,10 +1,7 @@
 package de.frauas.GUI.controllers;
 
-import de.frauas.GUI.controllers.observer.SimulationModel;
-import de.frauas.GUI.controllers.observer.SimulationObserver;
 import de.frauas.Settings;
 import de.frauas.objects.Scene;
-import de.frauas.objects.car.CarStatus;
 import de.frauas.objects.datastructures.Vec3D;
 import de.frauas.scenario.dto.Scenario;
 import lombok.Getter;
@@ -14,7 +11,10 @@ import javax.swing.*;
 import java.awt.*;
 
 
-public class AxisPanel extends JPanel implements SimulationObserver {
+public class AxisPanel extends JPanel implements SimulationObserver{
+
+    Timer timer;
+
     @Getter
     private Scene scene;
     private long lastTime = System.currentTimeMillis();
@@ -34,6 +34,7 @@ public class AxisPanel extends JPanel implements SimulationObserver {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g.create();
+        {
         g2.setColor(Color.BLUE); // oder eine andere Farbe deiner Wahl
 
         // Define the dimension of the frame
@@ -104,14 +105,24 @@ public class AxisPanel extends JPanel implements SimulationObserver {
             g2.drawString(label, x0 - LABEL_MARGIN - labelWidth, y + labelWidth / 2);
         }
 
-        // draw the scene
-        Graphics2D g3 = (Graphics2D) g2.create();
-        g3.translate(x0, y0);
-        g3.scale(1, -1);
-        scene.draw(g3);
-
-        g3.dispose();
+            Graphics2D g3 = (Graphics2D) g2.create();
+            {
+                g3.translate(x0, y0);
+                g3.scale(1, -1);
+                scene.draw(g3);
+            }
+            g3.dispose();
+        }
         g2.dispose();
     }
 
+    public void populate(Scenario scenario) {
+        scene = new Scene(scenario);
+
+        timer = new Timer(200, _ -> {
+            scene.update();
+            repaint();
+        });
+        timer.start();
+    }
 }

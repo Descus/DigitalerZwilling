@@ -1,12 +1,14 @@
 package de.frauas.objects;
 
 import de.frauas.IDrawable;
+import de.frauas.Settings;
 import de.frauas.objects.car.Car;
 import de.frauas.objects.car.CarStatus;
 import de.frauas.objects.datastructures.Vec3D;
 import de.frauas.objects.obstacle.ISdf;
 import de.frauas.objects.obstacle.Obstacle;
 import de.frauas.objects.trace.ShiftedCatmullTrace;
+import de.frauas.objects.trace.ShiftedTrace;
 import de.frauas.objects.trace.Trace;
 import de.frauas.scenario.dto.Scenario;
 import de.frauas.scenario.dto.StartPosition;
@@ -29,7 +31,7 @@ public class Scene extends Transformable implements ISdf, IDrawable {
     public Scene(Scenario scenario) {
         StartPosition startPosition = scenario.getStartPosition();
         this.startPosition = new Vec3D(startPosition.getX(), startPosition.getY(), 1);
-        this.startHeading = startPosition.getHeading();
+        this.startHeading = 360 - startPosition.getHeading();
         car = new Car(this, this.startPosition, this.startHeading);
         trace = new ShiftedCatmullTrace(this);
         trace.addPoint(new Vec3D(startPosition.getX(), startPosition.getY(), 1));
@@ -71,6 +73,10 @@ public class Scene extends Transformable implements ISdf, IDrawable {
     public void pauseCar(){ this.car.setStatus(CarStatus.PAUSED);}
 
     public void resumeCar(){ this.car.setStatus(CarStatus.RUNNING);}
+
+    public void update() {
+        car.update((ShiftedCatmullTrace) trace);
+    }
 
     @Override
     public void draw(Graphics g) {
