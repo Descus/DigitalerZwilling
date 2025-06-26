@@ -22,11 +22,15 @@ public class Scene extends Transformable implements ISdf, IDrawable {
     private final Trace trace;
     private final List<Obstacle> obstacles = new ArrayList<>();
     private final Car car;
+    private Vec3D startPosition;
+    private double startHeading;
 
 
     public Scene(Scenario scenario) {
         StartPosition startPosition = scenario.getStartPosition();
-        car = new Car(this, new Vec3D(startPosition.getX(), startPosition.getY(), 1), startPosition.getHeading());
+        this.startPosition = new Vec3D(startPosition.getX(), startPosition.getY(), 1);
+        this.startHeading = startPosition.getHeading();
+        car = new Car(this, this.startPosition, this.startHeading);
         trace = new ShiftedCatmullTrace(this);
         trace.addPoint(new Vec3D(startPosition.getX(), startPosition.getY(), 1));
         scenario.getTrace().forEach(point -> trace.addPoint(new Vec3D(point.getX(), point.getY(), 1)));
@@ -52,7 +56,9 @@ public class Scene extends Transformable implements ISdf, IDrawable {
     }
 
     public void resetCar(){
-
+        car.setStatus(CarStatus.STOPPED);  // Stop the car first
+        car.getTransform().setTranslation(startPosition); // Reset position
+        car.getTransform().setRotation(startHeading);
     }
 
     public void startCar(){
