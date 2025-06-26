@@ -49,9 +49,9 @@ public class Car extends Transformable implements IDrawable {
         ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(0, -CarSizeOffset.getY(), 0), 180));
         ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(CarSizeOffset.getX(), -CarSizeOffset.getY(), 0), SENSOR_ANGLE + 180));
 
-        infraredSensors.add(new InfraredSensor(this, new Vec3D(10 , -60, 0)));
-        infraredSensors.add(new InfraredSensor(this, new Vec3D(0, -60, 0)));
-        infraredSensors.add(new InfraredSensor(this, new Vec3D( -10, -60, 0)));
+        infraredSensors.add(new InfraredSensor(this, new Vec3D(10 , 60, 0)));
+        infraredSensors.add(new InfraredSensor(this, new Vec3D(0, 60, 0)));
+        infraredSensors.add(new InfraredSensor(this, new Vec3D( -10, 60, 0)));
 
     }
 
@@ -104,7 +104,7 @@ public class Car extends Transformable implements IDrawable {
 
         //Fahrbefehle ausführen
         switch (direction) {
-            case forward -> transform.translate(transform.right().normalize().scale(STEP_MM));
+            case forward -> transform.translate(transform.forward().normalize().scale(STEP_MM));
             case left -> transform.rotate(+TURN_DEG);
             case right -> transform.rotate(-TURN_DEG);
             default -> {}

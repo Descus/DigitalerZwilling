@@ -9,15 +9,23 @@ public abstract class Transformable {
     @Getter
     protected Transform2D transform = new Transform2D();
     
-    public Vec3D transformPoint(Vec3D point){
+    public Vec3D toGlobalSpace(Vec3D point){
         Vec3D transformedPoint = transform.transformPoint(point);
         return parent == null
                 ? transformedPoint
-                : parent.transformPoint(transformedPoint);
+                : parent.toGlobalSpace(transformedPoint);
+    }
+
+    public Vec3D toLocalSpace(Vec3D point){
+        Vec3D transformedPoint = point;
+        if (parent != null)
+            transformedPoint = parent.toLocalSpace(point);
+        return transform.transformPointReverse(transformedPoint);
+
     }
 
     public Vec3D getWorldPosition(){
-        return transformPoint(Vec3D.identity);
+        return toGlobalSpace(Vec3D.identity);
     }
 
     public Vec3D getWorldScale(){
