@@ -34,7 +34,12 @@ public class ControlPanel extends JPanel {
             pauseBtn.setEnabled(true);
             continueBtn.setEnabled(false);
         });
-        resetBtn.addActionListener(e -> scene.resetCar());
+        resetBtn.addActionListener(e -> {
+            scene.resetCar();
+            startBtn.setEnabled(true);
+            pauseBtn.setEnabled(false);
+            continueBtn.setEnabled(false);
+        });
 
         add(startBtn);
         add(pauseBtn);
