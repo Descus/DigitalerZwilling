@@ -94,9 +94,6 @@ public class Car extends Transformable implements IDrawable {
         for (int s = 0; s < infraredSensors.size(); s++) {
             InfraredSensor ir = (InfraredSensor) infraredSensors.get(s);
             irHit[s] = ir.isOnTrack(trace);
-            System.out.println(ir.getWorldPosition());
-            System.out.println(irHit[s]);
-            System.out.println("Rotation: " + transform.getRotation());
         }
 
         MovementInstruction direction = getDirection(irHit);
@@ -115,11 +112,22 @@ public class Car extends Transformable implements IDrawable {
         boolean L = sensorStatus[2];
         boolean M = sensorStatus[1];
         boolean R = sensorStatus[0];
-        System.out.println(R + " " + M + " " + L);
-        if (!M) return MovementInstruction.stop;
-        if ( L &&  R) return MovementInstruction.forward;
-        if (!L &&  R) return MovementInstruction.right; // go right
-        if ( L && !R) return MovementInstruction.left; // go left
-        else return MovementInstruction.stop; // Stop
+        if (M) { // wenn die mittlere Linie erkannt wird (schwarz)
+            if (L && !R) {
+                return MovementInstruction.left; // links abbiegen
+            } else if (!L && R) {
+                return MovementInstruction.right; // rechts abbiegen
+            } else {
+                return MovementInstruction.forward; // geradeaus
+            }
+        } else { // wenn keine Linie in der Mitte erkannt wird
+            if (L && !R) {
+                return MovementInstruction.left; // links abbiegen
+            } else if (!L && R) {
+                return MovementInstruction.right; // rechts abbiegen
+            } else {
+                return MovementInstruction.stop; // anhalten
+            }
+        }
     }
 }
