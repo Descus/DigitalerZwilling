@@ -1,4 +1,4 @@
-package de.frauas.objects.parts;
+package de.frauas.objects.car.parts;
 
 import de.frauas.IDrawable;
 import de.frauas.objects.obstacle.ISdf;
@@ -66,7 +66,7 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
      */
     private Vec3D castRay(Vec3D direction, ISdf ISDF) {
         double travelDistance = 0;
-        Vec3D currentPosition = transformPoint(Vec3D.identity);
+        Vec3D currentPosition = toGlobalSpace(Vec3D.identity);
 
         while (travelDistance < MAX_DISTANCE){
             double currentSdf = ISDF.getSDF(currentPosition);

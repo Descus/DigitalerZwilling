@@ -13,7 +13,11 @@ public class Transform2D {
     private Mat3x3D translationMatrix = Mat3x3D.IDENTITY;
     private Mat3x3D scaleMatrix = Mat3x3D.IDENTITY;
     private Mat3x3D rotationMatrix = Mat3x3D.IDENTITY;
-    
+
+    private Mat3x3D translationMatrixInverse = Mat3x3D.IDENTITY;
+    private Mat3x3D scaleMatrixInverse = Mat3x3D.IDENTITY;
+    private Mat3x3D rotationMatrixInverse = Mat3x3D.IDENTITY;
+
     public Transform2D() {}
 
     public Transform2D(Vec3D translation) {
@@ -31,23 +35,26 @@ public class Transform2D {
         setTranslation(translation);
     }
 
-    public void setRotation(double rotationDegree) {
-        this.rotation = rotationDegree;
-        this.rotationMatrix = Mat3x3D.RotationMatrix(90 - rotation);
+    public void setRotation(double rotation) {
+        this.rotation = rotation;
+        this.rotationMatrix = Mat3x3D.RotationMatrix(rotation);
+        this.rotationMatrixInverse = rotationMatrix.inverse();
     }
 
     public void setTranslation(Vec3D translation) {
         this.translation = translation;
         this.translationMatrix = Mat3x3D.TranslationMatrix(translation);
+        this.translationMatrixInverse = translationMatrix.inverse();
     }
     
     public void setScale(Vec3D scale) {
         this.scale = scale;
         this.scaleMatrix = Mat3x3D.ScaleMatrix(scale);
+        this.scaleMatrixInverse = scaleMatrix.inverse();
     }
 
     public Vec3D forward(){
-        return rotationMatrix.mult(Vec3D.right);
+        return rotationMatrix.mult(Vec3D.up);
     }
     
     public Vec3D right(){
@@ -71,6 +78,10 @@ public class Transform2D {
         return translatePoint(rotatePoint(scalePoint(point)));
     }
 
+    public Vec3D transformPointReverse(Vec3D point){
+        return scalePointReverse(rotatePointReverse(translatePointReverse(point)));
+    }
+
     public Vec3D scalePoint(Vec3D point){
         return scaleMatrix.mult(point);
     }
@@ -81,6 +92,18 @@ public class Transform2D {
 
     public Vec3D rotatePoint(Vec3D point){
         return rotationMatrix.mult(point);
+    }
+
+    public Vec3D scalePointReverse(Vec3D point){
+        return scaleMatrixInverse.mult(point);
+    }
+
+    public Vec3D translatePointReverse(Vec3D point){
+        return translationMatrixInverse.mult(point);
+    }
+
+    public Vec3D rotatePointReverse(Vec3D point){
+        return rotationMatrixInverse.mult(point);
     }
 
     public AffineTransform toAffineTransform(){

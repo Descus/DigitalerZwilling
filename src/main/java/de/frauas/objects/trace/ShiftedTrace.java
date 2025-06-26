@@ -66,6 +66,28 @@ public class ShiftedTrace extends Trace {
             lowerLine.add(new Line3D(this, shiftedPointsDown.get(i), shiftedPointsDown.get(i + 1)));
         }
     }
+    
+    public boolean isPointBetweenLines(Vec3D globalSpacePoint){
+        if (points.size() < 2) return false;
+
+        Vec3D localSpacePoint = toLocalSpace(globalSpacePoint);
+
+        for (int i = 0; i < upperLine.size(); i++) {
+            Line3D upper = upperLine.get(i);
+            Line3D lower = lowerLine.get(i);
+
+            Line3D leftBound = new Line3D(this, lower.getEnd(), upper.getEnd());
+            Line3D rightBound = new Line3D(this, lower.getStart(), upper.getStart());
+
+            if (lower.rightOfLine(localSpacePoint)
+                    && !upper.rightOfLine(localSpacePoint)
+                    && leftBound.rightOfLine(localSpacePoint)
+                    && !rightBound.rightOfLine(localSpacePoint)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     public void drawLines(Graphics g) {

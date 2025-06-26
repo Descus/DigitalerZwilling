@@ -104,14 +104,24 @@ public class AxisPanel extends JPanel implements SimulationObserver {
             g2.drawString(label, x0 - LABEL_MARGIN - labelWidth, y + labelWidth / 2);
         }
 
-        // draw the scene
-        Graphics2D g3 = (Graphics2D) g2.create();
-        g3.translate(x0, y0);
-        g3.scale(1, -1);
-        scene.draw(g3);
-
-        g3.dispose();
+            Graphics2D g3 = (Graphics2D) g2.create();
+            {
+                g3.translate(x0, y0);
+                g3.scale(1, -1);
+                scene.draw(g3);
+            }
+            g3.dispose();
+        }
         g2.dispose();
     }
 
+    public void populate(Scenario scenario) {
+        scene = new Scene(scenario);
+
+        timer = new Timer(200, _ -> {
+            scene.update();
+            repaint();
+        });
+        timer.start();
+    }
 }
