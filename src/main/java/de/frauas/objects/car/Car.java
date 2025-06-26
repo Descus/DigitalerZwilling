@@ -2,6 +2,7 @@ package de.frauas.objects.car;
 
 import de.frauas.IDrawable;
 import de.frauas.Settings;
+import de.frauas.objects.car.parts.MotionController;
 import de.frauas.objects.datastructures.Line3D;
 import de.frauas.objects.obstacle.ISdf;
 import de.frauas.objects.Scene;
@@ -14,6 +15,7 @@ import de.frauas.objects.car.parts.UltrasonicSensor;
 import de.frauas.objects.car.parts.InfraredSensor;
 import de.frauas.objects.trace.ShiftedCatmullTrace;
 import de.frauas.objects.trace.ShiftedTrace;
+import de.frauas.objects.car.parts.MotionController;
 import lombok.Getter;
 
 import java.awt.*;
@@ -27,19 +29,17 @@ import static de.frauas.Settings.POINT_DEBUG_RADIUS;
 public class Car extends Transformable implements IDrawable {
     private final double velocity = 100;
     public static final int SENSOR_ANGLE = 30;
-    private static final double TURN_DEG = 6;
-    private static final double STEP_MM  = 7;
-
     private CarStatus status = CarStatus.STOPPED;
     private final List<IUltrasonicSensor> ultraSonicSensors = new ArrayList<>();
     private final List<IInfraredSensor> infraredSensors = new ArrayList<>();
-    
+    private final MotionController motion;
     private final ISdf sceneDistanceField;
 
     public Car(Scene parent, Vec3D position, double headingDegree){
         this.parent = parent;
         this.sceneDistanceField = parent;
         this.transform = new Transform2D(position, headingDegree);
+        this.motion = new MotionController(this.transform);
         Vec3D CarSizeOffset = Settings.CAR_SIZE.scale(0.5);
 
         ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(-CarSizeOffset.getX(),  CarSizeOffset.getY(), 0), SENSOR_ANGLE));
@@ -89,6 +89,7 @@ public class Car extends Transformable implements IDrawable {
 
     //TODO Check / Drive / Stop logic here
     public void update(ShiftedTrace trace) {
+
         //Sensoren abfragen und direction bekommen
         boolean[] irHit = new boolean[infraredSensors.size()];
         for (int s = 0; s < infraredSensors.size(); s++) {
@@ -97,13 +98,12 @@ public class Car extends Transformable implements IDrawable {
         }
 
         MovementInstruction direction = getDirection(irHit);
-        System.out.println(direction);
-
         //Fahrbefehle ausführen
         switch (direction) {
-            case forward -> transform.translate(transform.forward().normalize().scale(STEP_MM));
-            case left -> transform.rotate(+TURN_DEG);
-            case right -> transform.rotate(-TURN_DEG);
+            case forward -> motion.forward();
+            case left -> motion.left();
+            case right -> motion.right();
+            case stop -> motion.endOfLineForward();
             default -> {}
         }
     }
@@ -113,6 +113,7 @@ public class Car extends Transformable implements IDrawable {
         boolean M = sensorStatus[1];
         boolean R = sensorStatus[0];
 
+        //Überprüfen ob links,rechts mitte gefahren werden soll
         if (L && !R) {
             return MovementInstruction.left; // links abbiegen
         } else if (!L && R) {
