@@ -18,8 +18,8 @@ public class Obstacle extends Transformable implements ISdf, IDrawable {
 
     public Obstacle(Scene parent, int xStart, int yStart, int xEnd, int yEnd, int height) {
         this.parent = parent;
-        this.startPoint = new Vec3D(xStart, yStart, 1);
-        this.endPoint = new Vec3D(xEnd, yEnd, 1);
+        this.startPoint = new Vec3D(xStart, yStart, 0);
+        this.endPoint = new Vec3D(xEnd, yEnd, 0);
         this.dimension = endPoint.subtract(startPoint).abs();
         this.height = height;
     }
@@ -47,6 +47,7 @@ public class Obstacle extends Transformable implements ISdf, IDrawable {
         Vec3D halfDim = dimension.scale(0.5);
         Vec3D translatedPosition = otherPosition.subtract(startPoint.add(halfDim));
         Vec3D d = translatedPosition.abs().subtract(halfDim);
+        d = new Vec3D(d.getX(), d.getY(), -Double.MAX_VALUE);
         return d.max(Vec3D.zero).length() + Math.min(d.maxComponent(), 0);
     }
 }

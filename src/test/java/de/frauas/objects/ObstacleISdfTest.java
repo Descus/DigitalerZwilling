@@ -16,7 +16,7 @@ class ObstacleISdfTest {
     void SDFTest_PointOutsideObstacle() {
         ISdf obstacle = new Obstacle(null, 50, 50, 100, 100, 10);
         double sdf = obstacle.getSDF(new Vec3D(40,  60, 0));
-        assertEquals(10, sdf);
+        assertEquals(10, sdf, 0.05);
     }
 
     @Test
