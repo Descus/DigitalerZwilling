@@ -31,7 +31,7 @@ public class Scene extends Transformable implements ISdf, IDrawable {
     public Scene(Scenario scenario) {
         StartPosition startPosition = scenario.getStartPosition();
         this.startPosition = new Vec3D(startPosition.getX(), startPosition.getY(), 1);
-        this.startHeading = startPosition.getHeading();
+        this.startHeading = 360 - startPosition.getHeading();
         car = new Car(this, this.startPosition, this.startHeading);
         trace = new ShiftedCatmullTrace(this);
         trace.addPoint(new Vec3D(startPosition.getX(), startPosition.getY(), 1));

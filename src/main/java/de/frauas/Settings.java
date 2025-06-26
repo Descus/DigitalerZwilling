@@ -11,9 +11,9 @@ public class Settings {
     public static final String SCENARIO_FILE = "Scenario/example.xml";
     public static final int SPLINE_INTERPOLATION_SIZE = 10;
     public static final Vec3D SCENE_CANVAS = new Vec3D(1000, 500, 0);
-    public static final Vec3D CAR_SIZE = new Vec3D(75, 150, 0);
+    public static final Vec3D CAR_SIZE = new Vec3D(150, 240, 0);
 
-    public static final float LINE_WIDTH = 4f;
+    public static final float LINE_WIDTH = 30f;
 
     public static final boolean DEBUG = true;
     public static final int POINT_DEBUG_RADIUS = 10;

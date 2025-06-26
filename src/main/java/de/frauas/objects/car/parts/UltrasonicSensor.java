@@ -46,7 +46,7 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
             }
         }
 
-        Vec3D sensorPos = transformPoint(Vec3D.identity);
+        Vec3D sensorPos = toGlobalSpace(Vec3D.identity);
         this.distance = calculateDistance(closestPoint, sensorPos);
 
         return closestPoint;
