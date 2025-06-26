@@ -2,12 +2,10 @@ package de.frauas.objects.car.parts;
 
 import de.frauas.IDrawable;
 import de.frauas.objects.Transformable;
-import de.frauas.objects.datastructures.Line3D;
 import de.frauas.objects.datastructures.Vec3D;
 import de.frauas.objects.interfaces.IInfraredSensor;
 import de.frauas.objects.trace.ShiftedTrace;
 
-import javax.sound.midi.Track;
 import java.awt.*;
 
 
@@ -23,9 +21,7 @@ public class InfraredSensor extends Transformable implements IInfraredSensor, ID
         Vec3D p = getWorldPosition();
         return trace.isPointBetweenLines(p);
     }
-
-
-
+    
     @Override
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();

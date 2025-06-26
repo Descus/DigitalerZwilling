@@ -7,44 +7,43 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ControlPanel extends JPanel {
+    boolean started = false, paused = false;
     public ControlPanel(SimulationModel model, Scene scene) {
         setLayout(new FlowLayout());
 
         JButton startBtn = new JButton("Start");
         JButton pauseBtn = new JButton("Pause");
-        JButton continueBtn = new JButton("Continue");
-        JButton resetBtn = new JButton("Reset");
 
         //initial status of the button
         pauseBtn.setEnabled(false);
-        continueBtn.setEnabled(false);
 
-        startBtn.addActionListener(e -> {
-            scene.startCar();
-            pauseBtn.setEnabled(true);
-            startBtn.setEnabled(false);
+        startBtn.addActionListener(_ -> {
+            if (!started) {
+                scene.startCar();
+                startBtn.setText("Reset");
+                pauseBtn.setEnabled(true);
+                started = true;
+            } else {
+                scene.resetCar();
+                startBtn.setText("Start");
+                pauseBtn.setEnabled(false);
+                started = false;
+            }
+            
         });
-        pauseBtn.addActionListener(e ->{
-            scene.pauseCar();
-            pauseBtn.setEnabled(false);
-            continueBtn.setEnabled(true);
+        pauseBtn.addActionListener(_ ->{
+            if(!paused) {
+                scene.pauseCar();
+                pauseBtn.setText("Continue");
+                paused = true;
+            } else {
+                scene.resumeCar();
+                pauseBtn.setText("Pause");
+                paused = false;
+            }
         }) ;
-        continueBtn.addActionListener(e -> {
-            scene.resumeCar();
-            pauseBtn.setEnabled(true);
-            continueBtn.setEnabled(false);
-        });
-        resetBtn.addActionListener(e -> {
-            scene.resetCar();
-            startBtn.setEnabled(true);
-            pauseBtn.setEnabled(false);
-            continueBtn.setEnabled(false);
-        });
-
         add(startBtn);
         add(pauseBtn);
-        add(continueBtn);
-        add(resetBtn);
     }
 }
 

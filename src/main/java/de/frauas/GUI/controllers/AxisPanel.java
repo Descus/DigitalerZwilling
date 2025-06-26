@@ -1,9 +1,10 @@
 package de.frauas.GUI.controllers;
 
+import de.frauas.GUI.controllers.observer.SimulationModel;
+import de.frauas.GUI.controllers.observer.SimulationObserver;
 import de.frauas.Settings;
 import de.frauas.objects.Scene;
 import de.frauas.objects.datastructures.Vec3D;
-import de.frauas.scenario.dto.Scenario;
 import lombok.Getter;
 
 
@@ -11,10 +12,8 @@ import javax.swing.*;
 import java.awt.*;
 
 
-public class AxisPanel extends JPanel implements SimulationObserver{
-
-    Timer timer;
-
+public class AxisPanel extends JPanel implements SimulationObserver {
+    
     @Getter
     private Scene scene;
     private long lastTime = System.currentTimeMillis();
@@ -114,15 +113,5 @@ public class AxisPanel extends JPanel implements SimulationObserver{
             g3.dispose();
         }
         g2.dispose();
-    }
-
-    public void populate(Scenario scenario) {
-        scene = new Scene(scenario);
-
-        timer = new Timer(200, _ -> {
-            scene.update();
-            repaint();
-        });
-        timer.start();
     }
 }

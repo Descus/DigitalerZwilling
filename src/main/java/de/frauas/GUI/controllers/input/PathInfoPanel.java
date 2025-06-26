@@ -26,7 +26,6 @@ public class PathInfoPanel extends JPanel{
     private void init() {
         listModel.clear();
         List<Vec3D> points = axisPanel.getScene().getTrace().getPoints(); //TODO Let Scene return info about the trace
-        System.out.println(points.size());
         for (int i = 0; i < points.size()-1; i++) {
             Vec3D point = points.get(i);
             Vec3D nextPoint = points.get(i+1);

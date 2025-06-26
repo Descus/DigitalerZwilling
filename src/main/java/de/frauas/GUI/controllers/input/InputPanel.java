@@ -1,7 +1,6 @@
 package de.frauas.GUI.controllers.input;
 
 import de.frauas.GUI.controllers.AxisPanel;
-import de.frauas.GUI.controllers.ObstacleInfoPanel;
 import de.frauas.GUI.controllers.TitledRoundedPanel;
 
 import javax.swing.*;

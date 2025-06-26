@@ -20,9 +20,8 @@ public class SimulationModel {
                 double delta = (now - lastTime) / 1000.0;
                 lastTime = now;
 
-                if (scene.getCar().getStatus() == CarStatus.RUNNING) {
-                    scene.getCar().move(delta);
-                }
+                scene.update(delta);
+                
                 notifyObservers();
             }
         });

@@ -7,9 +7,7 @@ import de.frauas.objects.car.CarStatus;
 import de.frauas.objects.datastructures.Vec3D;
 import de.frauas.objects.obstacle.ISdf;
 import de.frauas.objects.obstacle.Obstacle;
-import de.frauas.objects.trace.ShiftedCatmullTrace;
-import de.frauas.objects.trace.ShiftedTrace;
-import de.frauas.objects.trace.Trace;
+import de.frauas.objects.trace.*;
 import de.frauas.scenario.dto.Scenario;
 import de.frauas.scenario.dto.StartPosition;
 import lombok.Getter;
@@ -30,13 +28,10 @@ public class Scene extends Transformable implements ISdf, IDrawable {
 
     public Scene(Scenario scenario) {
         StartPosition startPosition = scenario.getStartPosition();
-        this.startPosition = new Vec3D(startPosition.getX(), startPosition.getY(), 1);
-        this.startHeading = 360 - startPosition.getHeading();
-        car = new Car(this, this.startPosition, this.startHeading);
-        trace = new ShiftedCatmullTrace(this);
+        trace = new RoadTrace(this);
         trace.addPoint(new Vec3D(startPosition.getX(), startPosition.getY(), 1));
         scenario.getTrace().forEach(point -> trace.addPoint(new Vec3D(point.getX(), point.getY(), 1)));
-
+        
         scenario.getObjects().forEach(object -> obstacles.add(new Obstacle(
                 this,
                 object.getXStart(),
@@ -44,6 +39,10 @@ public class Scene extends Transformable implements ISdf, IDrawable {
                 object.getXEnd(),
                 object.getYEnd(),
                 object.getHeight())));
+
+        this.startPosition = new Vec3D(startPosition.getX(), startPosition.getY(), 1);
+        this.startHeading = 360 - startPosition.getHeading();
+        car = new Car(this, this.startPosition, this.startHeading);
     }
 
 
@@ -74,8 +73,8 @@ public class Scene extends Transformable implements ISdf, IDrawable {
 
     public void resumeCar(){ this.car.setStatus(CarStatus.RUNNING);}
 
-    public void update() {
-        car.update((ShiftedCatmullTrace) trace);
+    public void update(double dt) {
+        car.update(dt);
     }
 
     @Override
@@ -86,6 +85,17 @@ public class Scene extends Transformable implements ISdf, IDrawable {
             trace.draw(g2);
             obstacles.forEach(obstacle -> obstacle.draw(g2));
             car.draw(g2);
+        }
+
+        if (Settings.DEBUG) {
+            for (int i = 0; i < Settings.WIDTH; i += 2) {
+                for (int j = 0; j < Settings.HEIGHT; j += 2) {
+                    Vec3D pos = new Vec3D(i, j, 1);
+                    pos = toGlobalSpace(pos);
+                    g2.setColor(((ShiftedTrace) trace).isPointBetweenLines(toGlobalSpace(pos)) ? Color.green : Color.red);
+                    g2.fillOval((int) pos.getX(), (int) pos.getY(), 1, 1);
+                }
+            }
         }
         g2.dispose();
     }

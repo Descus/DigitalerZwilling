@@ -1,5 +1,6 @@
-package de.frauas.GUI.controllers;
+package de.frauas.GUI.controllers.input;
 
+import de.frauas.GUI.controllers.AxisPanel;
 import de.frauas.objects.obstacle.Obstacle;
 import de.frauas.objects.datastructures.Vec3D;
 
