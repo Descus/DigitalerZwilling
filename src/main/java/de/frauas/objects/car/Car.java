@@ -27,7 +27,7 @@ import static de.frauas.Settings.POINT_DEBUG_RADIUS;
 @Getter
 public class Car extends Transformable implements IDrawable {
     private final double velocity = 10;
-    public static final int SENSOR_ANGLE = 30;
+    public static final int SENSOR_ANGLE = 20;
     private static final double TURN_DEG = 6;
     private static final double STEP_MM  = 7;
 
@@ -44,12 +44,12 @@ public class Car extends Transformable implements IDrawable {
         this.transform = new Transform2D(position, headingDegree);
         Vec3D CarSizeOffset = Settings.CAR_SIZE.scale(0.5);
 
-        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(-CarSizeOffset.getX(),  CarSizeOffset.getY(), 0), SENSOR_ANGLE));
-        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(0, CarSizeOffset.getY(), 0), 0));
-        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(CarSizeOffset.getX(), CarSizeOffset.getY(), 0), -SENSOR_ANGLE));
-        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(-CarSizeOffset.getX(), -CarSizeOffset.getY(), 0), -SENSOR_ANGLE + 180));
-        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(0, -CarSizeOffset.getY(), 0), 180));
-        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(CarSizeOffset.getX(), -CarSizeOffset.getY(), 0), SENSOR_ANGLE + 180));
+        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(-45,  110, 0), SENSOR_ANGLE));
+        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(0, 117.5, 0), 0));
+        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(45, 110, 0), -SENSOR_ANGLE));
+        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(-45, -117.5, 0), -SENSOR_ANGLE + 180));
+        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(0, -117.5, 0), 180));
+        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(45, -117.5, 0), SENSOR_ANGLE + 180));
 
         infraredSensors.add(new InfraredSensor(this, new Vec3D(10 , 60, 0)));
         infraredSensors.add(new InfraredSensor(this, new Vec3D(0, 60, 0)));

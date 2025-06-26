@@ -1,5 +1,6 @@
 package de.frauas.objects.trace;
 
+import de.frauas.Settings;
 import de.frauas.objects.Scene;
 import de.frauas.objects.datastructures.Line3D;
 import de.frauas.objects.datastructures.Vec3D;
@@ -34,10 +35,6 @@ import static de.frauas.Settings.SPLINE_INTERPOLATION_SIZE;
  * without generating any lines.
  */
 public class ShiftedCatmullTrace extends ShiftedTrace {
-
-
-    // Abstand für die verschobenen Traces zur originalen Trace (15 cm nach oben und unten)
-    private static final double OFFSET = 15.0;
 
     public ShiftedCatmullTrace(Scene scene, ArrayList<Vec3D> points) {
         super(scene, points);
@@ -108,8 +105,8 @@ public class ShiftedCatmullTrace extends ShiftedTrace {
             // Orthogonaler Vektor
             Vec3D normal = tangent.perpendicular();
 
-            shiftedPointsUp.add(current.add(normal.scale(OFFSET)));
-            shiftedPointsDown.add(current.add(normal.scale(-OFFSET)));
+            shiftedPointsUp.add(current.add(normal.scale(Settings.LINE_WIDTH / 2)));
+            shiftedPointsDown.add(current.add(normal.scale(-Settings.LINE_WIDTH / 2)));
         }
 
         // create Lines for both traces

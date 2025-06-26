@@ -1,5 +1,6 @@
 package de.frauas.objects.trace;
 
+import de.frauas.Settings;
 import de.frauas.objects.Scene;
 import de.frauas.objects.datastructures.Vec3D;
 import de.frauas.objects.datastructures.Line3D;
@@ -37,7 +38,6 @@ public class ShiftedTrace extends Trace {
         if (points.size() < 2) return;
 
         // Abstand für die verschobenen Traces zur originalen Trace (15 cm nach oben und unten)
-        double offset = 15.0;
 
         ArrayList<Vec3D> shiftedPointsUp = new ArrayList<>();
         ArrayList<Vec3D> shiftedPointsDown = new ArrayList<>();
@@ -54,8 +54,8 @@ public class ShiftedTrace extends Trace {
             Vec3D normal = tangent.perpendicular();
 
             // Punkte verschieben, jeweils nach unten und oben
-            Vec3D shiftedUp = points.get(i).add(normal.scale(offset));
-            Vec3D shiftedDown = points.get(i).add(normal.scale(-offset));
+            Vec3D shiftedUp = points.get(i).add(normal.scale(Settings.LINE_WIDTH / 2));
+            Vec3D shiftedDown = points.get(i).add(normal.scale(-Settings.LINE_WIDTH / 2));
 
             shiftedPointsUp.add(shiftedUp);
             shiftedPointsDown.add(shiftedDown);

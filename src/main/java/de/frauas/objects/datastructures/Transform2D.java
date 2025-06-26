@@ -17,7 +17,7 @@ public class Transform2D {
     private Mat3x3D translationMatrixInverse = Mat3x3D.IDENTITY;
     private Mat3x3D scaleMatrixInverse = Mat3x3D.IDENTITY;
     private Mat3x3D rotationMatrixInverse = Mat3x3D.IDENTITY;
-    
+
     public Transform2D() {}
 
     public Transform2D(Vec3D translation) {
