@@ -103,7 +103,6 @@ public class AxisPanel extends JPanel {
                 g3.translate(x0, y0);
                 g3.scale(1, -1);
                 scene.draw(g3);
-
             }
             g3.dispose();
         }
