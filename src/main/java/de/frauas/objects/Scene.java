@@ -25,6 +25,8 @@ public class Scene extends Transformable implements ISdf, IDrawable {
     private Vec3D startPosition;
     private double startHeading;
 
+    double time = 0;
+
 
     public Scene(Scenario scenario) {
         StartPosition startPosition = scenario.getStartPosition();
@@ -74,7 +76,9 @@ public class Scene extends Transformable implements ISdf, IDrawable {
     public void resumeCar(){ this.car.setStatus(CarStatus.RUNNING);}
 
     public void update(double dt) {
-        car.update(dt);
+        car.update((int) time, dt);
+
+        time += dt;
     }
 
     @Override

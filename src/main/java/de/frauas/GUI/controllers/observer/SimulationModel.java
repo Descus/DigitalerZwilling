@@ -1,7 +1,6 @@
 package de.frauas.GUI.controllers.observer;
 
 import de.frauas.objects.Scene;
-import de.frauas.objects.car.CarStatus;
 
 import javax.swing.*;
 import java.util.ArrayList;

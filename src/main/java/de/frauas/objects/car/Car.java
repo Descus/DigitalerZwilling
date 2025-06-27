@@ -2,6 +2,8 @@ package de.frauas.objects.car;
 
 import de.frauas.IDrawable;
 import de.frauas.Settings;
+import de.frauas.objects.CarUpdateInformation;
+import de.frauas.objects.interfaces.CarObserver;
 import de.frauas.objects.obstacle.ISdf;
 import de.frauas.objects.Scene;
 import de.frauas.objects.Transformable;
@@ -18,6 +20,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.awt.*;
+import java.nio.channels.InterruptedByTimeoutException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +30,8 @@ import static de.frauas.Settings.POINT_DEBUG_RADIUS;
 
 @Getter
 public class Car extends Transformable implements IDrawable {
+    
+    List<CarObserver> carObservers = new ArrayList<>();
     private final double velocity = 10;
     public static final int SENSOR_ANGLE = 20;
     private IMovementStrategy movementStrategy;
@@ -48,12 +54,12 @@ public class Car extends Transformable implements IDrawable {
             movementStrategy = new InterpolationMovementStrategy(transform, (RoadTrace) parent.getTrace());
         }
 
-        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(-45,  110, 0), SENSOR_ANGLE));
-        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(0, 117.5, 0), 0));
-        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(45, 110, 0), -SENSOR_ANGLE));
-        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(-45, -117.5, 0), -SENSOR_ANGLE + 180));
-        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(0, -117.5, 0), 180));
-        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(45, -117.5, 0), SENSOR_ANGLE + 180));
+        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(-45,  110, 0), SENSOR_ANGLE, parent));
+        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(0, 117.5, 0), 0, parent));
+        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(45, 110, 0), -SENSOR_ANGLE, parent));
+        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(-45, -117.5, 0), -SENSOR_ANGLE + 180, parent));
+        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(0, -117.5, 0), 180, parent));
+        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(45, -117.5, 0), SENSOR_ANGLE + 180, parent));
 
         infraredSensors.add(new InfraredSensor(this, new Vec3D(10 , 60, 0)));
         infraredSensors.add(new InfraredSensor(this, new Vec3D(0, 60, 0)));
@@ -97,11 +103,27 @@ public class Car extends Transformable implements IDrawable {
      * Moving the car forward based on its velocity and heading.
      * @param dt Time step in seconds.
      */
-    public void update(double dt) {
+    public void update(int time, double dt) {
         if (status != CarStatus.RUNNING) return;
         
         movementStrategy.move(dt);
         // Use transform's forward vector for direction:
+        
+        List<Integer> measurements = new ArrayList<>();
+        
+        for (IUltrasonicSensor sensor : ultraSonicSensors) {
+            int distance = sensor.distanceToClosestObstacle();
+            
+            measurements.add(distance);
+            
+            if(distance < 30)
+                status = CarStatus.STOPPED;
+        }
+        
+        for (CarObserver observer : carObservers) {
+            observer.onCarUpdate(new CarUpdateInformation(status, time, measurements));
+        }
+        //write measurements to Screen
     }
 
     public int[] getCurrentSensorDistances() {

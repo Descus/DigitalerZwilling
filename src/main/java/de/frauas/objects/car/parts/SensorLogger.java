@@ -1,10 +1,13 @@
-package de.frauas.objects.parts;
+package de.frauas.objects.car.parts;
+
+import de.frauas.objects.CarUpdateInformation;
+import de.frauas.objects.interfaces.CarObserver;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class SensorLogger {
+public class SensorLogger implements CarObserver {
 
     private BufferedWriter writer;
 
@@ -35,6 +38,13 @@ public class SensorLogger {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onCarUpdate(CarUpdateInformation info) {
+        for (Integer i : info.getMeasurements()) {
+
         }
     }
 }
