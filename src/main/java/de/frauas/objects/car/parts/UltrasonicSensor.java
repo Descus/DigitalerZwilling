@@ -18,7 +18,7 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
     public static final int MAX_ANGLE = 15;
     private final ISdf sceneDistanceField;
     public double stepSize = 0.1f;
-
+    public int firstUSTimestamp = 4395 + (int)(Math.random() * ((4403-4395) + 1));
     private int distance;
 
     public UltrasonicSensor(Transformable parent, Vec3D positionOffset, double orientationAngle, ISdf sceneDistanceField) {
@@ -89,6 +89,18 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
     public int calculateDistance(Vec3D closestPoint, Vec3D sensorPosition){
         return (int) closestPoint.subtract(sensorPosition).length();
     }
+    /* creates the first random timestamp for the Ultrasonic Sensor
+    public int firstTimestampUS() {
+        int timestamp = 4395 + (int)(Math.random() * ((4403-4395) + 1));
+        return timestamp;
+    }*/
+
+    /* Adds a random value between 200 - 300 ms to the timestamp */
+    public int iterateUSTimestamp(int previousTimestamp) {
+     return (previousTimestamp + (200 + (int)(Math.random() * ((300-200) + 1))));
+    }
+
+
 
     @Override
     public int distanceToClosestObstacle() {
