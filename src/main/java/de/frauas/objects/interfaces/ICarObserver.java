@@ -2,6 +2,6 @@ package de.frauas.objects.interfaces;
 
 import de.frauas.objects.CarUpdateInformation;
 
-public interface CarObserver {
+public interface ICarObserver {
     void onCarUpdate(CarUpdateInformation info);
 }

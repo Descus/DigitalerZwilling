@@ -3,7 +3,7 @@ package de.frauas.objects.car;
 import de.frauas.IDrawable;
 import de.frauas.Settings;
 import de.frauas.objects.CarUpdateInformation;
-import de.frauas.objects.interfaces.CarObserver;
+import de.frauas.objects.interfaces.ICarObserver;
 import de.frauas.objects.obstacle.ISdf;
 import de.frauas.objects.Scene;
 import de.frauas.objects.Transformable;
@@ -15,13 +15,10 @@ import de.frauas.objects.car.parts.UltrasonicSensor;
 import de.frauas.objects.car.parts.InfraredSensor;
 import de.frauas.objects.trace.RoadTrace;
 import de.frauas.objects.trace.ShiftedTrace;
-import de.frauas.objects.trace.Trace;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.awt.*;
-import java.nio.channels.InterruptedByTimeoutException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +28,7 @@ import static de.frauas.Settings.POINT_DEBUG_RADIUS;
 @Getter
 public class Car extends Transformable implements IDrawable {
     
-    List<CarObserver> carObservers = new ArrayList<>();
+    List<ICarObserver> carObservers = new ArrayList<>();
     private final double velocity = 10;
     public static final int SENSOR_ANGLE = 20;
     private IMovementStrategy movementStrategy;
@@ -104,36 +101,31 @@ public class Car extends Transformable implements IDrawable {
      * @param dt Time step in seconds.
      */
     public void update(int time, double dt) {
+
+        List<Integer> measurements = new ArrayList<>();
+
+        for (IUltrasonicSensor sensor : ultraSonicSensors) {
+            int distance = sensor.distanceToClosestObstacle();
+
+            measurements.add(distance);
+
+            if(distance < 30)
+                status = CarStatus.STOPPED;
+        }
+
+        notifyObservers(time, measurements);
+
+        
         if (status != CarStatus.RUNNING) return;
         
         movementStrategy.move(dt);
         // Use transform's forward vector for direction:
-        
-        List<Integer> measurements = new ArrayList<>();
-        
-        for (IUltrasonicSensor sensor : ultraSonicSensors) {
-            int distance = sensor.distanceToClosestObstacle();
-            
-            measurements.add(distance);
-            
-            if(distance < 30)
-                status = CarStatus.STOPPED;
-        }
-        
-        for (CarObserver observer : carObservers) {
-            observer.onCarUpdate(new CarUpdateInformation(status, time, measurements));
-        }
-        //write measurements to Screen
+
     }
 
-    public int[] getCurrentSensorDistances() {
-        return new int[]{
-                ultraSonicSensors.get(0).getDistance(),
-                ultraSonicSensors.get(1).getDistance(),
-                ultraSonicSensors.get(2).getDistance(),
-                ultraSonicSensors.get(3).getDistance(),
-                ultraSonicSensors.get(4).getDistance(),
-                ultraSonicSensors.get(5).getDistance()
-        };
+    private void notifyObservers(int time, List<Integer> measurements) {
+        for (ICarObserver observer : carObservers) {
+            observer.onCarUpdate(new CarUpdateInformation(status, time, measurements));
+        }
     }
 }

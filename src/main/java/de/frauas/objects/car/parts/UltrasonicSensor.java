@@ -9,8 +9,6 @@ import de.frauas.objects.interfaces.IUltrasonicSensor;
 import java.awt.*;
 import java.util.Random;
 
-import static java.lang.Math.sqrt;
-
 
 public class UltrasonicSensor extends Transformable implements IUltrasonicSensor, IDrawable {
     
@@ -19,7 +17,6 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
     private final ISdf sceneDistanceField;
     public double stepSize = 0.1f;
     public int firstUSTimestamp = 4395 + (int)(Math.random() * ((4403-4395) + 1));
-    private int distance;
 
     public UltrasonicSensor(Transformable parent, Vec3D positionOffset, double orientationAngle, ISdf sceneDistanceField) {
         this.sceneDistanceField = sceneDistanceField;
@@ -44,10 +41,6 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
                 closestPoint = currentPoint;
             }
         }
-
-        Vec3D sensorPos = toGlobalSpace(Vec3D.identity);
-        this.distance = calculateDistance(closestPoint, sensorPos);
-
         return closestPoint;
     }
 
@@ -97,22 +90,13 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
 
     /* Adds a random value between 200 - 300 ms to the timestamp */
     public int iterateUSTimestamp(int previousTimestamp) {
-     return (previousTimestamp + (200 + (int)(Math.random() * ((300-200) + 1))));
+        return (previousTimestamp + (200 + (int)(Math.random() * ((300-200) + 1))));
     }
-
-
 
     @Override
     public int distanceToClosestObstacle() {
         return calculateDistance(getWorldPosition(), getClosestPoint());
     }
-
-    /* get current distance */
-    @Override
-    public int getDistance() {
-        return distance;
-    }
-
 }
 
 

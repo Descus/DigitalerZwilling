@@ -1,13 +1,13 @@
 package de.frauas.objects.car.parts;
 
 import de.frauas.objects.CarUpdateInformation;
-import de.frauas.objects.interfaces.CarObserver;
+import de.frauas.objects.interfaces.ICarObserver;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class SensorLogger implements CarObserver {
+public class SensorLogger implements ICarObserver {
 
     private BufferedWriter writer;
 
