@@ -11,10 +11,12 @@ public class CarUpdateInformation {
     CarStatus status;
     int timestamp;
     List<Integer> measurements;
+    int usTimestamp;
 
-    public CarUpdateInformation(CarStatus status, int timestamp, List<Integer> measurements) {
+    public CarUpdateInformation(CarStatus status, int timestamp, List<Integer> measurements, int usTimestamp) {
         this.status = status;
         this.timestamp = timestamp;
         this.measurements = measurements;
+        this.usTimestamp = usTimestamp;
     }
 }
