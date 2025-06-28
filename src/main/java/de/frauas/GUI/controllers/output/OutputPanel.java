@@ -15,7 +15,7 @@ public class OutputPanel extends JPanel implements SimulationObserver {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         add(Box.createVerticalStrut(10));
         add(Box.createVerticalStrut(10));
-        add(new TitledRoundedPanel("Sensor Information",Color.BLACK,new JPanel()));
+        add(new TitledRoundedPanel("Sensor Information",Color.BLACK,new SensorLoggingPanel(model,scene)));
         add(new TitledRoundedPanel("Time-Status-Position", Color.BLACK,new CarPositionPanel(model, scene)));
     }
 
