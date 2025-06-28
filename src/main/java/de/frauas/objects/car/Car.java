@@ -56,7 +56,7 @@ public class Car extends Transformable implements IDrawable {
             movementStrategy = new InterpolationMovementStrategy(transform, (RoadTrace) parent.getTrace());
         }
         //writing the first Lines to the US output.txt
-        carObservers.add(new SensorLogger("output.txt", firstUSTimestamp));
+        carObservers.add(new SensorLogger("logs/output.txt", firstUSTimestamp));
 
 
         ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(-45,  110, 0), SENSOR_ANGLE_FL, parent));
