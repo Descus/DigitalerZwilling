@@ -20,8 +20,6 @@ public class CarPositionPanel extends JPanel implements SimulationObserver {
     public CarPositionPanel(SimulationModel simulModel, Scene scene) {
         this.scene = scene;
         setLayout(new BorderLayout(5, 5));
-        JLabel title = new JLabel("Track Car");
-        add(title, BorderLayout.NORTH);
 
         // Top: update interval control
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 2));
