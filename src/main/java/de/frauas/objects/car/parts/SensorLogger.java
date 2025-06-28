@@ -7,13 +7,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class SensorLogger implements ICarObserver {
 
@@ -61,6 +54,14 @@ public class SensorLogger implements ICarObserver {
     }
     @Override
     public void onCarUpdate(CarUpdateInformation info) {
-        logMeasurement(info.getUsTimestamp(), info.getMeasurements().get(0), info.getMeasurements().get(1),info.getMeasurements().get(2),info.getMeasurements().get(3),info.getMeasurements().get(4), info.getMeasurements().get(5));
+        logMeasurement(
+                info.getUsTimestamp(),
+                info.getMeasurements().get(0),
+                info.getMeasurements().get(1),
+                info.getMeasurements().get(2),
+                info.getMeasurements().get(3),
+                info.getMeasurements().get(4),
+                info.getMeasurements().get(5)
+        );
     }
 }
