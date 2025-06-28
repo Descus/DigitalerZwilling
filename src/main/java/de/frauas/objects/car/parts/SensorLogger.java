@@ -48,9 +48,7 @@ public class SensorLogger implements ICarObserver {
 
     @Override
     public void onCarUpdate(CarUpdateInformation info) {
-        for (Integer i : info.getMeasurements()) {
-
-        }
         logMeasurement(info.getUsTimestamp(), info.getMeasurements().get(0), info.getMeasurements().get(1),info.getMeasurements().get(2),info.getMeasurements().get(3),info.getMeasurements().get(4), info.getMeasurements().get(5));
+       System.out.println(info.getUsTimestamp());
     }
 }

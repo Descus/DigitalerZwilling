@@ -3,6 +3,7 @@ package de.frauas.objects.car;
 import de.frauas.IDrawable;
 import de.frauas.Settings;
 import de.frauas.objects.CarUpdateInformation;
+import de.frauas.objects.car.parts.SensorLogger;
 import de.frauas.objects.interfaces.ICarObserver;
 import de.frauas.objects.obstacle.ISdf;
 import de.frauas.objects.Scene;
@@ -54,6 +55,9 @@ public class Car extends Transformable implements IDrawable {
         }catch (ClassCastException e) {
             movementStrategy = new InterpolationMovementStrategy(transform, (RoadTrace) parent.getTrace());
         }
+        //writing the first Lines to the US output.txt
+        new SensorLogger("output.txt", firstUSTimestamp );
+
 
         ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(-45,  110, 0), SENSOR_ANGLE_FL, parent));
         ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(0, 117.5, 0), 0, parent));
