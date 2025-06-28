@@ -22,15 +22,18 @@ public class Scene extends Transformable implements ISdf, IDrawable {
     private final Trace trace;
     private final List<Obstacle> obstacles = new ArrayList<>();
     private final Car car;
-    private Vec3D startPosition;
-    private double startHeading;
+    private final Vec3D startPosition;
+    private final double startHeading;
+
+    private boolean isBaked = false;
+    private final double[][] bakedSdFields = new double[(int) Settings.SCENE_CANVAS.getX()][(int) Settings.SCENE_CANVAS.getY()];
 
     double time = 0;
 
 
     public Scene(Scenario scenario) {
         StartPosition startPosition = scenario.getStartPosition();
-        trace = new RoadTrace(this);
+        trace = new ShiftedCatmullTrace(this);
         trace.addPoint(new Vec3D(startPosition.getX(), startPosition.getY(), 1));
         scenario.getTrace().forEach(point -> trace.addPoint(new Vec3D(point.getX(), point.getY(), 1)));
         
@@ -45,11 +48,34 @@ public class Scene extends Transformable implements ISdf, IDrawable {
         this.startPosition = new Vec3D(startPosition.getX(), startPosition.getY(), 1);
         this.startHeading = 360 - startPosition.getHeading();
         car = new Car(this, this.startPosition, this.startHeading);
+
+        bakeSdf();
     }
 
 
     @Override
     public double getSDF(Vec3D otherPosition) {
+        if (!isBaked) {
+            bakeSdf();
+        }
+        return bakedSdFields[
+                Math.clamp((int) otherPosition.getX(), 0, (int) Settings.SCENE_CANVAS.getX() - 1)
+                ][
+                Math.clamp((int) otherPosition.getY(), 0, (int) Settings.SCENE_CANVAS.getY() - 1)
+                ];
+    }
+
+    private void bakeSdf(){
+        isBaked = false;
+        for (int i = 0; i < Settings.SCENE_CANVAS.getX(); i++) {
+            for (int j = 0; j < Settings.SCENE_CANVAS.getY(); j++) {
+                bakedSdFields[i][j] = createSdf(new Vec3D(i, j, 0));
+            }
+        }
+        isBaked = true;
+    }
+
+    private double createSdf(Vec3D otherPosition){
         double min = Double.MAX_VALUE;
         for (Obstacle obstacle : obstacles) {
             double sdf = obstacle.getSDF(otherPosition);
@@ -66,7 +92,6 @@ public class Scene extends Transformable implements ISdf, IDrawable {
 
     public void startCar(){
         this.car.setStatus(CarStatus.RUNNING);
-
     }
 
     public void stopCar(){ this.car.setStatus(CarStatus.STOPPED);}
@@ -77,7 +102,6 @@ public class Scene extends Transformable implements ISdf, IDrawable {
 
     public void update(double dt) {
         car.update((int) time, dt);
-
         time += dt;
     }
 
