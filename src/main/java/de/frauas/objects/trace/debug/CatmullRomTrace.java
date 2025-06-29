@@ -1,4 +1,4 @@
-package de.frauas.objects.trace;
+package de.frauas.objects.trace.debug;
 
 import de.frauas.objects.Scene;
 import de.frauas.objects.datastructures.Line3D;

@@ -1,4 +1,4 @@
-package de.frauas.objects.car;
+package de.frauas.objects.car.movement;
 
 public enum MovementInstruction {
     forward,

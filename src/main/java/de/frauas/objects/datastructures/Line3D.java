@@ -17,12 +17,18 @@ public class Line3D extends Transformable implements IDrawable {
         this.end = end;
     }
 
-    public Vec3D lerp(double t) {
-        return start.add(end.subtract(start).scale(t));
-    }
-
     public double length(){
         return end.subtract(start).length();
+    }
+    
+    public boolean rightOfLine(Vec3D point) {
+        Vec3D ap = point.subtract(start);
+        Vec3D abPerp = end.subtract(start).perpendicular();
+        return ap.dotProd(abPerp) >= 0;
+    }
+    
+    public String toString(){
+        return String.format("%s -> %s", start.toString(), end.toString());
     }
 
     @Override
@@ -37,15 +43,5 @@ public class Line3D extends Transformable implements IDrawable {
                     (int) this.end.getY());
         }
         g2.dispose();
-    }
-    
-    public boolean rightOfLine(Vec3D point) {
-        Vec3D ap = point.subtract(start);
-        Vec3D abPerp = end.subtract(start).perpendicular();
-        return ap.dotProd(abPerp) >= 0;
-    }
-    
-    public String toString(){
-        return String.format("%s -> %s", start.toString(), end.toString());
     }
 }

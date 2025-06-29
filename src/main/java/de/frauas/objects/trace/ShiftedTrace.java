@@ -94,4 +94,9 @@ public class ShiftedTrace extends Trace {
         upperLine.forEach(l -> l.draw(g));
         lowerLine.forEach(l -> l.draw(g));
     }
+
+    @Override
+    public TraceType getType() {
+        return TraceType.WORKING;
+    }
 }

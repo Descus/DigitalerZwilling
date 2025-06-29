@@ -12,21 +12,25 @@ public class SensorLogger implements ICarObserver {
 
     private BufferedWriter writer;
 
-    public SensorLogger(String filename, int firstUSTimestamp) {
-        File file = new File(filename);
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+    private static SensorLogger instance;
+
+    public static SensorLogger getOrCreate() {
+        if (instance == null) {
+            instance = new SensorLogger("logs/output.txt");
         }
+        return instance;
+    }
+
+    private SensorLogger(String filename) {
+        File file = new File(filename);
         try {
-            writer = new BufferedWriter(new FileWriter(filename));
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            }
+            writer = new BufferedWriter(new FileWriter(file));
             writer.write("Timestamp,FrontLeft,FrontMiddle,FrontRight,RearLeft,RearMiddle,RearRight\n");
             writer.write("--------------------------------------------------------------------------------------------------------------\n");
-            String line = String.format("%d,0,0,0,0,0,0,\n",firstUSTimestamp);
-            writer.write(line);
             writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -43,15 +47,6 @@ public class SensorLogger implements ICarObserver {
         }
     }
 
-    public void close() {
-        try {
-            if (writer != null) {
-                writer.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     @Override
     public void onCarUpdate(CarUpdateInformation info) {
         logMeasurement(

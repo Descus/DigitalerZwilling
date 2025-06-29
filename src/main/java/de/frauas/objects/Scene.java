@@ -25,8 +25,8 @@ public class Scene extends Transformable implements ISdf, IDrawable {
     private final Vec3D startPosition;
     private final double startHeading;
 
-    private boolean isBaked = false;
     private final double[][] bakedSdFields = new double[(int) Settings.SCENE_CANVAS.getX()][(int) Settings.SCENE_CANVAS.getY()];
+    private boolean isBaked = false;
 
     double time = 0;
 
@@ -85,20 +85,18 @@ public class Scene extends Transformable implements ISdf, IDrawable {
     }
 
     public void resetCar(){
-        car.setStatus(CarStatus.STOPPED);  // Stop the car first
-        car.getTransform().setTranslation(startPosition); // Reset position
-        car.getTransform().setRotation(startHeading);
+        car.reset(startPosition, startHeading);
     }
 
     public void startCar(){
-        this.car.setStatus(CarStatus.RUNNING);
+        this.car.start();
     }
 
-    public void stopCar(){ this.car.setStatus(CarStatus.STOPPED);}
+    public void stopCar(){ this.car.stop();}
 
-    public void pauseCar(){ this.car.setStatus(CarStatus.PAUSED);}
+    public void pauseCar(){ this.car.pause();}
 
-    public void resumeCar(){ this.car.setStatus(CarStatus.RUNNING);}
+    public void resumeCar(){ this.car.start();}
 
     public void update(double dt) {
         car.update((int) time, dt);

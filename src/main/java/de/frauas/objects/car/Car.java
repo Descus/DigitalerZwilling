@@ -3,60 +3,56 @@ package de.frauas.objects.car;
 import de.frauas.IDrawable;
 import de.frauas.Settings;
 import de.frauas.objects.CarUpdateInformation;
+import de.frauas.objects.car.movement.MovementInstruction;
 import de.frauas.objects.car.parts.SensorLogger;
 import de.frauas.objects.interfaces.ICarObserver;
-import de.frauas.objects.obstacle.ISdf;
 import de.frauas.objects.Scene;
 import de.frauas.objects.Transformable;
-import de.frauas.objects.datastructures.Transform2D;
 import de.frauas.objects.datastructures.Vec3D;
 import de.frauas.objects.interfaces.IUltrasonicSensor;
 import de.frauas.objects.interfaces.IInfraredSensor;
 import de.frauas.objects.car.parts.UltrasonicSensor;
 import de.frauas.objects.car.parts.InfraredSensor;
-import de.frauas.objects.trace.RoadTrace;
+import de.frauas.objects.trace.TraceType;
 import de.frauas.objects.trace.ShiftedTrace;
+import de.frauas.objects.trace.Trace;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static de.frauas.Settings.POINT_DEBUG_RADIUS;
-import static de.frauas.objects.car.parts.UltrasonicSensor.firstUSTimestamp;
-
 
 @Getter
 public class Car extends Transformable implements IDrawable {
-    
-    List<ICarObserver> carObservers = new ArrayList<>();
-    private final double velocity = 10;
+
     public static final int SENSOR_ANGLE_FR = 20;
     public static final int SENSOR_ANGLE_FL = 25;
     public static final int SENSOR_ANGLE_REAR = 35;
-    private IMovementStrategy movementStrategy;
-    public int usTimestamp = firstUSTimestamp;
+    public static final int FIRST_TIMESTAMP = 4395 + (int)(Math.random() * ((4403-4395) + 1));
 
-    @Setter
-    private CarStatus status = CarStatus.STOPPED;
     private final List<IUltrasonicSensor> ultraSonicSensors = new ArrayList<>();
     private final List<IInfraredSensor> infraredSensors = new ArrayList<>();
-    
-    private final ISdf sceneDistanceField;
+    private final List<ICarObserver> carObservers = new ArrayList<>();
+
+    private final Trace trace;
+
+    private CarStatus status = CarStatus.STOPPED;
+    private int usTimestamp = FIRST_TIMESTAMP;
+
 
     public Car(Scene parent, Vec3D position, double headingDegree){
         this.parent = parent;
-        this.sceneDistanceField = parent;
-        this.transform = new Transform2D(position, headingDegree);
-        
-        try {
-            movementStrategy = new SensorMovementStrategy(transform, (ShiftedTrace) parent.getTrace(), infraredSensors);
-        }catch (ClassCastException e) {
-            movementStrategy = new InterpolationMovementStrategy(transform, (RoadTrace) parent.getTrace());
-        }
+        trace = parent.getTrace();
+
+        transform.setTranslation(position);
+        transform.setRotation(headingDegree);
+
         //writing the first Lines to the US output.txt
-        carObservers.add(new SensorLogger("logs/output.txt", firstUSTimestamp));
+        carObservers.add(SensorLogger.getOrCreate());
+        notifyObservers(usTimestamp, Arrays.asList(0,0,0,0,0,0), usTimestamp);
 
 
         ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(-45,  110, 0), SENSOR_ANGLE_FL, parent));
@@ -109,34 +105,90 @@ public class Car extends Transformable implements IDrawable {
      * @param dt Time step in seconds.
      */
     public void update(int time, double dt) {
+        new Thread(() -> ultrasonicUpdate(time)).start();
 
-        //Ultrasonic Sensors
+        if (status != CarStatus.RUNNING || trace.getType() == TraceType.DEBUG) return;
 
-        List<Integer> measurements = new ArrayList<>();
+        new Thread(() -> infraredUpdate(dt)).start();
+    }
 
-        for (IUltrasonicSensor sensor : ultraSonicSensors) {
-            int distance = sensor.distanceToClosestObstacle();
+    public void reset(Vec3D position, double headingDegree){
+        stop();  // Stop the car first
+        transform.setTranslation(position); // Reset position
+        transform.setRotation(headingDegree);
+    }
 
-            measurements.add(distance);
+    public void start() {
+        status = CarStatus.RUNNING;
+    }
 
-            if(distance < 30)
-                status = CarStatus.STOPPED;
+    public void stop() {
+        status = CarStatus.STOPPED;
+    }
+
+    public void pause() {
+        status = CarStatus.PAUSED;
+    }
+
+    public void finish(){
+        status = CarStatus.FINISHED;
+    }
+
+    private void applyMovementFromInstruction(double dt, MovementInstruction movementInstruction) {
+        //Fahrbefehle ausführen
+        switch (movementInstruction) {
+            case forward -> transform.translate(transform.forward().normalize().scale(Settings.STEP_MM * dt));
+            case left -> transform.rotate(Settings.TURN_DEG * dt);
+            case right -> transform.rotate(-Settings.TURN_DEG * dt);
+            case stop -> finish();
         }
-        usTimestamp = UltrasonicSensor.iterateUSTimestamp(usTimestamp);
-
-        notifyObservers(time, measurements, usTimestamp);
-
-        
-        if (status != CarStatus.RUNNING) return;
-        
-        movementStrategy.move(dt);
-        // Use transform's forward vector for direction:
-
     }
 
     private void notifyObservers(int time, List<Integer> measurements, int usTimestamp) {
         for (ICarObserver observer : carObservers) {
             observer.onCarUpdate(new CarUpdateInformation(status, time, measurements, usTimestamp));
         }
+    }
+
+    private MovementInstruction getMovementInstructionFromSensors(boolean[] sensorStatus) {
+        boolean L = sensorStatus[2];
+        boolean M = sensorStatus[1];
+        boolean R = sensorStatus[0];
+
+        if (L && !R) {
+            return MovementInstruction.left; // links abbiegen
+        } else if (!L && R) {
+            return MovementInstruction.right; // rechts abbiegen
+        } else { // wenn links und rechts false
+            return M ? MovementInstruction.forward // falls mitte true
+                    : MovementInstruction.stop; // falls mitte false
+        }
+    }
+
+    private void ultrasonicUpdate(int time) {
+        List<Integer> measurements = new ArrayList<>();
+        for (IUltrasonicSensor sensor : ultraSonicSensors) {
+            int distance = sensor.distanceToClosestObstacle();
+
+            measurements.add(distance);
+
+            if(distance < 30)
+                finish();
+        }
+
+        usTimestamp = UltrasonicSensor.iterateUSTimestamp(usTimestamp);
+        notifyObservers(time, measurements, usTimestamp);
+    }
+
+    private void infraredUpdate(double dt) {
+        boolean[] irHit = new boolean[infraredSensors.size()];
+        for (int s = 0; s < infraredSensors.size(); s++) {
+            IInfraredSensor ir = infraredSensors.get(s);
+            irHit[s] = ir.isOnTrack((ShiftedTrace) trace);
+        }
+
+        MovementInstruction movementInstruction = getMovementInstructionFromSensors(irHit);
+
+        applyMovementFromInstruction(dt, movementInstruction);
     }
 }

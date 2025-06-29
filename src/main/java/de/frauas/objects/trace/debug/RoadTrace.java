@@ -1,8 +1,10 @@
-package de.frauas.objects.trace;
+package de.frauas.objects.trace.debug;
 
 import de.frauas.objects.Scene;
 import de.frauas.objects.datastructures.Line3D;
 import de.frauas.objects.datastructures.Vec3D;
+import de.frauas.objects.trace.Trace;
+import de.frauas.objects.trace.TraceType;
 import lombok.Getter;
 
 import java.awt.*;
@@ -24,11 +26,9 @@ public class RoadTrace extends Trace {
         createLines();
     }
 
-    public Vec3D lerp(double t){
-        int segment = (int) t;
-        if(t > lines.size() - 1)
-            return last();
-        return lines.get(segment).lerp(t - segment);
+    @Override
+    public TraceType getType() {
+        return TraceType.DEBUG;
     }
 
     @Override

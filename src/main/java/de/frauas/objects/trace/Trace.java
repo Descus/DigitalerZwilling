@@ -15,10 +15,12 @@ import java.util.List;
 public abstract class Trace extends Transformable implements IDrawable {
 
     protected final List<Vec3D> points = new ArrayList<>();
+    protected double length = 0;
 
     public Trace(Scene parent, List<Vec3D> points) {
         this.parent = parent;
         this.points.addAll(points);
+        calculateLength();
     }
 
     public Trace(Scene parent) {
@@ -28,6 +30,14 @@ public abstract class Trace extends Transformable implements IDrawable {
     public void addPoint(Vec3D point) {
         points.add(point);
         createLines();
+        calculateLength();
+    }
+
+    private void calculateLength(){
+        length = 0;
+        for (int i = 0; i < points.size() - 2; i++) {
+            length += points.get(i).subtract(points.get(i + 1)).length();
+        }
     }
 
     public Vec3D first(){
@@ -41,6 +51,8 @@ public abstract class Trace extends Transformable implements IDrawable {
     protected abstract void createLines();
     
     public abstract void drawLines(Graphics g);
+
+    public abstract TraceType getType();
     
     public void drawPoints(Graphics g) {
             points.forEach(p -> p.draw(g));
