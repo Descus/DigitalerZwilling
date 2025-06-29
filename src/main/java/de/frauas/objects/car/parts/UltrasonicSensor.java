@@ -84,7 +84,10 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
 
     /* Adds a random value between 200 - 300 ms to the timestamp */
     public static int iterateUSTimestamp(int previousTimestamp) {
-        return (previousTimestamp + (200 + (int)(Math.random() * ((300-200) + 1))));
+        Random random = new Random();
+        int sd = 50;
+        int mean = 250;
+        return (previousTimestamp + (int)(random.nextGaussian()* sd +mean)) ;
     }
 
     @Override
