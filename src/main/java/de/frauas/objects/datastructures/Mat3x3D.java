@@ -83,7 +83,7 @@ public class Mat3x3D {
         return new Mat3x3D(
                 scale.getX(), 0, 0, 
                 0, scale.getY(), 0, 
-                0, 0, scale.getZ());
+                0, 0, 1);
     }
 
     /**
