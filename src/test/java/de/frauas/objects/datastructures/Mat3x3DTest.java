@@ -81,7 +81,7 @@ class Mat3x3DTest {
 
         assertEquals(2, result.getX());
         assertEquals(3, result.getY());
-        assertEquals(4, result.getZ());
+        assertEquals(1, result.getZ());
     }
 
     @Test
