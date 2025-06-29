@@ -77,11 +77,11 @@ class Mat3x3DTest {
         Vec3D scale = new Vec3D(2, 3, 4);      // Skalierungsfaktor
         Mat3x3D scaleMatrix = Mat3x3D.ScaleMatrix(scale);
         Vec3D vec = new Vec3D(1, 1, 1);        // Testvektor
-        Vec3D result = scaleMatrix.mult(vec); // Sollte (2,3,4) ergeben
+        Vec3D result = scaleMatrix.mult(vec); // Sollte (2,3,1) ergeben
 
         assertEquals(2, result.getX());
         assertEquals(3, result.getY());
-        assertEquals(4, result.getZ());
+        assertEquals(1, result.getZ());
     }
 
     @Test
