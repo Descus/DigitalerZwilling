@@ -99,7 +99,7 @@ public class Vec3D implements IDrawable {
         Vec3D transformedPoint = this.subtract(new Vec3D((double) Settings.POINT_DEBUG_RADIUS / 2, (double) Settings.POINT_DEBUG_RADIUS / 2, 1));
         g.fillOval((int) transformedPoint.getX(), (int) transformedPoint.getY(), Settings.POINT_DEBUG_RADIUS, Settings.POINT_DEBUG_RADIUS);
     }
-    
+
     public boolean equals(Vec3D other){
         return this.x == other.x && this.y == other.y && this.z == other.z;
     }

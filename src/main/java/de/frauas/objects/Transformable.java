@@ -12,20 +12,27 @@ public abstract class Transformable {
     public Vec3D toGlobalSpace(Vec3D point){
         Vec3D transformedPoint = transform.transformPoint(point);
         return parent == null
-                ? transformedPoint
+                ? point
                 : parent.toGlobalSpace(transformedPoint);
     }
 
-    public Vec3D toLocalSpace(Vec3D point){
-        Vec3D transformedPoint = point;
-        if (parent != null)
-            transformedPoint = parent.toLocalSpace(point);
-        return transform.transformPointReverse(transformedPoint);
-
+    public Vec3D toLocalSpace(Vec3D point) {
+        if (parent != null) {
+            point = parent.toLocalSpace(point);
+            return transform.transformPointReverse(point);
+        }
+        return point;
     }
 
     public Vec3D getWorldPosition(){
         return toGlobalSpace(Vec3D.identity);
+    }
+
+    public Vec3D forward(){
+        Vec3D localForward = transform.forward();
+        return parent == null
+                ? localForward
+                : parent.toGlobalSpace(localForward);
     }
 
     public Vec3D getWorldScale(){

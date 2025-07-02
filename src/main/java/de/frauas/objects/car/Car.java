@@ -55,12 +55,12 @@ public class Car extends Transformable implements IDrawable {
         notifyObservers(usTimestamp, Arrays.asList(0,0,0,0,0,0), usTimestamp);
 
 
-        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(-45,  110, 0), SENSOR_ANGLE_FL, parent));
-        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(0, 117.5, 0), 0, parent));
-        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(45, 110, 0), -SENSOR_ANGLE_FR, parent));
-        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(-45, -117.5, 0), -SENSOR_ANGLE_REAR + 180, parent));
-        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(0, -117.5, 0), 180, parent));
-        ultraSonicSensors.add(new UltrasonicSensor(this, new Vec3D(45, -117.5, 0), SENSOR_ANGLE_REAR + 180, parent));
+        ultraSonicSensors.add(new UltrasonicSensor(this, "FL", new Vec3D(-45,  110, 0), SENSOR_ANGLE_FL, parent));
+        ultraSonicSensors.add(new UltrasonicSensor(this, "FC", new Vec3D(0, 117.5, 0), 0, parent));
+        ultraSonicSensors.add(new UltrasonicSensor(this, "FR", new Vec3D(45, 110, 0), -SENSOR_ANGLE_FR, parent));
+        ultraSonicSensors.add(new UltrasonicSensor(this, "RL", new Vec3D(-45, -117.5, 0), -SENSOR_ANGLE_REAR + 180, parent));
+        ultraSonicSensors.add(new UltrasonicSensor(this, "RC", new Vec3D(0, -117.5, 0), 180, parent));
+        ultraSonicSensors.add(new UltrasonicSensor(this, "RR", new Vec3D(45, -117.5, 0), SENSOR_ANGLE_REAR + 180, parent));
 
         infraredSensors.add(new InfraredSensor(this, new Vec3D(10 , 60, 0)));
         infraredSensors.add(new InfraredSensor(this, new Vec3D(0, 60, 0)));
@@ -107,7 +107,7 @@ public class Car extends Transformable implements IDrawable {
     public void update(int time, double dt) {
         new Thread(() -> ultrasonicUpdate(time)).start();
 
-        if (status != CarStatus.RUNNING || trace.getType() == TraceType.DEBUG) return;
+        if (trace.getType() == TraceType.DEBUG) return;
 
         new Thread(() -> infraredUpdate(dt)).start();
     }
@@ -136,8 +136,9 @@ public class Car extends Transformable implements IDrawable {
 
     private void applyMovementFromInstruction(double dt, MovementInstruction movementInstruction) {
         //Fahrbefehle ausführen
+        if (!status.equals(CarStatus.RUNNING)) return;
         switch (movementInstruction) {
-            case forward -> transform.translate(transform.forward().normalize().scale(Settings.STEP_MM * dt));
+            case forward -> transform.translate(forward().normalize().scale(Settings.STEP_MM * dt));
             case left -> transform.rotate(Settings.TURN_DEG * dt);
             case right -> transform.rotate(-Settings.TURN_DEG * dt);
             case stop -> finish();
@@ -166,18 +167,25 @@ public class Car extends Transformable implements IDrawable {
     }
 
     private void ultrasonicUpdate(int time) {
+        //try{
         List<Integer> measurements = new ArrayList<>();
         for (IUltrasonicSensor sensor : ultraSonicSensors) {
             int distance = sensor.distanceToClosestObstacle();
 
             measurements.add(distance);
 
-            if(distance < 30)
+            if (distance < 30)
                 finish();
+
+            //Thread.sleep(2000);
         }
+
 
         usTimestamp = UltrasonicSensor.iterateUSTimestamp(usTimestamp);
         notifyObservers(time, measurements, usTimestamp);
+        //} catch (InterruptedException e){
+        //    e.printStackTrace();
+        //}
     }
 
     private void infraredUpdate(double dt) {

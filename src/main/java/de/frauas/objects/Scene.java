@@ -118,7 +118,8 @@ public class Scene extends Transformable implements ISdf, IDrawable {
                 for (int j = 0; j < Settings.HEIGHT; j += 2) {
                     Vec3D pos = new Vec3D(i, j, 1);
                     pos = toGlobalSpace(pos);
-                    g2.setColor(((ShiftedTrace) trace).isPointBetweenLines(toGlobalSpace(pos)) ? Color.green : Color.red);
+                    double sdf = getSDF(pos);
+                    g2.setColor(((ShiftedTrace) trace).isPointBetweenLines(toGlobalSpace(pos)) ? Color.green : sdf >= 0 ? Color.red : Color.blue);
                     g2.fillOval((int) pos.getX(), (int) pos.getY(), 1, 1);
                 }
             }

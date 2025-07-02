@@ -25,9 +25,11 @@ public class InfraredSensor extends Transformable implements IInfraredSensor, ID
     @Override
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
-        g2d.transform(transform.toAffineTransform());
-        g2d.setColor(Color.GREEN);
-        g2d.fillOval(-3, -3, 6, 6);
+        {
+            g2d.transform(transform.toAffineTransform());
+            g2d.setColor(Color.GREEN);
+            g2d.fillOval(-3, -3, 6, 6);
+        }
         g2d.dispose();
     }
 }

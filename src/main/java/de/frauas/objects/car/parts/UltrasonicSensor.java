@@ -11,13 +11,15 @@ import java.util.Random;
 
 
 public class UltrasonicSensor extends Transformable implements IUltrasonicSensor, IDrawable {
-    
+
+    public String name;
     public static final int MAX_DISTANCE = 300;
     public static final int MAX_ANGLE = 15;
     private final ISdf sceneDistanceField;
     public double stepSize = 0.1f;
 
-    public UltrasonicSensor(Transformable parent, Vec3D positionOffset, double orientationAngle, ISdf sceneDistanceField) {
+    public UltrasonicSensor(Transformable parent, String name, Vec3D positionOffset, double orientationAngle, ISdf sceneDistanceField) {
+        this.name = name;
         this.sceneDistanceField = sceneDistanceField;
         this.parent = parent;
         transform.setTranslation(positionOffset);
@@ -35,7 +37,7 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
     public Vec3D getClosestPoint(){
         Vec3D closestPoint = Vec3D.identity.scale(1000);
         for (double angle = -MAX_ANGLE; angle < MAX_ANGLE; angle += stepSize) {
-            Vec3D currentPoint = castRay(transform.forward().rotate(angle));
+            Vec3D currentPoint = castRay(forward().rotate(angle));
             if (currentPoint.length() < closestPoint.length()) {
                 closestPoint = currentPoint;
             }
@@ -55,14 +57,16 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
      */
     private Vec3D castRay(Vec3D direction) {
         double travelDistance = 0;
+        Vec3D normalDirection = direction.normalize();
         Vec3D currentPosition = getWorldPosition();
 
         while (travelDistance < MAX_DISTANCE){
             double currentSdf = sceneDistanceField.getSDF(currentPosition);
-            if (currentSdf <= 0)
-                return currentPosition.add(direction.scale(travelDistance));
-            travelDistance += currentSdf < MAX_DISTANCE ? currentSdf : MAX_DISTANCE;
-            currentPosition = currentPosition.add(direction.scale(currentSdf));
+            if (currentSdf <= 0) {
+                return currentPosition;
+            }
+            travelDistance += currentSdf;
+            currentPosition = currentPosition.add(normalDirection.scale(travelDistance));
         }
         Random r = new Random();
         return direction.scale(r.nextInt(796,803));
@@ -71,9 +75,11 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
     @Override
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
-        g2d.transform(transform.toAffineTransform());
-        g2d.setColor(Color.BLUE);
-        g2d.drawRect(-15, -10, 30, 20);
+        {
+            g2d.transform(transform.toAffineTransform());
+            g2d.setColor(Color.BLUE);
+            g2d.drawRect(-15, -10, 30, 20);
+        }
         g2d.dispose();
     }
 
