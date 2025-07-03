@@ -47,11 +47,16 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
         hits.clear();
         steps.clear();
         Vec3D closestPoint = Vec3D.right.scale(1000);
+        Vec3D sensorPosition = getWorldPosition();
         for (double angle = -MAX_ANGLE; angle < MAX_ANGLE; angle += stepSize) {
             Vec3D currentPoint = castRay(forward().rotate(angle));
-            if (currentPoint.length() < closestPoint.length()) {
+            if (currentPoint.length() < closestPoint.subtract(getWorldPosition()).length()) {
                 closestPoint = currentPoint;
             }
+//            if (calculateDistance(currentPoint, sensorPosition) < calculateDistance(closestPoint, sensorPosition)) {
+//
+//                closestPoint = currentPoint;
+//            }
         }
         return closestPoint;
     }
