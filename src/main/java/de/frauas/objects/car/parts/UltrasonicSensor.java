@@ -8,8 +8,6 @@ import de.frauas.objects.Transformable;
 import de.frauas.objects.datastructures.Vec3D;
 import de.frauas.objects.interfaces.IUltrasonicSensor;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.awt.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -48,7 +46,6 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
         hits.clear();
         steps.clear();
         Vec3D closestPoint = Vec3D.right.scale(1000);
-        Vec3D sensorPosition = getWorldPosition();
         for (double angle = -MAX_ANGLE; angle < MAX_ANGLE; angle += stepSize) {
             Vec3D currentPoint = castRay(forward().rotate(angle));
             if (currentPoint.length() < closestPoint.subtract(getWorldPosition()).length()) {
