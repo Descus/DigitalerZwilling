@@ -100,6 +100,11 @@ public class Vec3D implements IDrawable {
         g.fillOval((int) transformedPoint.getX(), (int) transformedPoint.getY(), Settings.POINT_DEBUG_RADIUS, Settings.POINT_DEBUG_RADIUS);
     }
 
+    @Override
+    public void drawInScene(Graphics g) {
+        draw(g);
+    }
+
     public boolean equals(Vec3D other){
         return this.x == other.x && this.y == other.y && this.z == other.z;
     }

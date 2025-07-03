@@ -44,4 +44,13 @@ public class Line3D extends Transformable implements IDrawable {
         }
         g2.dispose();
     }
+
+    @Override
+    public void drawInScene(Graphics g) {
+        g.drawLine(
+                (int) this.start.getX(),
+                (int) this.start.getY(),
+                (int) this.end.getX(),
+                (int) this.end.getY());
+    }
 }

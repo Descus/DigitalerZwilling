@@ -32,4 +32,9 @@ public class InfraredSensor extends Transformable implements IInfraredSensor, ID
         }
         g2d.dispose();
     }
+
+    @Override
+    public void drawInScene(Graphics g) {
+        
+    }
 }

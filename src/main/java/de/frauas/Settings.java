@@ -2,6 +2,7 @@ package de.frauas;
 
 import de.frauas.objects.datastructures.Vec3D;
 
+
 public class Settings {
     
     public static final String TITLE = "Digitaler Zwilling";
@@ -18,5 +19,6 @@ public class Settings {
     public static final float LINE_WIDTH = 30f;
 
     public static final boolean DEBUG = false;
+    public static final boolean SHOW_DEBUG_RAYS = true;
     public static final int POINT_DEBUG_RADIUS = 10;
 }

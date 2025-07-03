@@ -43,6 +43,11 @@ public class Obstacle extends Transformable implements ISdf, IDrawable {
     }
 
     @Override
+    public void drawInScene(Graphics g) {
+        
+    }
+
+    @Override
     public double getSDF(Vec3D otherPosition) {
         Vec3D halfDim = dimension.scale(0.5);
         Vec3D translatedPosition = otherPosition.subtract(startPoint.add(halfDim));

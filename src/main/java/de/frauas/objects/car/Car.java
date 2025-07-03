@@ -100,12 +100,19 @@ public class Car extends Transformable implements IDrawable {
         g2.dispose();
     }
 
+    @Override
+    public void drawInScene(Graphics g) {
+        ultraSonicSensors.forEach(s -> s.drawInScene(g));
+        infraredSensors.forEach(s -> s.drawInScene(g));
+    }
+
     /**
      * Moving the car forward based on its velocity and heading.
      * @param dt Time step in seconds.
      */
     public void update(int time, double dt) {
-        new Thread(() -> ultrasonicUpdate(time)).start();
+        //new Thread(() -> ultrasonicUpdate(time)).start();
+        ultrasonicUpdate(time);
 
         if (trace.getType() == TraceType.DEBUG) return;
 

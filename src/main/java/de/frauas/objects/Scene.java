@@ -111,6 +111,7 @@ public class Scene extends Transformable implements ISdf, IDrawable {
             trace.draw(g2);
             obstacles.forEach(obstacle -> obstacle.draw(g2));
             car.draw(g2);
+            drawInScene(g2);
         }
 
         if (Settings.DEBUG) {
@@ -125,5 +126,12 @@ public class Scene extends Transformable implements ISdf, IDrawable {
             }
         }
         g2.dispose();
+    }
+
+    @Override
+    public void drawInScene(Graphics g) {
+        trace.drawInScene(g);
+        obstacles.forEach(obstacle -> obstacle.drawInScene(g));
+        car.drawInScene(g);
     }
 }

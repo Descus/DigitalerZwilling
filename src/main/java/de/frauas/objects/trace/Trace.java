@@ -75,4 +75,9 @@ public abstract class Trace extends Transformable implements IDrawable {
         }
         g2.dispose();
     }
+    
+    @Override
+    public void drawInScene(Graphics g) {
+        
+    }
 }

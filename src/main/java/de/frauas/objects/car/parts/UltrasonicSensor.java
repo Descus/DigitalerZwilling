@@ -1,13 +1,17 @@
 package de.frauas.objects.car.parts;
 
 import de.frauas.IDrawable;
+import de.frauas.Settings;
+import de.frauas.objects.datastructures.Line3D;
 import de.frauas.objects.obstacle.ISdf;
 import de.frauas.objects.Transformable;
 import de.frauas.objects.datastructures.Vec3D;
 import de.frauas.objects.interfaces.IUltrasonicSensor;
 
-import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.awt.*;
 
 
 public class UltrasonicSensor extends Transformable implements IUltrasonicSensor, IDrawable {
@@ -17,6 +21,10 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
     public static final int MAX_ANGLE = 15;
     private final ISdf sceneDistanceField;
     public double stepSize = 0.1f;
+    
+    List<Vec3D> hits = new ArrayList<>();
+    List<Vec3D> steps = new ArrayList<>();
+    List<Line3D> lines = new ArrayList<>();
 
     public UltrasonicSensor(Transformable parent, String name, Vec3D positionOffset, double orientationAngle, ISdf sceneDistanceField) {
         this.name = name;
@@ -35,7 +43,10 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
      *         If no obstacles are detected, returns a vector of length ~800.
      */
     public Vec3D getClosestPoint(){
-        Vec3D closestPoint = Vec3D.identity.scale(1000);
+        lines.clear();
+        hits.clear();
+        steps.clear();
+        Vec3D closestPoint = Vec3D.right.scale(1000);
         for (double angle = -MAX_ANGLE; angle < MAX_ANGLE; angle += stepSize) {
             Vec3D currentPoint = castRay(forward().rotate(angle));
             if (currentPoint.length() < closestPoint.length()) {
@@ -60,13 +71,16 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
         Vec3D normalDirection = direction.normalize();
         Vec3D currentPosition = getWorldPosition();
 
-        while (travelDistance < MAX_DISTANCE){
+        while (travelDistance <= MAX_DISTANCE){
             double currentSdf = sceneDistanceField.getSDF(currentPosition);
             if (currentSdf <= 0) {
+                hits.add(currentPosition);
                 return currentPosition;
             }
             travelDistance += currentSdf;
-            currentPosition = currentPosition.add(normalDirection.scale(travelDistance));
+            lines.add(new Line3D(this, currentPosition, currentPosition.add(normalDirection.scale(Math.max(currentSdf, 1)))));
+            currentPosition = currentPosition.add(normalDirection.scale(Math.max(currentSdf, 1)));
+            steps.add(currentPosition);
         }
         Random r = new Random();
         return direction.scale(r.nextInt(796,803));
@@ -81,6 +95,23 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
             g2d.drawRect(-15, -10, 30, 20);
         }
         g2d.dispose();
+    }
+
+    @Override
+    public void drawInScene(Graphics g) {
+        if (!Settings.SHOW_DEBUG_RAYS) return;
+        for (Line3D line : lines) {
+            g.setColor(Color.BLUE);
+            line.drawInScene(g);
+        }
+        for (Vec3D step : steps) {
+            g.setColor(Color.GREEN);
+            step.drawInScene(g);
+        }
+        for (Vec3D hit : hits) {
+            g.setColor(Color.RED);
+            hit.drawInScene(g);
+        }
     }
 
     /* calculate the distance from the Sensor to the closest Point*/
