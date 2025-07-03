@@ -53,10 +53,6 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
             if (currentPoint.length() < closestPoint.subtract(getWorldPosition()).length()) {
                 closestPoint = currentPoint;
             }
-//            if (calculateDistance(currentPoint, sensorPosition) < calculateDistance(closestPoint, sensorPosition)) {
-//
-//                closestPoint = currentPoint;
-//            }
         }
         return closestPoint;
     }
@@ -104,6 +100,10 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
 
     @Override
     public void drawInScene(Graphics g) {
+        g.setColor(Color.cyan);
+        Vec3D wp = getWorldPosition();
+        Vec3D f = forward().scale(100);
+        g.drawLine((int) wp.getX(), (int) wp.getY(), (int) (wp.getX() + f.getX()), (int) (wp.getY() + f.getY()) );
         if (!Settings.SHOW_DEBUG_RAYS) return;
         for (Line3D line : lines) {
             g.setColor(Color.BLUE);
@@ -120,8 +120,8 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
     }
 
     /* calculate the distance from the Sensor to the closest Point*/
-    public int calculateDistance(Vec3D closestPoint, Vec3D sensorPosition){
-        return (int) closestPoint.subtract(sensorPosition).length();
+    public double calculateDistance(Vec3D pos1, Vec3D pos2){
+        return pos1.subtract(pos2).length();
     }
 
     /* Adds a random value between 200 - 300 ms to the timestamp */
@@ -134,7 +134,7 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
 
     @Override
     public int distanceToClosestObstacle() {
-        return calculateDistance(getWorldPosition(), getClosestPoint());
+        return (int) calculateDistance(getWorldPosition(), getClosestPoint());
     }
 }
 

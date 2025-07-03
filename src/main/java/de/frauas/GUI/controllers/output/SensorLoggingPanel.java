@@ -2,6 +2,7 @@ package de.frauas.GUI.controllers.output;
 
 import de.frauas.GUI.controllers.observer.SimulationModel;
 import de.frauas.GUI.controllers.observer.SimulationObserver;
+import de.frauas.objects.CarUpdateInformation;
 import de.frauas.objects.Scene;
 import de.frauas.objects.datastructures.Vec3D;
 
@@ -13,6 +14,7 @@ import java.util.Date;
 
 public class SensorLoggingPanel extends JPanel implements SimulationObserver {
     private final Scene scene;
+    private CarUpdateInformation carInfo;
     private Timer timer;
     private final DefaultListModel<String> infoModel = new DefaultListModel<>();
     private final JList<String> infoList = new JList<>(infoModel);
@@ -67,25 +69,27 @@ public class SensorLoggingPanel extends JPanel implements SimulationObserver {
 
     @Override
     public void onSimulationUpdate() {
-//        int[] sensorDistances = scene.getCar().getCurrentSensorDistances();
-//        SimpleDateFormat timeFmt = new SimpleDateFormat("ss:SSS");
-//        String timestamp = timeFmt.format(new Date());
-//
-//        StringBuilder entryBuilder = new StringBuilder();
-//        entryBuilder.append(timestamp);
-//        String[] labels = {"FL", "FC", "FR", "RL", "RC", "RR"}; // FL = Front-Left, etc.
-//
-//        for (int i = 0; i < sensorDistances.length; i++) {
-//            entryBuilder.append(String.format(" | %s: %d", labels[i], sensorDistances[i]));
-//        }
-//        String entry = entryBuilder.toString();
-//        System.out.println(entry);
-//        infoModel.addElement(entry);
-//
-//        int last = infoModel.getSize() - 1;
-//        if (last >= 0) {
-//            infoList.ensureIndexIsVisible(last);
-//        }
+       if (scene.getCar() == null || scene.getCar().getCarInfo() == null) return;
+        CarUpdateInformation carInfo = scene.getCar().getCarInfo();
+        SimpleDateFormat timeFmt = new SimpleDateFormat("ss:SSS");
+        String timestamp = timeFmt.format(new Date());
+
+        String entry = String.format(
+                "%s - %s - FL: %d - FM: %d - FR: %d - RL: %d - RM: %d - RR: %d",
+                carInfo.getUsTimestamp(),timestamp,
+                carInfo.getMeasurements().get(0),
+                carInfo.getMeasurements().get(1),
+                carInfo.getMeasurements().get(2),
+                carInfo.getMeasurements().get(3),
+                carInfo.getMeasurements().get(4),
+                carInfo.getMeasurements().get(5)
+        );
+        infoModel.addElement(entry);
+
+        int last = infoModel.getSize() - 1;
+        if (last >= 0) {
+            infoList.ensureIndexIsVisible(last);
+        }
     }
 
 }

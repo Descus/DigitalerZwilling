@@ -38,7 +38,7 @@ public class Car extends Transformable implements IDrawable {
     private final List<ICarObserver> carObservers = new ArrayList<>();
 
     private final Trace trace;
-
+    private CarUpdateInformation carInfo;
     private CarStatus status = CarStatus.STOPPED;
     private int usTimestamp = FIRST_TIMESTAMP;
 
@@ -154,7 +154,8 @@ public class Car extends Transformable implements IDrawable {
 
     private void notifyObservers(int time, List<Integer> measurements, int usTimestamp) {
         for (ICarObserver observer : carObservers) {
-            observer.onCarUpdate(new CarUpdateInformation(status, time, measurements, usTimestamp));
+            carInfo = new CarUpdateInformation(status, time, measurements, usTimestamp);
+            observer.onCarUpdate(carInfo);
         }
     }
 
