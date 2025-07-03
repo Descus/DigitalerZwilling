@@ -111,8 +111,8 @@ public class Car extends Transformable implements IDrawable {
      * @param dt Time step in seconds.
      */
     public void update(int time, double dt) {
-        //new Thread(() -> ultrasonicUpdate(time)).start();
-        ultrasonicUpdate(time);
+        new Thread(() -> ultrasonicUpdate(time)).start();
+        //ultrasonicUpdate(time);
 
         if (trace.getType() == TraceType.DEBUG) return;
 

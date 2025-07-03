@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.awt.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 
 public class UltrasonicSensor extends Transformable implements IUltrasonicSensor, IDrawable {
@@ -22,9 +23,9 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
     private final ISdf sceneDistanceField;
     public double stepSize = 0.1f;
     
-    List<Vec3D> hits = new ArrayList<>();
-    List<Vec3D> steps = new ArrayList<>();
-    List<Line3D> lines = new ArrayList<>();
+    ConcurrentLinkedQueue<Vec3D> hits = new ConcurrentLinkedQueue<>();
+    ConcurrentLinkedQueue<Vec3D> steps = new ConcurrentLinkedQueue<>();
+    ConcurrentLinkedQueue<Line3D> lines = new ConcurrentLinkedQueue<>();
 
     public UltrasonicSensor(Transformable parent, String name, Vec3D positionOffset, double orientationAngle, ISdf sceneDistanceField) {
         this.name = name;
