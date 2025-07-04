@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static de.frauas.Settings.POINT_DEBUG_RADIUS;
+import static de.frauas.objects.car.parts.UltrasonicSensor.usTimestampiteration;
 
 @Getter
 public class Car extends Transformable implements IDrawable {
@@ -178,14 +179,18 @@ public class Car extends Transformable implements IDrawable {
         //try{
         List<Integer> measurements = new ArrayList<>();
         for (IUltrasonicSensor sensor : ultraSonicSensors) {
-            int distance = sensor.distanceToClosestObstacle();
+            int distance = (sensor.distanceToClosestObstacle()/10);
 
             measurements.add(distance);
 
-            if (distance < 30)
+            if (distance < 3)
                 finish();
 
-            //Thread.sleep(2000);
+            try {
+                Thread.sleep(Math.round(usTimestampiteration/6));
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
 
 

@@ -20,7 +20,8 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
     public static final int MAX_ANGLE = 15;
     private final ISdf sceneDistanceField;
     public double stepSize = 0.1f;
-    
+    public static int usTimestampiteration = 0;
+
     ConcurrentLinkedQueue<Vec3D> hits = new ConcurrentLinkedQueue<>();
     ConcurrentLinkedQueue<Vec3D> steps = new ConcurrentLinkedQueue<>();
     ConcurrentLinkedQueue<Line3D> lines = new ConcurrentLinkedQueue<>();
@@ -127,7 +128,8 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
         Random random = new Random();
         int sd = 50;
         int mean = 250;
-        return (previousTimestamp + (int)(random.nextGaussian()* sd +mean)) ;
+        usTimestampiteration = (int)(random.nextGaussian()* sd +mean);
+        return (previousTimestamp + usTimestampiteration) ;
     }
 
     @Override
