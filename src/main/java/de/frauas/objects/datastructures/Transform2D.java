@@ -1,10 +1,11 @@
 package de.frauas.objects.datastructures;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.awt.geom.AffineTransform;
 
-@Getter
+@Getter @Setter
 public class Transform2D {
     private Vec3D translation = Vec3D.zero;
     private double rotation = 0;

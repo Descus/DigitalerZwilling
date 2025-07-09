@@ -11,12 +11,14 @@ import de.frauas.objects.trace.*;
 import de.frauas.scenario.dto.Scenario;
 import de.frauas.scenario.dto.StartPosition;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
 public class Scene extends Transformable implements ISdf, IDrawable {
     
     private final Trace trace;
