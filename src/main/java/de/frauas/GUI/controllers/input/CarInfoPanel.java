@@ -32,7 +32,7 @@ public class CarInfoPanel extends JPanel{
         );
         listModel.addElement(carWidth);
         String carPos = String.format(
-                "Car length: %s mm" , model.getScene().getStartPosition().toString()
+                "Car Start Position: %s" , model.getScene().getStartPosition().toString()
         );
         listModel.addElement(carPos);
         String carRad = String.format(

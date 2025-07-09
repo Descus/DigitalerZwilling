@@ -23,12 +23,12 @@ public class Settings {
             public static final int MAX_DISTANCE = 300;
             public static final int MAX_ANGLE = 15;
             public static final int CHECK_DELAY_MS = 10;
+            public static final double STEP_SIZE = 0.1;
         }
         public static class INFRARED {
             public static final int CHECK_DELAY_MS = 7;
         }
     }
- 
     
     public static class SCENE {
         public static String DEFAULT_SCENARIO_FILE = "Scenario/example.xml";
@@ -42,7 +42,8 @@ public class Settings {
     
     public static class DEBUG {
         public static final boolean ENABLED = false;
-        public static final boolean SHOW_RAYS = true;
+        public static final boolean SHOW_RAYS = false;
+        public static final boolean SHOW_MAP_OVERLAY = false;
         public static final int POINT_RADIUS = 10;
     }
 }
