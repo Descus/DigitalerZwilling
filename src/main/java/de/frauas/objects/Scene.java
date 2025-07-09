@@ -25,7 +25,7 @@ public class Scene extends Transformable implements ISdf, IDrawable {
     private final Vec3D startPosition;
     private final double startHeading;
 
-    private final double[][] bakedSdFields = new double[(int) Settings.SCENE_CANVAS.getX()][(int) Settings.SCENE_CANVAS.getY()];
+    private final double[][] bakedSdFields = new double[(int) Settings.SCENE.CANVAS.getX()][(int) Settings.SCENE.CANVAS.getY()];
     private boolean isBaked = false;
 
     double time = 0;
@@ -59,16 +59,16 @@ public class Scene extends Transformable implements ISdf, IDrawable {
             bakeSdf();
         }
         return bakedSdFields[
-                Math.clamp((int) otherPosition.getX(), 0, (int) Settings.SCENE_CANVAS.getX() - 1)
+                Math.clamp((int) otherPosition.getX(), 0, (int) Settings.SCENE.CANVAS.getX() - 1)
                 ][
-                Math.clamp((int) otherPosition.getY(), 0, (int) Settings.SCENE_CANVAS.getY() - 1)
+                Math.clamp((int) otherPosition.getY(), 0, (int) Settings.SCENE.CANVAS.getY() - 1)
                 ];
     }
 
     private void bakeSdf(){
         isBaked = false;
-        for (int i = 0; i < Settings.SCENE_CANVAS.getX(); i++) {
-            for (int j = 0; j < Settings.SCENE_CANVAS.getY(); j++) {
+        for (int i = 0; i < Settings.SCENE.CANVAS.getX(); i++) {
+            for (int j = 0; j < Settings.SCENE.CANVAS.getY(); j++) {
                 bakedSdFields[i][j] = createSdf(new Vec3D(i, j, 0));
             }
         }
@@ -114,9 +114,9 @@ public class Scene extends Transformable implements ISdf, IDrawable {
             drawInScene(g2);
         }
 
-        if (Settings.DEBUG) {
-            for (int i = 0; i < Settings.WIDTH; i += 2) {
-                for (int j = 0; j < Settings.HEIGHT; j += 2) {
+        if (Settings.DEBUG.ENABLED) {
+            for (int i = 0; i < Settings.WINDOW.WIDTH; i += 2) {
+                for (int j = 0; j < Settings.WINDOW.HEIGHT; j += 2) {
                     Vec3D pos = new Vec3D(i, j, 1);
                     pos = toGlobalSpace(pos);
                     double sdf = getSDF(pos);

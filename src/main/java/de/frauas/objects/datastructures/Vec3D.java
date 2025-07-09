@@ -96,8 +96,8 @@ public class Vec3D implements IDrawable {
 
     @Override
     public void draw(Graphics g){
-        Vec3D transformedPoint = this.subtract(new Vec3D((double) Settings.POINT_DEBUG_RADIUS / 2, (double) Settings.POINT_DEBUG_RADIUS / 2, 1));
-        g.fillOval((int) transformedPoint.getX(), (int) transformedPoint.getY(), Settings.POINT_DEBUG_RADIUS, Settings.POINT_DEBUG_RADIUS);
+        Vec3D transformedPoint = this.subtract(new Vec3D((double) Settings.DEBUG.POINT_RADIUS / 2, (double) Settings.DEBUG.POINT_RADIUS / 2, 1));
+        g.fillOval((int) transformedPoint.getX(), (int) transformedPoint.getY(), Settings.DEBUG.POINT_RADIUS, Settings.DEBUG.POINT_RADIUS);
     }
 
     @Override

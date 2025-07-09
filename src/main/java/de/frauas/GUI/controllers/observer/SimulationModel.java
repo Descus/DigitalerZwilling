@@ -1,5 +1,6 @@
 package de.frauas.GUI.controllers.observer;
 
+import de.frauas.Settings;
 import de.frauas.objects.Scene;
 import de.frauas.scenario.xml.ScenarioLoader;
 import lombok.Setter;
@@ -20,7 +21,7 @@ public class SimulationModel {
 
     public SimulationModel(Scene scene) {
         this.scene = scene;
-        timer = new Timer(1000 / 60, e -> {
+        timer = new Timer(1000 / Settings.WINDOW.TARGET_FPS, e -> {
             if (running) {
                 long now = System.currentTimeMillis();
                 double delta = (now - lastTime) / 1000.0;

@@ -54,8 +54,8 @@ public class ShiftedTrace extends Trace {
             Vec3D normal = tangent.perpendicular();
 
             // Punkte verschieben, jeweils nach unten und oben
-            Vec3D shiftedUp = points.get(i).add(normal.scale(Settings.LINE_WIDTH / 2));
-            Vec3D shiftedDown = points.get(i).add(normal.scale(-Settings.LINE_WIDTH / 2));
+            Vec3D shiftedUp = points.get(i).add(normal.scale(Settings.SCENE.TRACE.LINE_WIDTH / 2));
+            Vec3D shiftedDown = points.get(i).add(normal.scale(-Settings.SCENE.TRACE.LINE_WIDTH / 2));
 
             shiftedPointsUp.add(shiftedUp);
             shiftedPointsDown.add(shiftedDown);

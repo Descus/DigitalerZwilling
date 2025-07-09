@@ -28,11 +28,11 @@ public class CarInfoPanel extends JPanel{
         listModel.clear();
         Car car = axisPanel.getScene().getCar();
         String carLength = String.format(
-                "Car length: %.2f mm" , Settings.CAR_SIZE.getY()
+                "Car length: %.2f mm" , Settings.CAR.SIZE.getY()
         );
         listModel.addElement(carLength);
         String carWidth = String.format(
-                "Car width: %.2f mm", Settings.CAR_SIZE.getX()
+                "Car width: %.2f mm", Settings.CAR.SIZE.getX()
         );
         listModel.addElement(carWidth);
 

@@ -1,13 +1,12 @@
 package de.frauas.scenario.xml;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import de.frauas.Settings;
 import de.frauas.scenario.dto.Scenario;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 
-import static de.frauas.Settings.SCENARIO_FILE;
 
 
 public class ScenarioXmlFile {
@@ -27,7 +26,7 @@ public class ScenarioXmlFile {
     }
     
     public static ScenarioXmlFile fromExample(){
-        URL resource = ScenarioXmlFile.class.getClassLoader().getResource(SCENARIO_FILE);
+        URL resource = ScenarioXmlFile.class.getClassLoader().getResource(Settings.SCENE.DEFAULT_SCENARIO_FILE);
         if (resource == null) {
             throw new IllegalArgumentException("File not found!");
         }

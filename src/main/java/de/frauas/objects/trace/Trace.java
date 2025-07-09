@@ -66,7 +66,7 @@ public abstract class Trace extends Transformable implements IDrawable {
             g2.setColor(Color.black);
             drawLines(g2);
 
-            if (Settings.DEBUG) {
+            if (Settings.DEBUG.ENABLED) {
                 Graphics2D g2Debug = (Graphics2D) g.create();
                 g2Debug.setColor(Color.RED);
                 drawPoints(g2Debug);

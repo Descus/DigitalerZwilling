@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static de.frauas.Settings.POINT_DEBUG_RADIUS;
 import static de.frauas.objects.car.parts.UltrasonicSensor.usTimestampiteration;
 
 @Getter
@@ -76,8 +75,8 @@ public class Car extends Transformable implements IDrawable {
             g2.transform(transform.toAffineTransform());
 
             Vec3D drawPoint = new Vec3D(
-                    0 - (Settings.CAR_SIZE.getX() / 2),
-                    0 - (Settings.CAR_SIZE.getY() / 2),
+                    0 - (Settings.CAR.SIZE.getX() / 2),
+                    0 - (Settings.CAR.SIZE.getY() / 2),
                     0
             );
 
@@ -85,16 +84,18 @@ public class Car extends Transformable implements IDrawable {
             g2.drawRect(
                     (int) drawPoint.getX(),
                     (int) drawPoint.getY(),
-                    (int) Settings.CAR_SIZE.getX(),
-                    (int) Settings.CAR_SIZE.getY()
+                    (int) Settings.CAR.SIZE.getX(),
+                    (int) Settings.CAR.SIZE.getY()
             );
             g2.setColor(Color.BLUE);
-            g2.fillOval(
-                    (int) (0 - (double) POINT_DEBUG_RADIUS / 2),
-                    (int) (0 - (double) POINT_DEBUG_RADIUS / 2),
-                    POINT_DEBUG_RADIUS,
-                    POINT_DEBUG_RADIUS
-            );
+            if (Settings.DEBUG.ENABLED) {
+                g2.fillOval(
+                        (int) (0 - (double) Settings.DEBUG.POINT_RADIUS / 2),
+                        (int) (0 - (double) Settings.DEBUG.POINT_RADIUS / 2),
+                        Settings.DEBUG.POINT_RADIUS,
+                        Settings.DEBUG.POINT_RADIUS
+                );
+            }
             ultraSonicSensors.forEach(s -> s.draw(g2));
             infraredSensors.forEach(s -> s.draw(g2));
         }
@@ -146,9 +147,9 @@ public class Car extends Transformable implements IDrawable {
         //Fahrbefehle ausführen
         if (!status.equals(CarStatus.RUNNING)) return;
         switch (movementInstruction) {
-            case forward -> transform.translate(forward().normalize().scale(Settings.STEP_MM * dt));
-            case left -> transform.rotate(Settings.TURN_DEG * dt);
-            case right -> transform.rotate(-Settings.TURN_DEG * dt);
+            case forward -> transform.translate(forward().normalize().scale(Settings.CAR.MOVEMENT.MM_PER_SECOND * dt));
+            case left -> transform.rotate(Settings.CAR.MOVEMENT.TURN_DEG * dt);
+            case right -> transform.rotate(-Settings.CAR.MOVEMENT.TURN_DEG * dt);
             case stop -> finish();
         }
     }
@@ -211,5 +212,10 @@ public class Car extends Transformable implements IDrawable {
         MovementInstruction movementInstruction = getMovementInstructionFromSensors(irHit);
 
         applyMovementFromInstruction(dt, movementInstruction);
+        try {
+            Thread.sleep(7);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

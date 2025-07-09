@@ -1,12 +1,11 @@
 package de.frauas.objects.trace.debug;
 
+import de.frauas.Settings;
 import de.frauas.objects.Scene;
 import de.frauas.objects.datastructures.Line3D;
 import de.frauas.objects.datastructures.Vec3D;
 
 import java.util.ArrayList;
-
-import static de.frauas.Settings.SPLINE_INTERPOLATION_SIZE;
 
 public class CatmullRomTrace extends RoadTrace {
     
@@ -41,8 +40,8 @@ public class CatmullRomTrace extends RoadTrace {
 
             Vec3D prevPoint = p1;
 
-            for (int j = 1; j <= SPLINE_INTERPOLATION_SIZE; j++) {
-                double t = j / (double) SPLINE_INTERPOLATION_SIZE;
+            for (int j = 1; j <= Settings.SCENE.TRACE.SPLINE_INTERPOLATION_STEPS; j++) {
+                double t = j / (double) Settings.SCENE.TRACE.SPLINE_INTERPOLATION_STEPS;
                 double t2 = t * t;
                 double t3 = t2 * t;
 

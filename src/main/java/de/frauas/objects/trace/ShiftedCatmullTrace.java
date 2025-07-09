@@ -7,8 +7,6 @@ import de.frauas.objects.datastructures.Vec3D;
 
 import java.util.ArrayList;
 
-import static de.frauas.Settings.SPLINE_INTERPOLATION_SIZE;
-
 /**
  * Generates the upper and lower lines based on Catmull-Rom spline interpolation
  * and offsets from the interpolated path. This method performs several steps:
@@ -71,8 +69,8 @@ public class ShiftedCatmullTrace extends ShiftedTrace {
             Vec3D p2 = points.get(i + 1);
             Vec3D p3 = (i + 2 < points.size()) ? points.get(i + 2) : lastControl;
 
-            for (int j = 1; j <= SPLINE_INTERPOLATION_SIZE; j++) {
-                double t = (double) j / SPLINE_INTERPOLATION_SIZE;
+            for (int j = 1; j <= Settings.SCENE.TRACE.SPLINE_INTERPOLATION_STEPS; j++) {
+                double t = (double) j / Settings.SCENE.TRACE.SPLINE_INTERPOLATION_STEPS;
                 double t2 = t * t;
                 double t3 = t2 * t;
 
@@ -105,8 +103,8 @@ public class ShiftedCatmullTrace extends ShiftedTrace {
             // Orthogonaler Vektor
             Vec3D normal = tangent.perpendicular();
 
-            shiftedPointsUp.add(current.add(normal.scale(Settings.LINE_WIDTH / 2)));
-            shiftedPointsDown.add(current.add(normal.scale(-Settings.LINE_WIDTH / 2)));
+            shiftedPointsUp.add(current.add(normal.scale(Settings.SCENE.TRACE.LINE_WIDTH / 2)));
+            shiftedPointsDown.add(current.add(normal.scale(-Settings.SCENE.TRACE.LINE_WIDTH / 2)));
         }
 
         // create Lines for both traces

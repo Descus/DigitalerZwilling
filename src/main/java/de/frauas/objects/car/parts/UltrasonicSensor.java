@@ -16,8 +16,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class UltrasonicSensor extends Transformable implements IUltrasonicSensor, IDrawable {
 
     public String name;
-    public static final int MAX_DISTANCE = 300;
-    public static final int MAX_ANGLE = 15;
+    
     private final ISdf sceneDistanceField;
     public double stepSize = 0.1f;
     public static int usTimestampiteration = 0;
@@ -47,7 +46,7 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
         hits.clear();
         steps.clear();
         Vec3D closestPoint = Vec3D.right.scale(1000);
-        for (double angle = -MAX_ANGLE; angle < MAX_ANGLE; angle += stepSize) {
+        for (double angle = -Settings.CAR.ULTRASONIC.MAX_ANGLE; angle < Settings.CAR.ULTRASONIC.MAX_ANGLE; angle += stepSize) {
             Vec3D currentPoint = castRay(forward().rotate(angle));
             if (currentPoint.length() < closestPoint.subtract(getWorldPosition()).length()) {
                 closestPoint = currentPoint;
@@ -71,7 +70,7 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
         Vec3D normalDirection = direction.normalize();
         Vec3D currentPosition = getWorldPosition();
 
-        while (travelDistance <= MAX_DISTANCE){
+        while (travelDistance <= Settings.CAR.ULTRASONIC.MAX_DISTANCE){
             double currentSdf = sceneDistanceField.getSDF(currentPosition);
             if (currentSdf <= 0) {
                 hits.add(currentPosition);
@@ -103,7 +102,7 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
         Vec3D wp = getWorldPosition();
         Vec3D f = forward().scale(100);
         g.drawLine((int) wp.getX(), (int) wp.getY(), (int) (wp.getX() + f.getX()), (int) (wp.getY() + f.getY()) );
-        if (!Settings.SHOW_DEBUG_RAYS) return;
+        if (!Settings.DEBUG.SHOW_RAYS) return;
         for (Line3D line : lines) {
             g.setColor(Color.BLUE);
             line.drawInScene(g);

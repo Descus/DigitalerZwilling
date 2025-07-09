@@ -18,9 +18,9 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
-        JFrame frame = new JFrame(Settings.TITLE);
+        JFrame frame = new JFrame(Settings.WINDOW.TITLE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(Settings.WIDTH,Settings.HEIGHT);
+        frame.setSize(Settings.WINDOW.WIDTH,Settings.WINDOW.HEIGHT);
         frame.setLayout(new BorderLayout());
 
         // parsing Data from Xml file into GUI object

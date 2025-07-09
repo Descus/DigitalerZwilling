@@ -53,8 +53,8 @@ public class AxisPanel extends JPanel implements SimulationObserver {
         // Define the physical size of the virtual environment (in mm).
         double drawableWidth = width - 2 * MARGIN;
         double drawableHeight = height - 2 * MARGIN;
-        double x_MAX = Settings.SCENE_CANVAS.getX();
-        double y_MAX = Settings.SCENE_CANVAS.getY();
+        double x_MAX = Settings.SCENE.CANVAS.getX();
+        double y_MAX = Settings.SCENE.CANVAS.getY();
         double scale = Math.min(drawableWidth / x_MAX, drawableHeight / y_MAX);
 
 
