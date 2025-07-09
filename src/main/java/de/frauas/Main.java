@@ -8,6 +8,7 @@ import de.frauas.GUI.controllers.observer.SimulationModel;
 import de.frauas.GUI.controllers.output.OutputPanel;
 import de.frauas.objects.Scene;
 import de.frauas.scenario.dto.Scenario;
+import de.frauas.scenario.xml.ScenarioLoader;
 import de.frauas.scenario.xml.ScenarioXmlFile;
 import org.w3c.dom.css.RGBColor;
 
