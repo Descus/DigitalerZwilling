@@ -18,7 +18,6 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
     public String name;
     
     private final ISdf sceneDistanceField;
-    public double stepSize = 0.1f;
 
     ConcurrentLinkedQueue<Vec3D> hits = new ConcurrentLinkedQueue<>();
     ConcurrentLinkedQueue<Vec3D> steps = new ConcurrentLinkedQueue<>();
@@ -45,7 +44,7 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
         hits.clear();
         steps.clear();
         Vec3D closestPoint = Vec3D.right.scale(1000);
-        for (double angle = -Settings.CAR.ULTRASONIC.MAX_ANGLE; angle < Settings.CAR.ULTRASONIC.MAX_ANGLE; angle += stepSize) {
+        for (double angle = -Settings.CAR.ULTRASONIC.MAX_ANGLE; angle < Settings.CAR.ULTRASONIC.MAX_ANGLE; angle += Settings.CAR.ULTRASONIC.STEP_SIZE) {
             Vec3D currentPoint = castRay(forward().rotate(angle));
             if (currentPoint.length() < closestPoint.subtract(getWorldPosition()).length()) {
                 closestPoint = currentPoint;
@@ -97,10 +96,12 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
 
     @Override
     public void drawInScene(Graphics g) {
-        g.setColor(Color.cyan);
-        Vec3D wp = getWorldPosition();
-        Vec3D f = forward().scale(100);
-        g.drawLine((int) wp.getX(), (int) wp.getY(), (int) (wp.getX() + f.getX()), (int) (wp.getY() + f.getY()) );
+        if (Settings.DEBUG.ENABLED) {
+            g.setColor(Color.cyan);
+            Vec3D wp = getWorldPosition();
+            Vec3D f = forward().scale(100);
+            g.drawLine((int) wp.getX(), (int) wp.getY(), (int) (wp.getX() + f.getX()), (int) (wp.getY() + f.getY()) );
+        }
         if (!Settings.DEBUG.SHOW_RAYS) return;
         for (Line3D line : lines) {
             g.setColor(Color.BLUE);

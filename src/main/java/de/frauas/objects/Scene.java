@@ -113,7 +113,7 @@ public class Scene extends Transformable implements ISdf, IDrawable {
             drawInScene(g2);
         }
 
-        if (Settings.DEBUG.ENABLED) {
+        if (Settings.DEBUG.SHOW_MAP_OVERLAY) {
             for (int i = 0; i < Settings.WINDOW.WIDTH; i += 2) {
                 for (int j = 0; j < Settings.WINDOW.HEIGHT; j += 2) {
                     Vec3D pos = new Vec3D(i, j, 1);

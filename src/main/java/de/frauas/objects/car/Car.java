@@ -22,6 +22,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Getter
@@ -31,13 +32,13 @@ public class Car extends Transformable implements IDrawable {
     public static final int SENSOR_ANGLE_FR = 20;
     public static final int SENSOR_ANGLE_FL = 25;
     public static final int SENSOR_ANGLE_REAR = 35;
-    public static final int FIRST_TIMESTAMP = 4395 + (int)(Math.random() * ((4403-4395) + 1));
+    public static final int FIRST_TIMESTAMP = 4395 + (int) (Math.random() * ((4403 - 4395) + 1));
 
     private final List<IUltrasonicSensor> ultraSonicSensors = new ArrayList<>();
     private final List<IInfraredSensor> infraredSensors = new ArrayList<>();
     private final List<ICarObserver> carObservers = new ArrayList<>();
-    
-    private final ConcurrentLinkedQueue<Integer> measurements = new ConcurrentLinkedQueue<>(Arrays.asList(0,0,0,0,0,0));
+
+    private final ConcurrentLinkedQueue<Integer> measurements = new ConcurrentLinkedQueue<>(Arrays.asList(0, 0, 0, 0, 0, 0));
     private final ConcurrentLinkedQueue<Boolean> infraredStatus = new ConcurrentLinkedQueue<>(Arrays.asList(false, false, false));
 
     private final Trace trace;
@@ -45,7 +46,7 @@ public class Car extends Transformable implements IDrawable {
     private int currentTimeMillis = FIRST_TIMESTAMP;
 
 
-    public Car(Scene parent, Vec3D position, double headingDegree){
+    public Car(Scene parent, Vec3D position, double headingDegree) {
         this.parent = parent;
         trace = parent.getTrace();
 
@@ -55,17 +56,17 @@ public class Car extends Transformable implements IDrawable {
         //writing the first Lines to the US output.txt
         carObservers.add(SensorLogger.getOrCreate());
         notifyObservers();
-        
-        ultraSonicSensors.add(new UltrasonicSensor(this, "FL", new Vec3D(-45,  110, 0), SENSOR_ANGLE_FL, parent));
+
+        ultraSonicSensors.add(new UltrasonicSensor(this, "FL", new Vec3D(-45, 110, 0), SENSOR_ANGLE_FL, parent));
         ultraSonicSensors.add(new UltrasonicSensor(this, "FC", new Vec3D(0, 117.5, 0), 0, parent));
         ultraSonicSensors.add(new UltrasonicSensor(this, "FR", new Vec3D(45, 110, 0), -SENSOR_ANGLE_FR, parent));
         ultraSonicSensors.add(new UltrasonicSensor(this, "RL", new Vec3D(-45, -117.5, 0), -SENSOR_ANGLE_REAR + 180, parent));
         ultraSonicSensors.add(new UltrasonicSensor(this, "RC", new Vec3D(0, -117.5, 0), 180, parent));
         ultraSonicSensors.add(new UltrasonicSensor(this, "RR", new Vec3D(45, -117.5, 0), SENSOR_ANGLE_REAR + 180, parent));
 
-        infraredSensors.add(new InfraredSensor(this, new Vec3D(10 , 60, 0)));
+        infraredSensors.add(new InfraredSensor(this, new Vec3D(10, 60, 0)));
         infraredSensors.add(new InfraredSensor(this, new Vec3D(0, 60, 0)));
-        infraredSensors.add(new InfraredSensor(this, new Vec3D( -10, 60, 0)));
+        infraredSensors.add(new InfraredSensor(this, new Vec3D(-10, 60, 0)));
 
         new Thread(this::ultrasonicUpdate).start();
 
@@ -115,14 +116,14 @@ public class Car extends Transformable implements IDrawable {
 
     /**
      * Moving the car forward based on its velocity and heading.
+     *
      * @param dt Time step in seconds.
      */
     public void update(double dt) {
-        currentTimeMillis += (int) (dt * 1000);
-        notifyObservers();
+        //currentTimeMillis += (int) (dt * 1000);
     }
 
-    public void reset(Vec3D position, double headingDegree){
+    public void reset(Vec3D position, double headingDegree) {
         stop();  // Stop the car first
         transform.setTranslation(position); // Reset position
         transform.setRotation(headingDegree);
@@ -140,7 +141,7 @@ public class Car extends Transformable implements IDrawable {
         status = CarStatus.PAUSED;
     }
 
-    public void finish(){
+    public void finish() {
         status = CarStatus.FINISHED;
     }
 
@@ -161,13 +162,13 @@ public class Car extends Transformable implements IDrawable {
             observer.onCarUpdate(new CarUpdateInformation(status, measurements.stream().toList(), infraredStatus.stream().toList(), getWorldPosition(), transform.getRotation(), currentTimeMillis));
         }
     }
-    
+
     public void addObserver(ICarObserver observer) {
         if (!carObservers.contains(observer)) {
             carObservers.add(observer);
         }
     }
-    
+
     public void removeObserver(ICarObserver observer) {
         carObservers.remove(observer);
     }
@@ -176,7 +177,7 @@ public class Car extends Transformable implements IDrawable {
         boolean L = sensorStatus[2];
         boolean M = sensorStatus[1];
         boolean R = sensorStatus[0];
-        
+
         infraredStatus.clear();
         infraredStatus.add(L);
         infraredStatus.add(M);
@@ -193,40 +194,42 @@ public class Car extends Transformable implements IDrawable {
     }
 
     private void ultrasonicUpdate() {
-        while(true) {
+        while (true) {
             try {
                 List<Integer> measurementsFront = new ArrayList<>();
                 List<Integer> measurementsBack = new ArrayList<>();
-                
+                int lastTimeStep = iterateUSTimestamp();
+
                 for (int i = 0; i < ultraSonicSensors.size() / 2; i++) {
                     int distance = (ultraSonicSensors.get(i).distanceToClosestObstacle() / 10);
-                    Thread.sleep(distance * 2 / SPEED_OF_SOUND);
                     measurementsFront.add(distance);
-                    Thread.sleep(Settings.CAR.ULTRASONIC.CHECK_DELAY_MS, 12);
+                    Thread.sleep(lastTimeStep / 6);
                 }
-                
+
                 for (Integer distance : measurementsFront) {
                     if (distance < 3)
                         finish();
                 }
-                Thread.sleep(Settings.CAR.ULTRASONIC.CHECK_DELAY_MS);
-                
+
                 for (int i = ultraSonicSensors.size() / 2; i < ultraSonicSensors.size(); i++) {
                     int distance = (ultraSonicSensors.get(i).distanceToClosestObstacle() / 10);
-                    Thread.sleep(distance * 2 / SPEED_OF_SOUND);
                     measurementsBack.add(distance);
-                    Thread.sleep(Settings.CAR.ULTRASONIC.CHECK_DELAY_MS, 12);
+
+                    Thread.sleep(lastTimeStep / 6);
                 }
 
                 for (Integer distance : measurementsBack) {
                     if (distance < 3)
                         finish();
                 }
-                Thread.sleep(Settings.CAR.ULTRASONIC.CHECK_DELAY_MS);
-                
+
                 measurements.clear();
                 measurements.addAll(measurementsFront);
                 measurements.addAll(measurementsBack);
+
+                
+                currentTimeMillis += lastTimeStep;
+                notifyObservers();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -234,23 +237,29 @@ public class Car extends Transformable implements IDrawable {
     }
 
     private void infraredUpdate() {
-        if (trace.getType() == TraceType.DEBUG) return;
-        while(true) {
-            boolean[] irHit = new boolean[infraredSensors.size()];
-            for (int s = 0; s < infraredSensors.size(); s++) {
-                IInfraredSensor ir = infraredSensors.get(s);
-                irHit[s] = ir.isOnTrack((ShiftedTrace) trace);
-            }
+        try {
+            if (trace.getType() == TraceType.DEBUG) return;
+            Thread.sleep(2000);
+            while (true) {
+                boolean[] irHit = new boolean[infraredSensors.size()];
+                for (int s = 0; s < infraredSensors.size(); s++) {
+                    IInfraredSensor ir = infraredSensors.get(s);
+                    irHit[s] = ir.isOnTrack((ShiftedTrace) trace);
+                }
 
-            MovementInstruction movementInstruction = getMovementInstructionFromSensors(irHit);
+                MovementInstruction movementInstruction = getMovementInstructionFromSensors(irHit);
+                
+                applyMovementFromInstruction(movementInstruction);
 
-            applyMovementFromInstruction(movementInstruction);
-            try {
                 Thread.sleep(Settings.CAR.INFRARED.CHECK_DELAY_MS);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+
             }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
-        
+    }
+
+    public static int iterateUSTimestamp() {
+        return (int)(new Random().nextGaussian(250, 50)); // 200 - 300
     }
 }
