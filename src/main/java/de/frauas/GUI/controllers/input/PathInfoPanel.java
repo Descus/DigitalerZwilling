@@ -1,6 +1,7 @@
 package de.frauas.GUI.controllers.input;
 
 import de.frauas.GUI.controllers.AxisPanel;
+import de.frauas.GUI.controllers.observer.SimulationModel;
 import de.frauas.objects.datastructures.Vec3D;
 
 import javax.swing.*;
@@ -8,11 +9,10 @@ import java.awt.*;
 import java.util.List;
 
 public class PathInfoPanel extends JPanel{
-    private final AxisPanel axisPanel;
     private final DefaultListModel<String> listModel = new DefaultListModel<>();
 
-    public PathInfoPanel(AxisPanel axisPanel) {
-        this.axisPanel = axisPanel;
+    public PathInfoPanel(SimulationModel model) {
+
         setLayout(new BorderLayout(10,10));
 
         // List in center
@@ -20,12 +20,12 @@ public class PathInfoPanel extends JPanel{
         add(new JScrollPane(infoList), BorderLayout.CENTER);
 
         // Initial population
-        init();
+        init(model);
     }
 
-    private void init() {
+    private void init(SimulationModel model) {
         listModel.clear();
-        List<Vec3D> points = axisPanel.getScene().getTrace().getPoints(); //TODO Let Scene return info about the trace
+        List<Vec3D> points = model.getScene().getTrace().getPoints(); 
         for (int i = 0; i < points.size()-1; i++) {
             Vec3D point = points.get(i);
             Vec3D nextPoint = points.get(i+1);

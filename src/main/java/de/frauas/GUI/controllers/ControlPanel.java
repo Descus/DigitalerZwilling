@@ -1,17 +1,14 @@
 package de.frauas.GUI.controllers;
 
 import de.frauas.GUI.controllers.observer.SimulationModel;
-import de.frauas.Settings;
-import de.frauas.objects.Scene;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 
 public class ControlPanel extends JPanel {
 
     boolean started = false, paused = false;
-    public ControlPanel(SimulationModel model, Scene scene) {
+    public ControlPanel(SimulationModel model) {
         setLayout(new FlowLayout());
 
         JButton startBtn = new JButton("Start");
@@ -45,12 +42,12 @@ public class ControlPanel extends JPanel {
 
         startBtn.addActionListener(_ -> {
             if (!started) {
-                scene.startCar();
+                model.start();
                 startBtn.setText("Reset");
                 pauseBtn.setEnabled(true);
                 started = true;
             } else {
-                scene.resetCar();
+                model.reset();
                 startBtn.setText("Start");
                 pauseBtn.setEnabled(false);
                 started = false;
@@ -59,11 +56,11 @@ public class ControlPanel extends JPanel {
         });
         pauseBtn.addActionListener(_ ->{
             if(!paused) {
-                scene.pauseCar();
+                model.pause();
                 pauseBtn.setText("Continue");
                 paused = true;
             } else {
-                scene.resumeCar();
+                model.resume();
                 pauseBtn.setText("Pause");
                 paused = false;
             }

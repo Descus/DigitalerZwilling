@@ -2,7 +2,7 @@ package de.frauas.GUI.controllers.observer;
 
 import de.frauas.Settings;
 import de.frauas.objects.Scene;
-import de.frauas.scenario.xml.ScenarioLoader;
+import lombok.Getter;
 import lombok.Setter;
 
 
@@ -13,25 +13,30 @@ import java.util.List;
 public class SimulationModel {
 
     @Setter
+    @Getter
     private Scene scene;
-    private final Timer timer;
     private final List<SimulationObserver> observers = new ArrayList<>();
     private boolean running = false;
     private long lastTime = System.currentTimeMillis();
+    double delta;
 
     public SimulationModel(Scene scene) {
         this.scene = scene;
-        timer = new Timer(1000 / Settings.WINDOW.TARGET_FPS, e -> {
-            if (running) {
-                long now = System.currentTimeMillis();
-                double delta = (now - lastTime) / 1000.0;
-                lastTime = now;
-
-                scene.update(delta);
-                
-                notifyObservers();
-            }
+        Timer timer = new Timer(1000 / Settings.WINDOW.TARGET_FPS, e -> {
+            long now = System.currentTimeMillis();
+            delta += (now - lastTime) / 1000.0;
+            lastTime = now;
+            notifyObservers();
         });
+
+        Timer timer1 = new Timer(1000, e -> {
+            if (!running) return;
+            scene.update(delta);
+            delta = 0;
+        });
+        
+        timer.start();
+        timer1.start();
     }
 
     public void addObserver(SimulationObserver observer) {
@@ -50,19 +55,25 @@ public class SimulationModel {
 
     public void start() {
         running = true;
-        timer.start();
+        scene.startCar();
     }
 
     public void pause() {
+        scene.pauseCar();
         running = false;
     }
 
     public void resume() {
+        scene.resumeCar();
         running = true;
+    }
+    
+    public void reset(){
+        scene.resetCar();
+        stop();
     }
 
     public void stop() {
         running = false;
-        timer.stop();
     }
 }

@@ -1,17 +1,14 @@
 package de.frauas.GUI.controllers.input;
 
-import de.frauas.GUI.controllers.AxisPanel;
+import de.frauas.GUI.controllers.observer.SimulationModel;
 import de.frauas.Settings;
-import de.frauas.objects.car.Car;
 import javax.swing.*;
 import java.awt.*;
 
 public class CarInfoPanel extends JPanel{
-    private final AxisPanel axisPanel;
     private final DefaultListModel<String> listModel = new DefaultListModel<>();
 
-    public CarInfoPanel(AxisPanel axisPanel) {
-        this.axisPanel = axisPanel;
+    public CarInfoPanel(SimulationModel model) {
         setOpaque(false);
         setLayout(new BorderLayout(5, 5));
 
@@ -21,12 +18,11 @@ public class CarInfoPanel extends JPanel{
         add(new JScrollPane(infoList), BorderLayout.CENTER);
 
         // Initial population
-        init();
+        init(model);
     }
 
-    private void init() {
+    private void init(SimulationModel model) {
         listModel.clear();
-        Car car = axisPanel.getScene().getCar();
         String carLength = String.format(
                 "Car length: %.2f mm" , Settings.CAR.SIZE.getY()
         );
@@ -35,9 +31,12 @@ public class CarInfoPanel extends JPanel{
                 "Car width: %.2f mm", Settings.CAR.SIZE.getX()
         );
         listModel.addElement(carWidth);
-
+        String carPos = String.format(
+                "Car length: %s mm" , model.getScene().getStartPosition().toString()
+        );
+        listModel.addElement(carPos);
         String carRad = String.format(
-                "Car initial heading to %s degree ", car.getTransform().getRotation()
+                "Car initial heading to %s degree ", model.getScene().getStartHeading()
         );
         listModel.addElement(carRad);
     }

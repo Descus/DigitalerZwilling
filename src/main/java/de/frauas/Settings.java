@@ -16,15 +16,16 @@ public class Settings {
         public static final Vec3D SIZE = new Vec3D(150, 240, 0);
         
         public static class MOVEMENT {
-            public static final double TURN_DEG = 56;
-            public static final double MM_PER_SECOND = 30;
+            public static final double TURN_SPEED_DEG_P_S = 56;
+            public static final double SPEED_MM_P_S = 30;
         }
         public static class ULTRASONIC {
             public static final int MAX_DISTANCE = 300;
             public static final int MAX_ANGLE = 15;
+            public static final int CHECK_DELAY_MS = 10;
         }
         public static class INFRARED {
-            
+            public static final int CHECK_DELAY_MS = 7;
         }
     }
  

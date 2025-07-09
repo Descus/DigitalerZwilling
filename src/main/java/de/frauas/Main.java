@@ -36,10 +36,10 @@ public class Main {
         SimulationModel model = new SimulationModel(scene);
 
         // create Panel
-        AxisPanel axisPanel = new AxisPanel(model,scene);
-        InputPanel infoIn = new InputPanel(axisPanel);
-        OutputPanel infoOut = new OutputPanel(model,scene);
-        ControlPanel controlPanel = new ControlPanel(model, scene);
+        AxisPanel axisPanel = new AxisPanel(model);
+        InputPanel infoIn = new InputPanel(model);
+        OutputPanel infoOut = new OutputPanel(model);
+        ControlPanel controlPanel = new ControlPanel(model);
 
         //Middle Area
         //Axis Panel
@@ -81,7 +81,6 @@ public class Main {
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        model.start();
         // axisPanel.startCar(); the "Start" button will handle that now.
     }
 }

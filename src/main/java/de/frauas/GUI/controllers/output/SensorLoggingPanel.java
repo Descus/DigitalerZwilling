@@ -1,27 +1,23 @@
 package de.frauas.GUI.controllers.output;
 
 import de.frauas.GUI.controllers.observer.SimulationModel;
-import de.frauas.GUI.controllers.observer.SimulationObserver;
 import de.frauas.objects.CarUpdateInformation;
-import de.frauas.objects.Scene;
-import de.frauas.objects.datastructures.Vec3D;
+import de.frauas.objects.interfaces.ICarObserver;
 
 import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 
-public class SensorLoggingPanel extends JPanel implements SimulationObserver {
-    private final Scene scene;
-    private CarUpdateInformation carInfo;
+public class SensorLoggingPanel extends JPanel implements ICarObserver {
+    
     private Timer timer;
+    private CarUpdateInformation latestInfo;
     private final DefaultListModel<String> infoModel = new DefaultListModel<>();
     private final JList<String> infoList = new JList<>(infoModel);
     private final JTextField intervalField = new JTextField("1000", 5);
 
-    public SensorLoggingPanel(SimulationModel simulModel, Scene scene) {
-        this.scene = scene;
+    public SensorLoggingPanel(SimulationModel simulModel) {
         setLayout(new BorderLayout(5, 5));
 
         // Top: update interval control
@@ -51,6 +47,7 @@ public class SensorLoggingPanel extends JPanel implements SimulationObserver {
                 );
             }
         });
+        simulModel.getScene().addObserverToCar(this);
     }
 
     private void startLoggingTimer(int intervalMs) {
@@ -65,24 +62,21 @@ public class SensorLoggingPanel extends JPanel implements SimulationObserver {
     private void restartLoggingTimer(int intervalMs) {
         startLoggingTimer(intervalMs);
     }
-
-
-    @Override
+    
     public void onSimulationUpdate() {
-       if (scene.getCar() == null || scene.getCar().getCarInfo() == null) return;
-        CarUpdateInformation carInfo = scene.getCar().getCarInfo();
-        SimpleDateFormat timeFmt = new SimpleDateFormat("ss:SSS");
+        if(latestInfo == null) return;
+        SimpleDateFormat timeFmt = new SimpleDateFormat("hh:mm:ss:SSS");
         String timestamp = timeFmt.format(new Date());
 
         String entry = String.format(
                 "%s - %s - FL: %d - FM: %d - FR: %d - RL: %d - RM: %d - RR: %d",
-                carInfo.getUsTimestamp(),timestamp,
-                carInfo.getMeasurements().get(0),
-                carInfo.getMeasurements().get(1),
-                carInfo.getMeasurements().get(2),
-                carInfo.getMeasurements().get(3),
-                carInfo.getMeasurements().get(4),
-                carInfo.getMeasurements().get(5)
+                timestamp, latestInfo.getUsTimestamp(),
+                latestInfo.getMeasurements().get(0),
+                latestInfo.getMeasurements().get(1),
+                latestInfo.getMeasurements().get(2),
+                latestInfo.getMeasurements().get(3),
+                latestInfo.getMeasurements().get(4),
+                latestInfo.getMeasurements().get(5)
         );
         infoModel.addElement(entry);
 
@@ -92,4 +86,8 @@ public class SensorLoggingPanel extends JPanel implements SimulationObserver {
         }
     }
 
+    @Override
+    public void onCarUpdate(CarUpdateInformation info) {
+        latestInfo = info;
+    }
 }

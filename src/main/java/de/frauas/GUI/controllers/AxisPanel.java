@@ -13,13 +13,12 @@ import java.awt.*;
 
 
 public class AxisPanel extends JPanel implements SimulationObserver {
-    
-    @Getter
-    private Scene scene;
+
+    private final SimulationModel model;
     private long lastTime = System.currentTimeMillis();
 
-    public AxisPanel(SimulationModel model, Scene scene){
-        this.scene = scene;
+    public AxisPanel(SimulationModel model){
+        this.model = model;
         model.addObserver(this);
         setOpaque(false);
     }
@@ -65,7 +64,7 @@ public class AxisPanel extends JPanel implements SimulationObserver {
         int x1 = MARGIN + (int) (x_MAX * scale); // Endpoint of each axis depend on the scale
         int y1 = y0 - (int) (y_MAX * scale);
 
-        scene.getTransform().setScale(new Vec3D(scale, scale, 1));
+        model.getScene().getTransform().setScale(new Vec3D(scale, scale, 1));
 
         // Draw axes
         g2.drawLine(x0, y0, x1, y0); // X-axis
@@ -108,7 +107,7 @@ public class AxisPanel extends JPanel implements SimulationObserver {
             {
                 g3.translate(x0, y0);
                 g3.scale(1, -1);
-                scene.draw(g3);
+                model.getScene().draw(g3);
             }
             g3.dispose();
         }

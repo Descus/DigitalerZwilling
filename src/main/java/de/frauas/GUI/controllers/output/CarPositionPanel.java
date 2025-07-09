@@ -1,24 +1,24 @@
 package de.frauas.GUI.controllers.output;
 
 import de.frauas.GUI.controllers.observer.SimulationModel;
-import de.frauas.GUI.controllers.observer.SimulationObserver;
-import de.frauas.objects.Scene;
+import de.frauas.objects.CarUpdateInformation;
 import de.frauas.objects.datastructures.Vec3D;
+import de.frauas.objects.interfaces.ICarObserver;
 
 import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class CarPositionPanel extends JPanel implements SimulationObserver {
-    private final Scene scene;
+public class CarPositionPanel extends JPanel implements ICarObserver {
+    
     private Timer timer;
+    public CarUpdateInformation latestInfo;
     private final DefaultListModel<String> infoModel = new DefaultListModel<>();
     private final JList<String> infoList = new JList<>(infoModel);
     private final JTextField intervalField = new JTextField("1000", 5);
 
-    public CarPositionPanel(SimulationModel simulModel, Scene scene) {
-        this.scene = scene;
+    public CarPositionPanel(SimulationModel simulModel) {
         setLayout(new BorderLayout(5, 5));
 
         // Top: update interval control
@@ -48,6 +48,7 @@ public class CarPositionPanel extends JPanel implements SimulationObserver {
                 );
             }
         });
+        simulModel.getScene().addObserverToCar(this);
     }
 
     private void startLoggingTimer(int intervalMs) {
@@ -62,17 +63,15 @@ public class CarPositionPanel extends JPanel implements SimulationObserver {
     private void restartLoggingTimer(int intervalMs) {
         startLoggingTimer(intervalMs);
     }
-
-
-    @Override
+    
     public void onSimulationUpdate() {
-        String status = scene.getCar().getStatus().toString();
-        Vec3D pos = scene.getCar().getTransform().getTranslation(); //TODO let scene return a car information object to get information from
-        SimpleDateFormat timeFmt = new SimpleDateFormat("ss:SSS");
+        if (latestInfo == null) return;
+        SimpleDateFormat timeFmt = new SimpleDateFormat("hh:mm:ss:SSS");
         String timestamp = timeFmt.format(new Date());
+        Vec3D pos = latestInfo.getPosition();
         String entry = String.format(
                 "%s - %s - (%.1f, %.1f)",
-                timestamp, status, pos.getX(), pos.getY()
+                timestamp, latestInfo.getStatus(), pos.getX(), pos.getY()
         );
         infoModel.addElement(entry);
         // Scroll to the latest entry
@@ -80,5 +79,10 @@ public class CarPositionPanel extends JPanel implements SimulationObserver {
         if (last >= 0) {
             infoList.ensureIndexIsVisible(last);
         }
+    }
+
+    @Override
+    public void onCarUpdate(CarUpdateInformation info) {
+        latestInfo = info;
     }
 }

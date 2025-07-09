@@ -1,6 +1,8 @@
 package de.frauas.GUI.controllers.input;
 
 import de.frauas.GUI.controllers.AxisPanel;
+import de.frauas.GUI.controllers.observer.SimulationModel;
+import de.frauas.GUI.controllers.observer.SimulationObserver;
 import de.frauas.objects.obstacle.Obstacle;
 import de.frauas.objects.datastructures.Vec3D;
 
@@ -10,11 +12,9 @@ import java.util.List;
 
 
 public class ObstacleInfoPanel extends JPanel {
-    private final AxisPanel axisPanel;
     private final DefaultListModel<String> listModel = new DefaultListModel<>();
 
-    public ObstacleInfoPanel(AxisPanel axisPanel) {
-        this.axisPanel = axisPanel;
+    public ObstacleInfoPanel(SimulationModel model) {
         setLayout(new BorderLayout(5, 5));
 
         // List in center
@@ -22,12 +22,12 @@ public class ObstacleInfoPanel extends JPanel {
         add(new JScrollPane(infoList), BorderLayout.CENTER);
 
         // Initial population
-        init();
+        init(model);
     }
 
-    private void init() {
+    private void init(SimulationModel model) {
         listModel.clear();
-        List<Obstacle> obstacles = axisPanel.getScene().getObstacles(); //TODO Let Scene return info about all obstacles
+        List<Obstacle> obstacles = model.getScene().getObstacles();
         for (Obstacle o : obstacles) {
             Vec3D startPoint = o.getStartPoint();
             Vec3D endPoint = o.getEndPoint();

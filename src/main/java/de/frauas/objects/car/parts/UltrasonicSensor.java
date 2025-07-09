@@ -19,7 +19,6 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
     
     private final ISdf sceneDistanceField;
     public double stepSize = 0.1f;
-    public static int usTimestampiteration = 0;
 
     ConcurrentLinkedQueue<Vec3D> hits = new ConcurrentLinkedQueue<>();
     ConcurrentLinkedQueue<Vec3D> steps = new ConcurrentLinkedQueue<>();
@@ -121,16 +120,7 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
     public double calculateDistance(Vec3D pos1, Vec3D pos2){
         return pos1.subtract(pos2).length();
     }
-
-    /* Adds a random value between 200 - 300 ms to the timestamp */
-    public static int iterateUSTimestamp(int previousTimestamp) {
-        Random random = new Random();
-        int sd = 50;
-        int mean = 250;
-        usTimestampiteration = (int)(random.nextGaussian()* sd +mean);
-        return (previousTimestamp + usTimestampiteration) ;
-    }
-
+    
     @Override
     public int distanceToClosestObstacle() {
         return (int) calculateDistance(getWorldPosition(), getClosestPoint());

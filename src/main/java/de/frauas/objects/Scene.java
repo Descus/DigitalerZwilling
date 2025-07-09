@@ -3,8 +3,8 @@ package de.frauas.objects;
 import de.frauas.IDrawable;
 import de.frauas.Settings;
 import de.frauas.objects.car.Car;
-import de.frauas.objects.car.CarStatus;
 import de.frauas.objects.datastructures.Vec3D;
+import de.frauas.objects.interfaces.ICarObserver;
 import de.frauas.objects.obstacle.ISdf;
 import de.frauas.objects.obstacle.Obstacle;
 import de.frauas.objects.trace.*;
@@ -27,8 +27,6 @@ public class Scene extends Transformable implements ISdf, IDrawable {
 
     private final double[][] bakedSdFields = new double[(int) Settings.SCENE.CANVAS.getX()][(int) Settings.SCENE.CANVAS.getY()];
     private boolean isBaked = false;
-
-    double time = 0;
 
 
     public Scene(Scenario scenario) {
@@ -99,8 +97,7 @@ public class Scene extends Transformable implements ISdf, IDrawable {
     public void resumeCar(){ this.car.start();}
 
     public void update(double dt) {
-        car.update((int) time, dt);
-        time += dt;
+        car.update(dt);
     }
 
     @Override
@@ -126,6 +123,16 @@ public class Scene extends Transformable implements ISdf, IDrawable {
             }
         }
         g2.dispose();
+    }
+    
+    public void addObserverToCar(ICarObserver observer){
+        if (car == null) return;
+        car.addObserver(observer);
+    }
+    
+    public void removeObserverFromCar(ICarObserver observer){
+        if (car == null) return;
+        car.removeObserver(observer);
     }
 
     @Override
