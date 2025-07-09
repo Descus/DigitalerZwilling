@@ -5,6 +5,7 @@ import de.frauas.objects.Scene;
 import de.frauas.objects.interfaces.ICarObserver;
 import de.frauas.scenario.dto.Scenario;
 import de.frauas.scenario.xml.ScenarioLoader;
+import de.frauas.scenario.xml.ScenarioXmlFile;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -85,23 +86,17 @@ public class SimulationModel {
 
     public void reload(String scenarioFile) {
         try {
+            List<ICarObserver> carObservers = this.scene.getCar().getCarObservers().stream().toList();
 
-            if (this.scene != null) {
-                for (SimulationObserver observer : observers) {
-                    if (observer instanceof ICarObserver) {
-                        scene.removeObserverFromCar((ICarObserver) observer);
-                    }
-                }
+            for (ICarObserver observer : carObservers) {
+                this.scene.removeObserverFromCar(observer);
             }
 
-            Scenario scenario = ScenarioLoader.loadFromFile(scenarioFile);
+            Scenario scenario = ScenarioXmlFile.fromPath(scenarioFile).read();
             this.scene = new Scene(scenario);
 
-
-            for (SimulationObserver observer : observers) {
-                if (observer instanceof ICarObserver) {
-                    scene.addObserverToCar((ICarObserver) observer);
-                }
+            for (ICarObserver observer : carObservers) {
+                this.scene.addObserverToCar(observer);
             }
 
             reset();

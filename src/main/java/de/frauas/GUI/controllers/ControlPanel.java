@@ -1,18 +1,17 @@
 package de.frauas.GUI.controllers;
 
 import de.frauas.GUI.controllers.observer.SimulationModel;
-import de.frauas.objects.Scene;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
-import static de.frauas.Settings.SCENE.DEFAULT_SCENARIO_FILE;
-
 
 public class ControlPanel extends JPanel {
 
     boolean started = false, paused = false;
+    private File currentDir = new File(System.getProperty("user.home"));
+
     public ControlPanel(SimulationModel model) {
         setLayout(new FlowLayout());
 
@@ -21,19 +20,17 @@ public class ControlPanel extends JPanel {
         JButton scenarioBtn = new JButton("ScenarioOption");
 
         // path list of our default scenarios
-        File scenariosDir = new File("src/main/resources/Scenario");
-        String[] choices = scenariosDir.list((dir, name) -> name.toLowerCase().endsWith(".xml"));
-
         // shows a pop-up menu in which you can switch the scene
         scenarioBtn.addActionListener(e -> {
-            String input = (String) JOptionPane.showInputDialog(this, "choose a scene",
-                    "Scene", JOptionPane.QUESTION_MESSAGE, null,
-                    choices,
-                    DEFAULT_SCENARIO_FILE.substring(DEFAULT_SCENARIO_FILE.lastIndexOf("/")+1));
-            if (input != null) {
-                DEFAULT_SCENARIO_FILE = "Scenario/" + input;
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(currentDir);
+            int result = fileChooser.showOpenDialog(this);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                currentDir = selectedFile.getParentFile();
+                System.out.println("Selected file: " + selectedFile.getAbsolutePath());
 
-                model.reload(DEFAULT_SCENARIO_FILE);
+                model.reload(selectedFile.getAbsolutePath());
 
                 startBtn.setText("Start");
                 pauseBtn.setText("Pause");
@@ -42,7 +39,6 @@ public class ControlPanel extends JPanel {
                 paused = false;
             }
         });
-
         //initial status of the button
         pauseBtn.setEnabled(false);
 
@@ -58,10 +54,10 @@ public class ControlPanel extends JPanel {
                 pauseBtn.setEnabled(false);
                 started = false;
             }
-            
+
         });
-        pauseBtn.addActionListener(_ ->{
-            if(!paused) {
+        pauseBtn.addActionListener(_ -> {
+            if (!paused) {
                 model.pause();
                 pauseBtn.setText("Continue");
                 paused = true;
@@ -70,7 +66,7 @@ public class ControlPanel extends JPanel {
                 pauseBtn.setText("Pause");
                 paused = false;
             }
-        }) ;
+        });
         add(startBtn);
         add(pauseBtn);
         add(scenarioBtn);

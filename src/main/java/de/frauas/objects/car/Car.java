@@ -36,7 +36,7 @@ public class Car extends Transformable implements IDrawable {
 
     private final List<IUltrasonicSensor> ultraSonicSensors = new ArrayList<>();
     private final List<IInfraredSensor> infraredSensors = new ArrayList<>();
-    private final List<ICarObserver> carObservers = new ArrayList<>();
+    private final ConcurrentLinkedQueue<ICarObserver> carObservers = new ConcurrentLinkedQueue<>();
 
     private final ConcurrentLinkedQueue<Integer> measurements = new ConcurrentLinkedQueue<>(Arrays.asList(0, 0, 0, 0, 0, 0));
     private final ConcurrentLinkedQueue<Boolean> infraredStatus = new ConcurrentLinkedQueue<>(Arrays.asList(false, false, false));
