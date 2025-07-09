@@ -24,19 +24,13 @@ public class SimulationModel {
         this.scene = scene;
         Timer timer = new Timer(1000 / Settings.WINDOW.TARGET_FPS, e -> {
             long now = System.currentTimeMillis();
-            delta += (now - lastTime) / 1000.0;
+            delta = (now - lastTime) / 1000.0;
             lastTime = now;
             notifyObservers();
-        });
-
-        Timer timer1 = new Timer(1000, e -> {
-            if (!running) return;
             scene.update(delta);
-            delta = 0;
         });
         
         timer.start();
-        timer1.start();
     }
 
     public void addObserver(SimulationObserver observer) {
