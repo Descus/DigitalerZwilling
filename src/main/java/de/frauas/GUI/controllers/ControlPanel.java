@@ -28,7 +28,6 @@ public class ControlPanel extends JPanel {
             if (result == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = fileChooser.getSelectedFile();
                 currentDir = selectedFile.getParentFile();
-                System.out.println("Selected file: " + selectedFile.getAbsolutePath());
 
                 model.reload(selectedFile.getAbsolutePath());
 
