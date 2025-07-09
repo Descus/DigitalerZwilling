@@ -9,7 +9,7 @@ public class Settings {
     public static final int WIDTH = 1600;
     public static final int HEIGHT = 1000;
     
-    public static final String SCENARIO_FILE = "Scenario/example2.xml";
+    public static String SCENARIO_FILE = "Scenario/example.xml";
     public static final int SPLINE_INTERPOLATION_SIZE = 10;
     public static final Vec3D SCENE_CANVAS = new Vec3D(1000, 500, 0);
     public static final Vec3D CAR_SIZE = new Vec3D(150, 240, 0);

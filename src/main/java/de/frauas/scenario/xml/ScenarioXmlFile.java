@@ -4,6 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import de.frauas.scenario.dto.Scenario;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 import static de.frauas.Settings.SCENARIO_FILE;
@@ -11,10 +12,12 @@ import static de.frauas.Settings.SCENARIO_FILE;
 
 public class ScenarioXmlFile {
     private final String filePath;
-    
+
     private ScenarioXmlFile(String filePath){
         this.filePath = filePath;
     }
+
+
     
     public static ScenarioXmlFile fromPath(String filePath) throws IllegalArgumentException{
         if(filePath == null || filePath.isEmpty()){

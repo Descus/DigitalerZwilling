@@ -1,18 +1,25 @@
 package de.frauas.GUI.controllers.observer;
 
 import de.frauas.objects.Scene;
+import de.frauas.scenario.xml.ScenarioLoader;
+import lombok.Setter;
+
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SimulationModel {
+
+    @Setter
+    private Scene scene;
     private final Timer timer;
     private final List<SimulationObserver> observers = new ArrayList<>();
     private boolean running = false;
     private long lastTime = System.currentTimeMillis();
 
     public SimulationModel(Scene scene) {
+        this.scene = scene;
         timer = new Timer(1000 / 60, e -> {
             if (running) {
                 long now = System.currentTimeMillis();
