@@ -28,7 +28,7 @@ public abstract class Transformable {
         return toGlobalSpace(Vec3D.identity);
     }
 
-    public Vec3D forward(){
+    public Vec3D forwardVector(){
         Vec3D localForward = transform.forward();
         return parent == null
                 ? localForward

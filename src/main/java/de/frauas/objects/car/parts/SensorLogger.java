@@ -7,23 +7,24 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 public class SensorLogger implements ICarObserver {
 
     private BufferedWriter writer;
+    private static String filename = "logs/output";
 
-    private static SensorLogger instance;
-
-    public static SensorLogger getOrCreate() {
-        if (instance == null) {
-            instance = new SensorLogger("logs/output.txt");
-        }
-        return instance;
+    public SensorLogger() {
+        reset();
     }
-
-    private SensorLogger(String filename) {
-        File file = new File(filename);
+    
+    public void reset(){
+        
+        File file = new File(filename + LocalDateTime.now().toString().replace(":", "_") + ".csv");
         try {
+            if (writer != null) {
+                writer.close();
+            }
             if (!file.exists()) {
                 file.getParentFile().mkdirs();
                 file.createNewFile();

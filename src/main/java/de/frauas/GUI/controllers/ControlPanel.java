@@ -10,7 +10,7 @@ import java.io.File;
 public class ControlPanel extends JPanel {
 
     boolean started = false, paused = false;
-    private File currentDir = new File(System.getProperty("user.home"));
+    private File currentDir = new File(System.getProperty("user.home") + "/Documents/Scenarien");
 
     public ControlPanel(SimulationModel model) {
         setLayout(new FlowLayout());

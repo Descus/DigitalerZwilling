@@ -45,7 +45,7 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
         steps.clear();
         Vec3D closestPoint = Vec3D.right.scale(1000);
         for (double angle = -Settings.CAR.ULTRASONIC.MAX_ANGLE; angle < Settings.CAR.ULTRASONIC.MAX_ANGLE; angle += Settings.CAR.ULTRASONIC.STEP_SIZE) {
-            Vec3D currentPoint = castRay(forward().rotate(angle));
+            Vec3D currentPoint = castRay(forwardVector().rotate(angle));
             if (currentPoint.length() < closestPoint.subtract(getWorldPosition()).length()) {
                 closestPoint = currentPoint;
             }
@@ -99,7 +99,7 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
         if (Settings.DEBUG.ENABLED) {
             g.setColor(Color.cyan);
             Vec3D wp = getWorldPosition();
-            Vec3D f = forward().scale(100);
+            Vec3D f = forwardVector().scale(100);
             g.drawLine((int) wp.getX(), (int) wp.getY(), (int) (wp.getX() + f.getX()), (int) (wp.getY() + f.getY()) );
         }
         if (!Settings.DEBUG.SHOW_RAYS) return;

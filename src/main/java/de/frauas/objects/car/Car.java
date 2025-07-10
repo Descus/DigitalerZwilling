@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Getter
 public class Car extends Transformable implements IDrawable {
@@ -32,7 +33,8 @@ public class Car extends Transformable implements IDrawable {
     public static final int SENSOR_ANGLE_FR = 20;
     public static final int SENSOR_ANGLE_FL = 25;
     public static final int SENSOR_ANGLE_REAR = 35;
-    public static final int FIRST_TIMESTAMP = 4395 + (int) (Math.random() * ((4403 - 4395) + 1));
+    
+    private static final Random random = new Random();
 
     private final List<IUltrasonicSensor> ultraSonicSensors = new ArrayList<>();
     private final List<IInfraredSensor> infraredSensors = new ArrayList<>();
@@ -41,9 +43,11 @@ public class Car extends Transformable implements IDrawable {
     private final ConcurrentLinkedQueue<Integer> measurements = new ConcurrentLinkedQueue<>(Arrays.asList(0, 0, 0, 0, 0, 0));
     private final ConcurrentLinkedQueue<Boolean> infraredStatus = new ConcurrentLinkedQueue<>(Arrays.asList(false, false, false));
 
+    private final SensorLogger sensorLogger;
     private final Trace trace;
-    private CarStatus status = CarStatus.STOPPED;
-    private int currentTimeMillis = FIRST_TIMESTAMP;
+    private AtomicReference<CarStatus> status = new AtomicReference<>(CarStatus.STOPPED);
+    private int currentTimeMillis = random.nextInt(4395, 4403);
+    private boolean resetting = false;
 
 
     public Car(Scene parent, Vec3D position, double headingDegree) {
@@ -54,7 +58,8 @@ public class Car extends Transformable implements IDrawable {
         transform.setRotation(headingDegree);
 
         //writing the first Lines to the US output.txt
-        carObservers.add(SensorLogger.getOrCreate());
+        sensorLogger = new SensorLogger();
+        carObservers.add(sensorLogger);
         notifyObservers();
 
         ultraSonicSensors.add(new UltrasonicSensor(this, "FL", new Vec3D(-45, 110, 0), SENSOR_ANGLE_FL, parent));
@@ -64,9 +69,9 @@ public class Car extends Transformable implements IDrawable {
         ultraSonicSensors.add(new UltrasonicSensor(this, "RC", new Vec3D(0, -117.5, 0), 180, parent));
         ultraSonicSensors.add(new UltrasonicSensor(this, "RR", new Vec3D(45, -117.5, 0), SENSOR_ANGLE_REAR + 180, parent));
 
-        infraredSensors.add(new InfraredSensor(this, new Vec3D(10, 60, 0)));
-        infraredSensors.add(new InfraredSensor(this, new Vec3D(0, 60, 0)));
-        infraredSensors.add(new InfraredSensor(this, new Vec3D(-10, 60, 0)));
+        infraredSensors.add(new InfraredSensor(this, new Vec3D(10, 90, 0)));
+        infraredSensors.add(new InfraredSensor(this, new Vec3D(0, 90, 0)));
+        infraredSensors.add(new InfraredSensor(this, new Vec3D(-10, 90, 0)));
 
         new Thread(this::ultrasonicUpdate).start();
 
@@ -120,46 +125,60 @@ public class Car extends Transformable implements IDrawable {
      * @param dt Time step in seconds.
      */
     public void update(double dt) {
-        //currentTimeMillis += (int) (dt * 1000);
     }
 
     public void reset(Vec3D position, double headingDegree) {
+        resetting = true;
         stop();  // Stop the car first
+        currentTimeMillis = random.nextInt(4395, 4403);
+        measurements.clear();
+        infraredStatus.clear();
+        
+        measurements.addAll(Arrays.asList(0, 0, 0, 0, 0, 0));
+        infraredStatus.addAll(Arrays.asList(false, false, false));
+        
+        sensorLogger.reset();
         transform.setTranslation(position); // Reset position
         transform.setRotation(headingDegree);
+        
+        notifyObservers();
+        resetting = false;
     }
 
     public void start() {
-        status = CarStatus.RUNNING;
+        status.set(CarStatus.RUNNING);
     }
 
     public void stop() {
-        status = CarStatus.STOPPED;
+        status.set(CarStatus.STOPPED);
     }
 
     public void pause() {
-        status = CarStatus.PAUSED;
+        status.set(CarStatus.PAUSED);
     }
 
     public void finish() {
-        status = CarStatus.FINISHED;
+        status.set(CarStatus.FINISHED);
     }
-
-    private void applyMovementFromInstruction(MovementInstruction movementInstruction) {
-        //Fahrbefehle ausführen
-        if (!status.equals(CarStatus.RUNNING)) return;
+    
+    private void forward(){
         double dt = Settings.CAR.INFRARED.CHECK_DELAY_MS / 1000.0;
-        switch (movementInstruction) {
-            case forward -> transform.translate(forward().normalize().scale(Settings.CAR.MOVEMENT.SPEED_MM_P_S * dt));
-            case left -> transform.rotate(Settings.CAR.MOVEMENT.TURN_SPEED_DEG_P_S * dt);
-            case right -> transform.rotate(-Settings.CAR.MOVEMENT.TURN_SPEED_DEG_P_S * dt);
-            case stop -> finish();
-        }
+        transform.translate(forwardVector().normalize().scale(Settings.CAR.MOVEMENT.SPEED_MM_P_S * dt));
     }
-
+    
+    private void left(){
+        double dt = Settings.CAR.INFRARED.CHECK_DELAY_MS / 1000.0;
+        transform.rotate(random.nextDouble(88, 143) * dt);
+    }
+    
+    private void right(){
+        double dt = Settings.CAR.INFRARED.CHECK_DELAY_MS / 1000.0;
+        transform.rotate(-random.nextDouble(30, 57) * dt);
+    }
+    
     private void notifyObservers() {
         for (ICarObserver observer : carObservers) {
-            observer.onCarUpdate(new CarUpdateInformation(status, measurements.stream().toList(), infraredStatus.stream().toList(), getWorldPosition(), transform.getRotation(), currentTimeMillis));
+            observer.onCarUpdate(new CarUpdateInformation(status.get(), measurements.stream().toList(), infraredStatus.stream().toList(), getWorldPosition(), transform.getRotation(), currentTimeMillis));
         }
     }
 
@@ -173,7 +192,7 @@ public class Car extends Transformable implements IDrawable {
         carObservers.remove(observer);
     }
 
-    private MovementInstruction getMovementInstructionFromSensors(boolean[] sensorStatus) {
+    private void getMovementInstructionFromSensors(boolean[] sensorStatus) {
         boolean L = sensorStatus[2];
         boolean M = sensorStatus[1];
         boolean R = sensorStatus[0];
@@ -184,12 +203,16 @@ public class Car extends Transformable implements IDrawable {
         infraredStatus.add(R);
 
         if (L && !R) {
-            return MovementInstruction.left; // links abbiegen
+            left(); // links abbiegen
         } else if (!L && R) {
-            return MovementInstruction.right; // rechts abbiegen
+            right(); // rechts abbiegen
         } else { // wenn links und rechts false
-            return M ? MovementInstruction.forward // falls mitte true
-                    : MovementInstruction.stop; // falls mitte false
+            if (M) {
+                forward();
+            } 
+            else {
+                finish();
+            }
         }
     }
 
@@ -229,6 +252,7 @@ public class Car extends Transformable implements IDrawable {
 
                 
                 currentTimeMillis += lastTimeStep;
+                if (resetting) return;
                 notifyObservers();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -241,16 +265,15 @@ public class Car extends Transformable implements IDrawable {
             if (trace.getType() == TraceType.DEBUG) return;
             Thread.sleep(2000);
             while (true) {
+                if (status.get() != CarStatus.RUNNING) continue;
                 boolean[] irHit = new boolean[infraredSensors.size()];
                 for (int s = 0; s < infraredSensors.size(); s++) {
                     IInfraredSensor ir = infraredSensors.get(s);
                     irHit[s] = ir.isOnTrack((ShiftedTrace) trace);
                 }
 
-                MovementInstruction movementInstruction = getMovementInstructionFromSensors(irHit);
+                getMovementInstructionFromSensors(irHit);
                 
-                applyMovementFromInstruction(movementInstruction);
-
                 Thread.sleep(Settings.CAR.INFRARED.CHECK_DELAY_MS);
 
             }
@@ -260,6 +283,6 @@ public class Car extends Transformable implements IDrawable {
     }
 
     public static int iterateUSTimestamp() {
-        return (int)(new Random().nextGaussian(250, 50)); // 200 - 300
+        return (int)(random.nextGaussian(250, 50)); // 200 - 300
     }
 }

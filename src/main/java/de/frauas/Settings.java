@@ -17,8 +17,9 @@ public class Settings {
         
         public static class MOVEMENT {
             public static final double TURN_SPEED_DEG_P_S = 56;
-            public static final double SPEED_MM_P_S = 30;
+            public static final double SPEED_MM_P_S = 300;
         }
+        
         public static class ULTRASONIC {
             public static final int MAX_DISTANCE = 300;
             public static final int MAX_ANGLE = 15;
@@ -42,7 +43,7 @@ public class Settings {
     
     public static class DEBUG {
         public static final boolean ENABLED = false;
-        public static final boolean SHOW_RAYS = false;
+        public static final boolean SHOW_RAYS = true;
         public static final boolean SHOW_MAP_OVERLAY = false;
         public static final int POINT_RADIUS = 10;
     }
