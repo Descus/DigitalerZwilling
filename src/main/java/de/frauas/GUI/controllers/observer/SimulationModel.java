@@ -4,7 +4,6 @@ import de.frauas.Settings;
 import de.frauas.objects.Scene;
 import de.frauas.objects.interfaces.ICarObserver;
 import de.frauas.scenario.dto.Scenario;
-import de.frauas.scenario.xml.ScenarioLoader;
 import de.frauas.scenario.xml.ScenarioXmlFile;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,16 +15,17 @@ import java.util.List;
 
 public class SimulationModel {
 
-    @Setter
-    @Getter
+    @Setter @Getter
     private Scene scene;
+
     private final List<SimulationObserver> observers = new ArrayList<>();
     private boolean running = false;
     private long lastTime = System.currentTimeMillis();
-    double delta;
+    private double delta;
 
     public SimulationModel(Scene scene) {
         this.scene = scene;
+
         Timer timer = new Timer(1000 / Settings.WINDOW.TARGET_FPS, e -> {
             long now = System.currentTimeMillis();
             delta = (now - lastTime) / 1000.0;
@@ -84,6 +84,10 @@ public class SimulationModel {
         notifyObservers();
     }
 
+    public void stop() {
+        running = false;
+    }
+
     public void reload(String scenarioFile) {
         try {
             List<ICarObserver> carObservers = this.scene.getCar().getCarObservers().stream().toList();
@@ -105,7 +109,4 @@ public class SimulationModel {
         }
     }
 
-    public void stop() {
-        running = false;
-    }
 }

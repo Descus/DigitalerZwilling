@@ -1,6 +1,6 @@
 package de.frauas.GUI.controllers.input;
 
-import de.frauas.GUI.controllers.AxisPanel;
+import de.frauas.GUI.controllers.TitledRoundedPanel;
 import de.frauas.GUI.controllers.observer.SimulationModel;
 import de.frauas.objects.datastructures.Vec3D;
 
@@ -8,12 +8,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class PathInfoPanel extends JPanel{
+public class PathInfoPanel extends TitledRoundedPanel {
     private final DefaultListModel<String> listModel = new DefaultListModel<>();
 
     public PathInfoPanel(SimulationModel model) {
-
-        setLayout(new BorderLayout(10,10));
+        super("Path Information", Color.BLACK);
 
         // List in center
         JList<String> infoList = new JList<>(listModel);
@@ -29,8 +28,8 @@ public class PathInfoPanel extends JPanel{
         for (int i = 0; i < points.size()-1; i++) {
             Vec3D point = points.get(i);
             Vec3D nextPoint = points.get(i+1);
-
             double distance = nextPoint.subtract(point).length();
+
             String info = String.format(
                     "Point %d (%.1f,%.1f) - Point %d (%.1f,%.1f) : %.2f mm",
                     i, point.getX(), point.getY(), i+1, nextPoint.getX(), nextPoint.getY(), distance

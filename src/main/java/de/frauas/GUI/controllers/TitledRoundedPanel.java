@@ -2,22 +2,29 @@ package de.frauas.GUI.controllers;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
+/**
+ * A customized Swing JPanel that draws rounded-border container with a title around another panel.
+ * This is useful for creating sections in a GUI with a consistent and styled appearance.
+ */
 public class TitledRoundedPanel extends JPanel {
     private String title;
     private Color borderColor;
 
-    public TitledRoundedPanel(String title, Color borderColor,JPanel panel) {
+    /**
+     * Constructs a TitledRoundedPanel with a title, border color, and inner content panel.
+     *
+     * @param title       The title text displayed at the top of the panel.
+     * @param borderColor The color used for the border and title text.
+     */
+    public TitledRoundedPanel(String title, Color borderColor) {
+        int padding = 15;
         this.title = title;
         this.borderColor = borderColor;
         setLayout(new BorderLayout());
-        this.add(panel, BorderLayout.CENTER);
-        setOpaque(false); // Make transparent to draw custom border
-
-        int padding = 15; // hoặc tùy chỉnh theo độ cong viền và title
+        setOpaque(false);
         setBorder(new EmptyBorder(30, padding, padding, padding));
     }
 
@@ -25,7 +32,7 @@ public class TitledRoundedPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        int arc = 20; // How rounded the corners are
+        int arc = 20; //radius of corner rounding
         int margin = 5;
 
         FontMetrics fm = g.getFontMetrics();
@@ -44,7 +51,7 @@ public class TitledRoundedPanel extends JPanel {
         g2.draw(new RoundRectangle2D.Double(x, y, width, height, arc, arc));
         g2.dispose();
 
-        // Draw title
+        // Draw title text on top
         drawTitle(g);
     }
 
@@ -53,10 +60,8 @@ public class TitledRoundedPanel extends JPanel {
         Font font = new Font("Monospaced", Font.BOLD, 18);
         g.setFont(font);
         g.setColor(borderColor);
-
-        int x = 15; // luôn cố định ở bên trái
-        int y = g.getFontMetrics().getAscent(); // vị trí dòng đầu tiên
-
+        int x = 15;
+        int y = g.getFontMetrics().getAscent();
         g.drawString(title, x, y);
     }
 }

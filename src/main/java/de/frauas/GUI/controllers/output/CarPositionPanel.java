@@ -1,5 +1,6 @@
 package de.frauas.GUI.controllers.output;
 
+import de.frauas.GUI.controllers.TitledRoundedPanel;
 import de.frauas.GUI.controllers.observer.SimulationModel;
 import de.frauas.objects.CarUpdateInformation;
 import de.frauas.objects.datastructures.Vec3D;
@@ -10,27 +11,36 @@ import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class CarPositionPanel extends JPanel implements ICarObserver {
-    
+/**
+ * CarPositionPanel displays real-time updates about the car's
+ * current position,status, and a timestamp.
+ * It logs this data periodically in a list.
+ */
+public class CarPositionPanel extends TitledRoundedPanel implements ICarObserver {
+
     private Timer timer;
-    public CarUpdateInformation latestInfo;
+    private CarUpdateInformation latestInfo;
+
     private final DefaultListModel<String> infoModel = new DefaultListModel<>();
     private final JList<String> infoList = new JList<>(infoModel);
     private final JTextField intervalField = new JTextField("1000", 5);
 
     public CarPositionPanel(SimulationModel simulModel) {
+        super("Time - Status - Position",Color.BLACK);
         setLayout(new BorderLayout(5, 5));
 
         // Top: update interval control
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 2));
         top.add(new JLabel("Update Interval (ms):"));
         top.add(intervalField);
+
         JButton setBtn = new JButton("Set");
         top.add(setBtn);
-        add(top, BorderLayout.NORTH);
 
+        add(top, BorderLayout.NORTH);
         add(new JScrollPane(infoList), BorderLayout.CENTER);
 
+        // Start logging timer with initial interval
         startLoggingTimer(Integer.parseInt(intervalField.getText()));
 
         // Button action to restart timer
@@ -55,6 +65,7 @@ public class CarPositionPanel extends JPanel implements ICarObserver {
         if (timer != null && timer.isRunning()) {
             timer.stop();
         }
+
         timer = new Timer(intervalMs, _ -> onSimulationUpdate());
         timer.setInitialDelay(0);
         timer.start();
@@ -63,18 +74,30 @@ public class CarPositionPanel extends JPanel implements ICarObserver {
     private void restartLoggingTimer(int intervalMs) {
         startLoggingTimer(intervalMs);
     }
-    
+
+    /**
+     * Called periodically by the timer to log the current car state.
+     * Adds a formatted entry with timestamp, status, and position.
+     */
     public void onSimulationUpdate() {
         if (latestInfo == null) return;
+
         SimpleDateFormat timeFmt = new SimpleDateFormat("hh:mm:ss:SSS");
         String timestamp = timeFmt.format(new Date());
+
         Vec3D pos = latestInfo.getPosition();
         String entry = String.format(
                 "%s - %s - (%.1f, %.1f)",
-                timestamp, latestInfo.getStatus(), pos.getX(), pos.getY()
+                timestamp,
+                latestInfo.getStatus(),
+                pos.getX(),
+                pos.getY()
+
         );
+
         infoModel.addElement(entry);
-        // Scroll to the latest entry
+
+        // Auto-scroll the list
         int last = infoModel.getSize() - 1;
         if (last >= 0) {
             infoList.ensureIndexIsVisible(last);

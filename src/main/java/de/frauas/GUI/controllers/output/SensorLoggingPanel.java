@@ -1,5 +1,6 @@
 package de.frauas.GUI.controllers.output;
 
+import de.frauas.GUI.controllers.TitledRoundedPanel;
 import de.frauas.GUI.controllers.observer.SimulationModel;
 import de.frauas.objects.CarUpdateInformation;
 import de.frauas.objects.interfaces.ICarObserver;
@@ -9,27 +10,36 @@ import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class SensorLoggingPanel extends JPanel implements ICarObserver {
+/**
+ * SensorLoggingPanel displays real-time sensor measurements from the car.
+ * It logs ultrasonic distance values from front and rear sensors,
+ * timestamped and updated at a configurable interval.
+ */
+public class SensorLoggingPanel extends TitledRoundedPanel implements ICarObserver {
     
     private Timer timer;
     private CarUpdateInformation latestInfo;
+
     private final DefaultListModel<String> infoModel = new DefaultListModel<>();
     private final JList<String> infoList = new JList<>(infoModel);
     private final JTextField intervalField = new JTextField("1000", 5);
 
     public SensorLoggingPanel(SimulationModel simulModel) {
+        super("Sensor Information",Color.BLACK);
         setLayout(new BorderLayout(5, 5));
 
         // Top: update interval control
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 2));
         top.add(new JLabel("Update Interval (ms):"));
         top.add(intervalField);
+
         JButton setBtn = new JButton("Set");
         top.add(setBtn);
-        add(top, BorderLayout.NORTH);
 
+        add(top, BorderLayout.NORTH);
         add(new JScrollPane(infoList), BorderLayout.CENTER);
 
+        // Start timer
         startLoggingTimer(Integer.parseInt(intervalField.getText()));
 
         // Button action to restart timer
@@ -47,6 +57,8 @@ public class SensorLoggingPanel extends JPanel implements ICarObserver {
                 );
             }
         });
+
+        // Register observer
         simulModel.getScene().addObserverToCar(this);
     }
 

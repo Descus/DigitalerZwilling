@@ -1,17 +1,16 @@
 package de.frauas.GUI.controllers.input;
 
+import de.frauas.GUI.controllers.TitledRoundedPanel;
 import de.frauas.GUI.controllers.observer.SimulationModel;
 import de.frauas.Settings;
 import javax.swing.*;
 import java.awt.*;
 
-public class CarInfoPanel extends JPanel{
+public class CarInfoPanel extends TitledRoundedPanel {
     private final DefaultListModel<String> listModel = new DefaultListModel<>();
 
     public CarInfoPanel(SimulationModel model) {
-        setOpaque(false);
-        setLayout(new BorderLayout(5, 5));
-
+        super("Car Information", Color.BLACK);
 
         // List in center
         JList<String> infoList = new JList<>(listModel);
