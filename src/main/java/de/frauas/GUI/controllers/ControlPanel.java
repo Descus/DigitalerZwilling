@@ -1,23 +1,34 @@
 package de.frauas.GUI.controllers;
 
 import de.frauas.GUI.controllers.observer.SimulationModel;
+import de.frauas.objects.CarUpdateInformation;
+import de.frauas.objects.interfaces.ICarObserver;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
+/**
+ * ControlPanel is a panel that contains buttons to control
+ * the simulation flow: start/reset, pause/continue, and load scenario files.
+ */
+public class ControlPanel extends TitledRoundedPanel implements ICarObserver {
 
-public class ControlPanel extends JPanel {
-
-    boolean started = false, paused = false;
+    private boolean started = false;
+    private boolean paused  = false;
     private File currentDir = new File(System.getProperty("user.home") + "/Documents/Scenarien");
+    private CarUpdateInformation latestInfo;
+
+    private final JButton startBtn = new JButton("Start");
+    private final JButton pauseBtn = new JButton("Pause");
+    private final JButton scenarioBtn = new JButton("Scenario Option(s)");
 
     public ControlPanel(SimulationModel model) {
+        super("Control Panel",Color.GREEN);
         setLayout(new FlowLayout());
 
-        JButton startBtn = new JButton("Start");
-        JButton pauseBtn = new JButton("Pause");
-        JButton scenarioBtn = new JButton("ScenarioOption");
+        //initial status of the Pause button
+        pauseBtn.setEnabled(false);
 
         // path list of our default scenarios
         // shows a pop-up menu in which you can switch the scene
@@ -25,6 +36,7 @@ public class ControlPanel extends JPanel {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setCurrentDirectory(currentDir);
             int result = fileChooser.showOpenDialog(this);
+
             if (result == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = fileChooser.getSelectedFile();
                 currentDir = selectedFile.getParentFile();
@@ -38,10 +50,9 @@ public class ControlPanel extends JPanel {
                 paused = false;
             }
         });
-        //initial status of the button
-        pauseBtn.setEnabled(false);
 
-        startBtn.addActionListener(_ -> {
+        // Start-Reset logic
+        startBtn.addActionListener(e -> {
             if (!started) {
                 model.start();
                 startBtn.setText("Reset");
@@ -55,8 +66,10 @@ public class ControlPanel extends JPanel {
             }
 
         });
-        pauseBtn.addActionListener(_ -> {
-            if (!paused) {
+
+        // Pause-Continue logic
+        pauseBtn.addActionListener(e -> {
+            if (!paused ) {
                 model.pause();
                 pauseBtn.setText("Continue");
                 paused = true;
@@ -66,8 +79,19 @@ public class ControlPanel extends JPanel {
                 paused = false;
             }
         });
+
+        // Add buttons to the panel
         add(startBtn);
         add(pauseBtn);
         add(scenarioBtn);
+        model.getScene().addObserverToCar(this);
+    }
+
+
+    @Override
+    public void onCarUpdate(CarUpdateInformation info) {
+        if ("FINISHED".equals(String.valueOf(info.getStatus()))) {
+            pauseBtn.setEnabled(false);
+        }
     }
 }
