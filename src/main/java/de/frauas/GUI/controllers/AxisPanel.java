@@ -1,7 +1,7 @@
 package de.frauas.GUI.controllers;
 
 import de.frauas.GUI.controllers.observer.SimulationModel;
-import de.frauas.GUI.controllers.observer.SimulationObserver;
+import de.frauas.GUI.controllers.observer.ISimulationObserver;
 import de.frauas.Settings;
 import de.frauas.objects.datastructures.Vec3D;
 import java.awt.*;
@@ -14,7 +14,7 @@ import java.awt.*;
  * This panel extends TitledRoundedPanel and implements SimulationObserver
  * to enable real-time updates.
  */
-public class AxisPanel extends TitledRoundedPanel implements SimulationObserver {
+public class AxisPanel extends TitledRoundedPanel implements ISimulationObserver {
     private final SimulationModel model;
 
     /**

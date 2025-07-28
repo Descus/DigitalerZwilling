@@ -1,5 +1,5 @@
 package de.frauas.GUI.controllers.observer;
 
-public interface SimulationObserver {
+public interface ISimulationObserver {
     void onSimulationUpdate();
 }

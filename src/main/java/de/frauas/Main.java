@@ -2,7 +2,6 @@ package de.frauas;
 
 import de.frauas.GUI.controllers.AxisPanel;
 import de.frauas.GUI.controllers.ControlPanel;
-import de.frauas.GUI.controllers.TitledRoundedPanel;
 import de.frauas.GUI.controllers.InputPanel;
 import de.frauas.GUI.controllers.observer.SimulationModel;
 import de.frauas.GUI.controllers.OutputPanel;
@@ -48,12 +47,11 @@ public class Main {
         // West Area
         frame.add(infoIn,BorderLayout.WEST);
 
-        //Soutg Area
+        //South Area
         frame.add(infoOut,BorderLayout.SOUTH);
 
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        // axisPanel.startCar(); the "Start" button will handle that now.
     }
 }

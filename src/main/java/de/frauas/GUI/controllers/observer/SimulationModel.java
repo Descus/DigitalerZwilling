@@ -18,7 +18,7 @@ public class SimulationModel {
     @Setter @Getter
     private Scene scene;
 
-    private final List<SimulationObserver> observers = new ArrayList<>();
+    private final List<ISimulationObserver> observers = new ArrayList<>();
     private boolean running = false;
     private long lastTime = System.currentTimeMillis();
     private double delta;
@@ -37,7 +37,7 @@ public class SimulationModel {
         timer.start();
     }
 
-    public void addObserver(SimulationObserver observer) {
+    public void addObserver(ISimulationObserver observer) {
         observers.add(observer);
 
         // new observer for the new car (doesnt work?)
@@ -46,7 +46,7 @@ public class SimulationModel {
         }
     }
 
-    public void removeObserver(SimulationObserver observer) {
+    public void removeObserver(ISimulationObserver observer) {
         // Observer beim aktuellen car deabonnieren
         if (this.scene != null && observer instanceof ICarObserver) {
             this.scene.removeObserverFromCar((ICarObserver) observer);
@@ -55,7 +55,7 @@ public class SimulationModel {
     }
 
     private void notifyObservers() {
-        for (SimulationObserver o : observers) {
+        for (ISimulationObserver o : observers) {
             o.onSimulationUpdate();
         }
     }
