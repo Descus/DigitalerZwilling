@@ -20,10 +20,11 @@ public class SensorLoggingPanel extends TitledRoundedPanel implements ICarObserv
     
     private Timer timer;
     private CarUpdateInformation latestInfo;
+    private int intervalTime = 1000;
 
     private final DefaultListModel<String> infoModel = new DefaultListModel<>();
     private final JList<String> infoList = new JList<>(infoModel);
-    private final JTextField intervalField = new JTextField("1000", 5);
+    private final JTextField intervalField = new JTextField(String.valueOf(intervalTime), 5);
 
     public SensorLoggingPanel(SimulationModel simulModel) {
         super("Sensor Information",Color.BLACK);
@@ -47,8 +48,12 @@ public class SensorLoggingPanel extends TitledRoundedPanel implements ICarObserv
         setBtn.addActionListener(_ -> {
             try {
                 int ms = Integer.parseInt(intervalField.getText());
-                if (ms <= 0) throw new NumberFormatException();
-                restartLoggingTimer(ms);
+                if (ms <= 0) {
+                    intervalField.setText(String.valueOf(intervalTime));
+                    throw new NumberFormatException();
+                }
+                intervalTime = ms;
+                restartLoggingTimer(intervalTime);
             } catch (NumberFormatException ex) {
                 NotificationHelper.showError("Please enter a positive integer for the interval.");
             }
