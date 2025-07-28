@@ -1,5 +1,6 @@
 package de.frauas.GUI.controllers.output;
 
+import de.frauas.GUI.controllers.NotificationHelper;
 import de.frauas.GUI.controllers.TitledRoundedPanel;
 import de.frauas.GUI.controllers.observer.SimulationModel;
 import de.frauas.objects.CarUpdateInformation;
@@ -50,12 +51,7 @@ public class CarPositionPanel extends TitledRoundedPanel implements ICarObserver
                 if (ms <= 0) throw new NumberFormatException();
                 restartLoggingTimer(ms);
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Please enter a positive integer for the interval.",
-                        "Invalid Interval",
-                        JOptionPane.ERROR_MESSAGE
-                );
+                NotificationHelper.showError("Please enter a positive integer for the interval.");
             }
         });
         simulModel.getScene().addObserverToCar(this);
