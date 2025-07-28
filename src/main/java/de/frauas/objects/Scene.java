@@ -1,5 +1,6 @@
 package de.frauas.objects;
 
+import de.frauas.GUI.controllers.NotificationHelper;
 import de.frauas.IDrawable;
 import de.frauas.Settings;
 import de.frauas.objects.car.Car;
@@ -21,34 +22,46 @@ import java.util.List;
 @Setter
 public class Scene extends Transformable implements ISdf, IDrawable {
     
-    private final Trace trace;
+    private Trace trace = null;
     private final List<Obstacle> obstacles = new ArrayList<>();
-    private final Car car;
-    private final Vec3D startPosition;
-    private final double startHeading;
+    private Car car = null;
+    private Vec3D startPosition = null;
+    private double startHeading = 0;
 
     private final double[][] bakedSdFields = new double[(int) Settings.SCENE.CANVAS.getX()][(int) Settings.SCENE.CANVAS.getY()];
     private boolean isBaked = false;
 
 
     public Scene(Scenario scenario) {
+        if (scenario.getStartPosition() == null || scenario.getTrace() == null) {
+            if (scenario.getStartPosition() == null) {
+                NotificationHelper.showError("Scenario start position could not be parsed");
+            } else if (scenario.getTrace() == null) {
+                NotificationHelper.showError("Trace could not be parsed");
+            }
+            System.exit(0);
+        }
+        if (scenario.getObjects() == null) {
+            if(!NotificationHelper.showWarning("There is no Object in the file. Do you want to continue?")){
+                System.exit(0);
+            }
+        } else {
+            scenario.getObjects().forEach(object -> obstacles.add(new Obstacle(
+                    this,
+                    object.getXStart(),
+                    object.getYStart(),
+                    object.getXEnd(),
+                    object.getYEnd(),
+                    object.getHeight())));
+        }
+
         StartPosition startPosition = scenario.getStartPosition();
         trace = new ShiftedCatmullTrace(this);
         trace.addPoint(new Vec3D(startPosition.getX(), startPosition.getY(), 1));
         scenario.getTrace().forEach(point -> trace.addPoint(new Vec3D(point.getX(), point.getY(), 1)));
-        
-        scenario.getObjects().forEach(object -> obstacles.add(new Obstacle(
-                this,
-                object.getXStart(),
-                object.getYStart(),
-                object.getXEnd(),
-                object.getYEnd(),
-                object.getHeight())));
-
         this.startPosition = new Vec3D(startPosition.getX(), startPosition.getY(), 1);
         this.startHeading = 360 - startPosition.getHeading();
         car = new Car(this, this.startPosition, this.startHeading);
-
         bakeSdf();
     }
 
