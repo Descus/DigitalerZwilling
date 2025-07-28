@@ -58,11 +58,14 @@ public class ControlPanel extends TitledRoundedPanel implements ICarObserver {
                 startBtn.setText("Reset");
                 pauseBtn.setEnabled(true);
                 started = true;
+                paused = false;
             } else {
                 model.reset();
                 startBtn.setText("Start");
+                pauseBtn.setText("Pause");
                 pauseBtn.setEnabled(false);
                 started = false;
+                paused = false;
             }
 
         });
