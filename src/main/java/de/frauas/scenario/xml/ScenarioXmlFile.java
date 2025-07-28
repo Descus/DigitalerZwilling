@@ -1,25 +1,22 @@
 package de.frauas.scenario.xml;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import de.frauas.GUI.controllers.NotificationHelper;
 import de.frauas.Settings;
 import de.frauas.scenario.dto.Scenario;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-
-
 public class ScenarioXmlFile {
     private final String filePath;
-
     private ScenarioXmlFile(String filePath){
         this.filePath = filePath;
     }
 
-
-    
     public static ScenarioXmlFile fromPath(String filePath) throws IllegalArgumentException{
         if(filePath == null || filePath.isEmpty()){
+            NotificationHelper.showError("File path must not be null or empty");
             throw new IllegalArgumentException("File path must not be null or empty");
         }
         return new ScenarioXmlFile(filePath);
@@ -28,6 +25,7 @@ public class ScenarioXmlFile {
     public static ScenarioXmlFile fromExample(){
         URL resource = ScenarioXmlFile.class.getClassLoader().getResource(Settings.SCENE.DEFAULT_SCENARIO_FILE);
         if (resource == null) {
+            NotificationHelper.showError("File not found!");
             throw new IllegalArgumentException("File not found!");
         }
         return fromPath(resource.getFile());
