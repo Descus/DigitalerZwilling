@@ -9,6 +9,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
+/**
+ * Done by Ultrasonic Team
+ *
+ * The SensorLogger class implements a logging system for ultrasonic sensor measurements of a vehicle.
+ *
+ * Sensor values are written to a CSV file every time the car is updated.
+ */
+
 public class SensorLogger implements ICarObserver {
 
     private BufferedWriter writer;
@@ -17,9 +25,18 @@ public class SensorLogger implements ICarObserver {
     public SensorLogger() {
         reset();
     }
-    
+
+    /**
+     *Done by Ultrasonic Team
+     *
+     * Creates a new log file with the current timestamp.
+     *
+     * If a writer is already open, it will be closed first.
+     * The new file includes a header line describing the columns.
+     */
+
     public void reset(){
-        
+
         File file = new File(filename + LocalDateTime.now().toString().replace(":", "_") + ".csv");
         try {
             if (writer != null) {
@@ -37,6 +54,19 @@ public class SensorLogger implements ICarObserver {
             e.printStackTrace();
         }
     }
+    /**
+     * Done by Ultrasonic Team
+     *
+     * Logs a single measurement entry to the CSV file.
+     *
+     * @param timestamp The timestamp of the measurement
+     * @param fl        Distance from the front left sensor
+     * @param fm        Distance from the front middle sensor
+     * @param fr        Distance from the front right sensor
+     * @param rl        Distance from the rear left sensor
+     * @param rm        Distance from the rear middle sensor
+     * @param rr        Distance from the rear right sensor
+     */
 
     public void logMeasurement(int timestamp, int fl, int fm, int fr, int rl, int rm, int rr) {
         try {
@@ -47,6 +77,16 @@ public class SensorLogger implements ICarObserver {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Done by Ultrasonic Team
+     *
+     * This method is called whenever the car updates its state.
+     *
+     * Extracts the sensor values from the CarUpdateInformation object and logs them.
+     *
+     * @param info Object containing the latest timestamp and ultrasonic measurements
+     */
 
     @Override
     public void onCarUpdate(CarUpdateInformation info) {
