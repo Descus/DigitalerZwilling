@@ -28,7 +28,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Getter
 public class Car extends Transformable implements IDrawable {
-
+    // sets the angles at which the Ultrasonic Sensors are mounted on the vehicle (part of the Ultrasonic Team)
     public static final int SPEED_OF_SOUND = 34;
     public static final int SENSOR_ANGLE_FR = 20;
     public static final int SENSOR_ANGLE_FL = 25;
@@ -36,11 +36,14 @@ public class Car extends Transformable implements IDrawable {
     
     private static final Random random = new Random();
 
+    // Initialises Lists for the USSensors, IRSensors and CarObservers part of US and IR Teams
     private final List<IUltrasonicSensor> ultraSonicSensors = new ArrayList<>();
     private final List<IInfraredSensor> infraredSensors = new ArrayList<>();
     private final ConcurrentLinkedQueue<ICarObserver> carObservers = new ConcurrentLinkedQueue<>();
 
+    // initialises List for the US Measurements part of USTeam
     private final ConcurrentLinkedQueue<Integer> measurements = new ConcurrentLinkedQueue<>(Arrays.asList(0, 0, 0, 0, 0, 0));
+    // initialises List for the IR Measurements part of IRTeam
     private final ConcurrentLinkedQueue<Boolean> infraredStatus = new ConcurrentLinkedQueue<>(Arrays.asList(false, false, false));
 
     private final SensorLogger sensorLogger;
@@ -62,6 +65,7 @@ public class Car extends Transformable implements IDrawable {
         carObservers.add(sensorLogger);
         notifyObservers();
 
+        //Adds all the UltrasonicSensors for the car with degree and position offset from the center of the car part of the Ultrasonic Team
         ultraSonicSensors.add(new UltrasonicSensor(this, "FL", new Vec3D(-45, 110, 0), SENSOR_ANGLE_FL, parent));
         ultraSonicSensors.add(new UltrasonicSensor(this, "FC", new Vec3D(0, 117.5, 0), 0, parent));
         ultraSonicSensors.add(new UltrasonicSensor(this, "FR", new Vec3D(45, 110, 0), -SENSOR_ANGLE_FR, parent));
@@ -73,6 +77,7 @@ public class Car extends Transformable implements IDrawable {
         infraredSensors.add(new InfraredSensor(this, new Vec3D(0, 90, 0)));
         infraredSensors.add(new InfraredSensor(this, new Vec3D(-10, 90, 0)));
 
+        //starts the update Thread for the UltrasonicSensors part of the Ultrasonic Team
         new Thread(this::ultrasonicUpdate).start();
 
         new Thread(this::infraredUpdate).start();
@@ -221,25 +226,30 @@ public class Car extends Transformable implements IDrawable {
             }
         }
     }
-
+    // class to update the Ultrasonic Sensors part of the Ultrasonic Team
     private void ultrasonicUpdate() {
         while (true) {
             try {
+                // two integer Lists for the Front and Back Sensor Measurements
                 List<Integer> measurementsFront = new ArrayList<>();
                 List<Integer> measurementsBack = new ArrayList<>();
+                //iteration for the TimeStep after each passthrough off all Sensors
                 int lastTimeStep = iterateUSTimestamp();
 
+                // Measures the distance to the closest Obstacle in mm for the front 3 Sensors and saves it to the list in cm
                 for (int i = 0; i < ultraSonicSensors.size() / 2; i++) {
                     int distance = (ultraSonicSensors.get(i).distanceToClosestObstacle() / 10);
                     measurementsFront.add(distance);
+                    //since the calculations are faster than the real life sound waves, the thread is paused for 1/6 of the last added time to the TimeStep
                     Thread.sleep(lastTimeStep / 6);
                 }
 
+                //checks if an Obstacle is detected too close and if so, stops the car
                 for (Integer distance : measurementsFront) {
                     if (distance < 3)
                         finish();
                 }
-
+                // Same as with the front Sensors but for the back Sensors
                 for (int i = ultraSonicSensors.size() / 2; i < ultraSonicSensors.size(); i++) {
                     int distance = (ultraSonicSensors.get(i).distanceToClosestObstacle() / 10);
                     measurementsBack.add(distance);
@@ -251,14 +261,15 @@ public class Car extends Transformable implements IDrawable {
                     if (distance < 3)
                         finish();
                 }
-
+                // adds all the measurements into one list for the Observer Pattern
                 measurements.clear();
                 measurements.addAll(measurementsFront);
                 measurements.addAll(measurementsBack);
 
-                
+                //adds the time off one run through all Sensors to the Timestamp
                 currentTimeMillis += lastTimeStep;
                 if (resetting) return;
+                //notifys the Observer off changes to the measurements
                 notifyObservers();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -292,7 +303,7 @@ public class Car extends Transformable implements IDrawable {
             throw new RuntimeException(e);
         }
     }
-
+    //part of the Ultrasonic Team creates a semi random new Time to be added onto the Timestamp later
     public static int iterateUSTimestamp() {
         return (int)(random.nextGaussian(250, 50)); // 200 - 300
     }
