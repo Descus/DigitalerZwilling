@@ -7,6 +7,9 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 import java.util.List;
 
+//Contains all Information from the different car parts
+// measurements and usTimestamp are part of the Ultrasonic Team
+
 @Getter
 public class CarUpdateInformation {
     CarStatus status;
