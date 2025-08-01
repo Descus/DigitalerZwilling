@@ -66,7 +66,14 @@ public class ShiftedTrace extends Trace {
             lowerLine.add(new Line3D(this, shiftedPointsDown.get(i), shiftedPointsDown.get(i + 1)));
         }
     }
-    
+
+    /**
+     * Checks if the given point lies between the upper, lower and left, right lines
+     * of any segment in the trace.
+     *
+     * @param globalSpacePoint the point to check
+     * @return true if the point is within the trace bounds, false otherwise
+     */
     public boolean isPointBetweenLines(Vec3D globalSpacePoint){
         if (points.size() < 2) return false;
 

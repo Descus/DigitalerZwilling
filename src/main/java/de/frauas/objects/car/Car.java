@@ -192,6 +192,12 @@ public class Car extends Transformable implements IDrawable {
         carObservers.remove(observer);
     }
 
+    /**
+     * Determines the car's movement based on the infrared sensor input.
+     * Left, right, forward, or finishes depending on sensor values.
+     *
+     * @param sensorStatus boolean array representing sensor hits (L, M, R)
+     */
     private void getMovementInstructionFromSensors(boolean[] sensorStatus) {
         boolean L = sensorStatus[2];
         boolean M = sensorStatus[1];
@@ -260,6 +266,11 @@ public class Car extends Transformable implements IDrawable {
         }
     }
 
+    /**
+     * Reads infrared sensors and updates movement instructions
+     * based on whether the car is on track.
+     *
+     */
     private void infraredUpdate() {
         try {
             if (trace.getType() == TraceType.DEBUG) return;

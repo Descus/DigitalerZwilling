@@ -8,7 +8,10 @@ import de.frauas.objects.trace.ShiftedTrace;
 
 import java.awt.*;
 
-
+/**
+ * Represents an infrared sensor attached to a car.
+ * Checks if it's on the track.
+ */
 public class InfraredSensor extends Transformable implements IInfraredSensor, IDrawable {
 
     public InfraredSensor(Transformable parent, Vec3D positionOffset) {
