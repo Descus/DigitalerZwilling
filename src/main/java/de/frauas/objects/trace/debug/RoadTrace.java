@@ -14,6 +14,8 @@ import java.util.List;
 /**
  * Represents a simple trace made of straight line segments connecting a series of points.
  * This class is intended for debugging purposes, providing a visual representation of a path.
+ * <p>
+ * @author Scenario
  */
 @Getter
 public class RoadTrace extends Trace {
@@ -26,7 +28,7 @@ public class RoadTrace extends Trace {
     /**
      * Constructs a RoadTrace with a parent scene and an initial list of points.
      * The lines are created immediately upon construction.
-     *
+     * <p>
      * @param parent The scene this trace belongs to.
      * @param points The initial list of points defining the trace.
      */
@@ -37,7 +39,7 @@ public class RoadTrace extends Trace {
 
     /**
      * Constructs an empty RoadTrace with a parent scene.
-     *
+     * <p>
      * @param parent The scene this trace belongs to.
      */
     public RoadTrace(Scene parent) {
@@ -47,7 +49,7 @@ public class RoadTrace extends Trace {
 
     /**
      * Returns the type of this trace, which is always {@link TraceType#DEBUG}.
-     *
+     * <p>
      * @return The debug trace type.
      */
     @Override
@@ -57,7 +59,7 @@ public class RoadTrace extends Trace {
 
     /**
      * Draws all the line segments of the trace on the given Graphics context.
-     *
+     * <p>
      * @param g The Graphics context on which to draw the lines.
      */
     @Override

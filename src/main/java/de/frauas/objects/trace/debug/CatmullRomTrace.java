@@ -11,13 +11,15 @@ import java.util.ArrayList;
  * Represents a debug trace created using Catmull-Rom spline interpolation.
  * This class generates a smooth curve that passes through a given set of control points,
  * making it useful for visualizing complex paths for debugging purposes.
+ * <p>
+ * @author Scenario
  */
 public class CatmullRomTrace extends RoadTrace {
 
     /**
      * Constructs a CatmullRomTrace with a parent scene and an initial list of control points.
      * The spline curve is generated immediately upon construction.
-     *
+     * <p>
      * @param parent The scene this trace belongs to.
      * @param points The list of control points used to generate the spline.
      */
@@ -29,7 +31,7 @@ public class CatmullRomTrace extends RoadTrace {
     /**
      * Constructs an empty CatmullRomTrace with a parent scene.
      * Points can be added later, and {@link #createLines()} must be called to generate the trace.
-     *
+     * <p>
      * @param parent The scene this trace belongs to.
      */
     public CatmullRomTrace(Scene parent) {

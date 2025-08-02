@@ -14,7 +14,7 @@ public class NotificationHelper {
 
     /**
      * Displays a warning dialog with Yes/No options.
-     *
+     * <p>
      * @param message the warning message to be shown
      * @return true if the user clicks "Yes", false otherwise
      */

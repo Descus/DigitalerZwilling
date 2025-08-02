@@ -12,13 +12,14 @@ import java.util.List;
 
 
 /**
- * @author Scenario-Group
  * Represents a trace defined by two parallel lines (upper and lower) shifted
  * from a central path of points. This class is used to create road-like
  * structures with a specific width. It calculates the geometry of these parallel
  * lines based on tangents and normals at each point of the central path.
  * It also provides methods for drawing the trace and checking if a point
  * lies within its boundaries.
+ * <p>
+ * @author Scenario
  */
 
 @Getter
@@ -107,7 +108,7 @@ public class ShiftedTrace extends Trace {
      * These checks are performed using the method rightOfLine(), which evaluates
      * whether a point lies to the right of a directed line segment. If all conditions are met
      * for any segment, the point is considered to be within the trace bounds
-     *
+     * <p>
      * @param globalSpacePoint the point to check
      * @return true if the point is within the trace bounds, false otherwise
      */
@@ -135,7 +136,7 @@ public class ShiftedTrace extends Trace {
 
     /**
      * Draws the upper and lower lines of the trace on the given Graphics context.
-     *
+     * <p>
      * @param g The Graphics context on which to draw the lines.
      */
 
@@ -147,7 +148,7 @@ public class ShiftedTrace extends Trace {
 
     /**
     * Returns the type of this trace.
-    *
+    * <p>
     */
     @Override
         public TraceType getType() {

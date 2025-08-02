@@ -44,14 +44,14 @@ class Vec3DTest {
 
     @Test
     void lengthSq() {
-        Vec3D vec1 = new Vec3D(1, 1,0);
+        Vec3D vec1 = new Vec3D(1, 1, 0);
         double result = vec1.lengthSq();
         assertEquals(2, result);
     }
 
     @Test
     void rotate() {
-        Vec3D vec1 = new Vec3D(1, 1,0);
+        Vec3D vec1 = new Vec3D(1, 1, 0);
         Vec3D result = vec1.rotate(-90);
         assertEquals(1, result.getX());
         assertEquals(-1, result.getY(), 0.001);
@@ -59,7 +59,7 @@ class Vec3DTest {
 
     @Test
     void normalize() {
-        Vec3D vec1 = new Vec3D(0, 4,0);
+        Vec3D vec1 = new Vec3D(0, 4, 0);
         Vec3D result = vec1.normalize();
         assertEquals(0, result.getX());
         assertEquals(1, result.getY());

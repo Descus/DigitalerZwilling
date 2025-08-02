@@ -10,10 +10,11 @@ import java.net.URL;
 
 
 /**
- * @author Scenario-Group
+
  * A utility class for handling scenario definition files in XML format.
  * It provides methods to create an object representation from a file path
  * and to load and parse the XML file into a {@link Scenario} data transfer object (DTO).
+ * @author Scenario
  */
 public class ScenarioXmlFile {
     private final String filePath;
@@ -21,7 +22,7 @@ public class ScenarioXmlFile {
     /**
      * Private constructor to initialize with a file path.
      * Use the static factory methods {@code fromPath} or {@code fromExample} to create instances.
-     *
+     * <p>
      * @param filePath The path to the scenario XML file.
      */
     private ScenarioXmlFile(String filePath){
@@ -31,7 +32,7 @@ public class ScenarioXmlFile {
     /**
      * Creates a {ScenarioXmlFile} instance from a given file path string.
      * It validates that the path is not null or empty.
-     *
+     * <p>
      * @param filePath The path to the XML file.
      */
     public static ScenarioXmlFile fromPath(String filePath) throws IllegalArgumentException{
@@ -45,7 +46,7 @@ public class ScenarioXmlFile {
 
     /**
      * Creates a {ScenarioXmlFile} instance from a default example scenario file defined in the settings.
-     *
+     * <p>
      * @return A new instance of {@link ScenarioXmlFile} pointing to the example file.
      * @throws IllegalArgumentException if the default scenario file cannot be found in the resources.
      */

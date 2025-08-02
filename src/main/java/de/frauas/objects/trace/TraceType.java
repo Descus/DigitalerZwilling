@@ -1,11 +1,11 @@
 package de.frauas.objects.trace;
 
 /**
- * @Author Scenario-Group
- * Specifies the type of a trace, which can be used to differentiate
- * between traces for debugging purposes and those used in the main application.
+ * The TraceType enumeration defines the types of traces that can be used within the application.
+ * These trace types are utilized to specify the purpose or context of certain trace objects.
+ *
+ * @author Scenario
  */
-
 public enum TraceType {
     /**
      * A trace used for debugging visualizations.

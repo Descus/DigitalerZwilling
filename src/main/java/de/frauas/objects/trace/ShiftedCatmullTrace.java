@@ -9,36 +9,38 @@ import java.util.ArrayList;
 
 /**
  * Author: Scenario-Group
- *
+ * <p>
  * Generates the upper and lower lines based on Catmull-Rom spline interpolation
  * and offsets from the interpolated path. This method performs several steps:
  * clearing existing data (line), computing interpolated points using Catmull-Rom splines,
  * calculating displaced points for upper and lower traces, and creating line segments
  * for the traces.
- *
+ * <p>
  * The method first interpolates a smooth path based on the given control points
  * using Catmull-Rom splines. To do so, it considers the start and end tangents
  * by reflecting the second and second-to-last points around the first and last
  * control points respectively. It then interpolates intermediate points based
  * on predefined resolution defined by SPLINE_INTERPOLATION_SIZE.
- *
+ * <p>
  * Afterwards, for each interpolated point, the method computes normal vectors
  * and offsets (about 15 cm for each trace) them to generate the shifted points for the upper and lower traces.
  * These shifted points are displaced in perpendicular directions by an amount
  * determined by OFFSET, forming parallel paths.
- *
+ * <p>
  * Finally, the method connects consecutive shifted points to create line segments
  * for both the upper and lower traces, storing the results in the upperLine and
  * lowerLine collections.
- *
+ * <p>
  * If there are fewer than two initial points, this method will return immediately
  * without generating any lines.
+ *
+ * @author Scenario
  */
 public class ShiftedCatmullTrace extends ShiftedTrace {
 
     /**
      * Constructs a ShiftedCatmullTrace with the given scene and control points, and immediately generates the trace lines.
-     *
+     * <p>
      * @param scene  The scene in which the trace will be rendered.
      * @param points The initial list of control points to define the path.
      */
@@ -50,7 +52,7 @@ public class ShiftedCatmullTrace extends ShiftedTrace {
     /**
      * Constructs an empty ShiftedCatmullTrace associated with a scene.
      * Points can be added later, and createLines() must be called to generate the trace.
-     *
+     * <p>
      * @param scene The scene in which the trace will be rendered.
      */
     public ShiftedCatmullTrace(Scene scene) {

@@ -13,30 +13,76 @@ import java.awt.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * Part of Ultrasonic Team
- *
  * Represents an ultrasonic sensor used to detect obstacles within a scene
  * using ray marching and Signed Distance Fields (SDFs).
- *
  * The sensor casts rays in a configurable angle and distance range to detect
  * the nearest obstacle in front of it.
+ * @author Ultrasonic
  */
 public class UltrasonicSensor extends Transformable implements IUltrasonicSensor, IDrawable {
 
+    /**
+     * Represents the name of the ultrasonic sensor.
+     * <p>
+     * This variable is used to identify the sensor, which can be useful
+     * for distinguishing between multiple sensors attached to the same parent
+     * or within a system. The name is assigned during the construction of the
+     * UltrasonicSensor instance.
+     */
     public String name;
     
+    /**
+     * Represents the Signed Distance Field (SDF) used by the ultrasonic sensor for
+     * detecting obstacles and surfaces within a 3D space. The SDF is a mathematical
+     * representation that provides the shortest distance from a given point to the
+     * nearest surface or boundary in the scene. Negative values indicate positions
+     * inside the boundary, while positive values indicate positions outside.
+     * <p>
+     * This field is a critical component for ray marching and collision detection,
+     * enabling the sensor to calculate object proximity and geometry interactions.
+     * It is provided during the sensor's initialization.
+     */
     private final ISdf sceneDistanceField;
 
+
+    /**
+     * A thread-safe queue storing the results of intersection points (hits)
+     * detected by ray casting in a Signed Distance Field (SDF) during ultrasonic sensor operations.
+     * Each element in the queue represents a 3D positional vector (Vec3D) where a
+     * ray has intersected with an obstacle or surface.
+     * The `hits` queue is utilized primarily for visualization purposes and debugging,
+     * enabling the rendering of intersected points in the scene during ray marching
+     * calculations.
+     */
     ConcurrentLinkedQueue<Vec3D> hits = new ConcurrentLinkedQueue<>();
+
+    /**
+     * A thread-safe, non-blocking queue that holds step points calculated during
+     * ray marching operations performed by the sensor. Each step represents an
+     * intermediate position in the path of a ray as it interacts with the Signed Distance Field (SDF).
+     * These steps are visualized when debug mode is enabled to aid in understanding the
+     * sensor's operation and ray marching process.
+     * Each element in the queue is a Vec3D object representing a 3D point.
+     */
     ConcurrentLinkedQueue<Vec3D> steps = new ConcurrentLinkedQueue<>();
+    /**
+     * Represents a thread-safe, concurrent collection of 3D lines used in ray tracing
+     * or visualization tasks. Each line in the collection is defined as a directed
+     * segment in 3D space, represented by instances of the `Line3D` class.
+     * This queue supports operations that facilitate safe manipulation of its elements
+     * across multiple threads without external synchronization.
+     * <p>
+     * The `lines` collection is primarily used in the context of the `UltrasonicSensor`
+     * class to store and manage the 3D lines generated during ray-marching operations.
+     * These lines may represent visualized rays, detected collision paths, or other
+     * sensor outputs and are processed asynchronously to improve performance.
+     */
     ConcurrentLinkedQueue<Line3D> lines = new ConcurrentLinkedQueue<>();
 
     /**
-     * Part of Ultrasonic Team
-     *
      * Constructs a new UltrasonicSensor attached to a parent transform,
      * placed with a given offset and rotation, and interacting with a provided SDF scene.
-     *
+     * <p>
      * @param parent            The parent object to which this sensor is attached.
      * @param name              The name of the sensor.
      * @param positionOffset    The position offset relative to the parent.
@@ -52,21 +98,19 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
     }
 
     /**
-     * Part of Ultrasonic Team
-     *
      * Detects the closest obstacle within the sensor's defined range and angle by casting rays
      * in different directions and evaluating their intersection with a Signed Distance Field (SDF).
      * Returns the position of the closest obstacle detected.
-     *
      * @return a Vec3D representing the position of the closest obstacle detected based on SDF values.
-     *         If no obstacles are detected, returns a vector of length ~800.
+     * <p>
+     * If no obstacles are detected, returns a vector of length ~800.
      */
     public Vec3D getClosestPoint(){
         lines.clear();
         hits.clear();
         steps.clear();
         Vec3D closestPoint = Vec3D.right.scale(1000);
-        // iterates through the angles accoring to the step size
+        // iterates through the angles according to the step size
         for (double angle = -Settings.CAR.ULTRASONIC.MAX_ANGLE; angle < Settings.CAR.ULTRASONIC.MAX_ANGLE; angle += Settings.CAR.ULTRASONIC.STEP_SIZE) {
             // casts a ray to get the position off where it hits an object at the current angle
             Vec3D currentPoint = castRay(forwardVector().rotate(angle));
@@ -79,14 +123,12 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
     }
 
     /**
-     * part of Ultrasonic Team
-     *
      * Casts a ray in a specified direction while interacting with a Signed Distance Field (SDF)
      * until an intersection is detected or the maximum travel distance is exceeded.
      * The method iteratively increments the ray's position based on the SDF value at the current position.
      * If an intersection with the surface is detected (SDF value <= 0), the method returns the intersected position.
      * If no intersection occurs within the maximum permitted distance, a fallback random scaled vector is returned.
-     *
+     * <p>
      * @param direction the direction vector in which the ray is to be cast.
      * @return the position of the intersection with the surface based on the SDF, or a fallback position if no intersection occurs.
      */
@@ -112,11 +154,8 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
     }
 
     /**
-     * Part of XML Team
-     *
      * Renders the sensor's body on the car (top-down view).
      * Used for visualizing the sensor itself.
-     *
      * @param g The graphics context.
      */
 
@@ -132,12 +171,10 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
     }
 
     /**
-     * Part of XML Team
-     *
      * Renders the ray marching visualization in the scene.
      * Includes ray paths (blue), step points (green), and hits (red),
      * if debug mode is enabled.
-     *
+     * <p>
      * @param g The graphics context.
      */
 
@@ -168,10 +205,7 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
     }
 
     /**
-     * Part of Ultrasonic Team
-     *
      * Calculates the Euclidean distance between two 3D points.
-     *
      * @param pos1 First position.
      * @param pos2 Second position.
      * @return Distance between the two positions.
@@ -181,10 +215,7 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
     }
 
     /**
-     * Part of Ultrasonic Team
-     *
      * Calculates the distance from the sensor to the nearest detected obstacle.
-     *
      * @return Distance in integer form (rounded down).
      */
 

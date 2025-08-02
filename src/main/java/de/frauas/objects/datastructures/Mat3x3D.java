@@ -3,30 +3,30 @@ package de.frauas.objects.datastructures;
 import lombok.Getter;
 
 /**
- * @author Scenario-Group
- * Represents an immutable 3x3 matrix, primarily used for 2D affine transformations
- * using homogeneous coordinates. This class provides functionalities for basic matrix
- * operations and the creation of transformation matrices (rotation, scaling, translation).
+ * A class representing a 3x3 matrix of doubles, primarily designed for
+ * mathematical operations involving linear transformations in 2D or 3D space.
+ * This class provides utility methods for common matrix operations such as
+ * addition, subtraction, multiplication with vectors, and generating specific
+ * transformation matrices like rotation, scaling, and translation matrices.
+ *
+ * @author Scenario
  */
 @Getter
 public class Mat3x3D {
-    /**
-     * The elements of the matrix, stored in row-major order.
-     */
     private final double m00, m01, m02, m10, m11, m12, m20, m21, m22;
 
     /**
-     * Constructs a new 3x3 matrix with the specified elements.
-     *
-     * @param m00 Element at row 0, column 0.
-     * @param m01 Element at row 0, column 1.
-     * @param m02 Element at row 0, column 2.
-     * @param m10 Element at row 1, column 0.
-     * @param m11 Element at row 1, column 1.
-     * @param m12 Element at row 1, column 2.
-     * @param m20 Element at row 2, column 0.
-     * @param m21 Element at row 2, column 1.
-     * @param m22 Element at row 2, column 2.
+     * Constructs a 3x3 matrix with the specified elements.
+     * <p>
+     * @param m00 the element at the first row and first column of the matrix
+     * @param m01 the element at the first row and second column of the matrix
+     * @param m02 the element at the first row and third column of the matrix
+     * @param m10 the element at the second row and first column of the matrix
+     * @param m11 the element at the second row and second column of the matrix
+     * @param m12 the element at the second row and third column of the matrix
+     * @param m20 the element at the third row and first column of the matrix
+     * @param m21 the element at the third row and second column of the matrix
+     * @param m22 the element at the third row and third column of the matrix
      */
     public Mat3x3D(double m00, double m01, double m02, double m10, double m11, double m12, double m20, double m21, double m22) {
         this.m00 = m00;
@@ -41,7 +41,9 @@ public class Mat3x3D {
     }
 
     /**
-     * A constant for the 3x3 identity matrix.
+     * A constant representing the 3x3 identity matrix.
+     * The identity matrix is a square matrix in which all elements of the principal diagonal are ones and
+     * all other elements are zeros. It acts as the multiplicative identity in matrix operations.
      */
     public static final Mat3x3D IDENTITY =
             new Mat3x3D(
@@ -50,16 +52,24 @@ public class Mat3x3D {
                     0, 0, 1);
     
     /**
-     * A constant for a 3x3 matrix with all elements set to zero.
+     * A constant representing a 3x3 zero matrix, where all elements are set to 0.
+     * This matrix is commonly used as an additive identity in matrix operations.
+     * All values in the matrix, from the first row to the last, are set to zero:
+     * <p>
+     * m00 = 0, m01 = 0, m02 = 0,
+     * m10 = 0, m11 = 0, m12 = 0,
+     * m20 = 0, m21 = 0, m22 = 0.
      */
     public static final Mat3x3D ZERO =
             new Mat3x3D(
                     0, 0, 0, 
                     0, 0, 0,
                     0,0, 0);
-    
+
     /**
-     * A constant for a 3x3 matrix with all elements set to one.
+     * A constant 3x3 matrix where all elements are set to 1.
+     * Represents a matrix with uniform values in all positions.
+     * This can be used as a predefined matrix for mathematical or graphical operations.
      */
     public static final Mat3x3D ONE =
             new Mat3x3D(
@@ -68,10 +78,10 @@ public class Mat3x3D {
                     1, 1, 1);
 
     /**
-     * Performs element-wise addition of this matrix with another.
-     *
-     * @param other The matrix to add to this one.
-     * @return A new {@code Mat3x3D} instance representing the sum.
+     * Adds the elements of the given matrix to this matrix and returns the resulting matrix.
+     * <p>
+     * @param other the matrix to be added to this matrix
+     * @return a new Mat3x3D instance representing the result of the addition
      */
     public Mat3x3D add(Mat3x3D other){
         return new Mat3x3D(
@@ -81,10 +91,10 @@ public class Mat3x3D {
     }
 
     /**
-     * Performs element-wise subtraction of another matrix from this one.
-     *
-     * @param other The matrix to subtract.
-     * @return A new {@code Mat3x3D} instance representing the difference.
+     * Subtracts the elements of the given matrix from this matrix and returns the resulting matrix.
+     * <p>
+     * @param other the matrix to be subtracted from this matrix
+     * @return a new Mat3x3D instance representing the result of the subtraction
      */
     public Mat3x3D sub(Mat3x3D other){
         return new Mat3x3D(
@@ -94,10 +104,10 @@ public class Mat3x3D {
     }
 
     /**
-     * Multiplies this matrix by a column vector.
-     *
-     * @param other The {@code Vec3D} to multiply with.
-     * @return A new {@code Vec3D} instance representing the transformed vector.
+     * Multiplies this 3x3 matrix with a 3D vector and returns the resulting vector.
+     * <p>
+     * @param other the 3D vector to be multiplied with this matrix
+     * @return a new Vec3D instance representing the result of the multiplication
      */
     public Vec3D mult(Vec3D other){
         return new Vec3D(
@@ -107,13 +117,11 @@ public class Mat3x3D {
     }
 
     /**
-     * Creates a 2D rotation matrix for a given angle in degrees around the z-axis.
-     * <p>
-     * Note: Rotations around the x and y axes are not implemented as they are not
-     * required for the 2D scope of this project.
-     *
-     * @param angleDeg The rotation angle in degrees.
-     * @return A new {@code Mat3x3D} representing the z-rotation.
+     * Returns a rotation matrix for the given angle in degrees around the z-axis.
+     * 
+     * x/y-rotations are not needed for our usecase
+     * @param angleDeg
+     * @return
      */
     public static Mat3x3D RotationMatrix(double angleDeg){
         double angleRad = Math.toRadians(angleDeg);
@@ -126,11 +134,9 @@ public class Mat3x3D {
     }
 
     /**
-     * Creates a 2D scale matrix from a given vector.
-     *
-     * @param scale A {@code Vec3D} containing the scale factors for the x and y axes.
-     *              The z-component of the vector is ignored.
-     * @return A new {@code Mat3x3D} representing the scaling transformation.
+     * Returns a Scale matrix for the Given vector.
+     * @param scale
+     * @return
      */
     public static Mat3x3D ScaleMatrix(Vec3D scale){
         return new Mat3x3D(
@@ -140,11 +146,10 @@ public class Mat3x3D {
     }
 
     /**
-     * Creates a 2D translation matrix from a given vector.
-     * The z-component of the vector is ignored.
-     *
-     * @param translation A {@code Vec3D} containing the translation distances for the x and y axes.
-     * @return A new {@code Mat3x3D} representing the translation.
+     * Returns a Translation matrix for the Given vector.
+     * This is 2D only, so the z-component of the vector is ignored.
+     * @param translation
+     * @return
      */
     public static Mat3x3D TranslationMatrix(Vec3D translation){
         return new Mat3x3D(
@@ -152,12 +157,14 @@ public class Mat3x3D {
                 0, 1, translation.getY(),
                 0, 0, 1);
     }
-
+    
     /**
-     * Calculates and returns the inverse of this matrix.
-     *
-     * @return A new {@code Mat3x3D} instance that is the inverse of this matrix.
-     * @throws ArithmeticException if the matrix is singular and cannot be inverted (i.e., its determinant is close to zero).
+     * Computes and returns the inverse of this 3x3 matrix. If the matrix
+     * is not invertible (i.e., its determinant is zero), an
+     * {@link ArithmeticException} is thrown.
+     * <p>
+     * @return a new Mat3x3D instance representing the inverse of this matrix
+     * @throws ArithmeticException if the matrix is not invertible
      */
     public Mat3x3D inverse(){
         double det = m00 * (m11 * m22 - m12 * m21)

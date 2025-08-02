@@ -13,11 +13,12 @@ import java.util.List;
 
 
 /**
- * @Author Scenario-Group
  * Represents an abstract trace defined by a sequence of points.
  * This class serves as a base for different types of traces (e.g., straight, curved)
  * and provides fundamental functionalities like storing points, calculating length,
  * and drawing the trace.
+ * <p>
+ * @author Scenario-Group
  */
 @Getter
 public abstract class Trace extends Transformable implements IDrawable {
@@ -27,7 +28,7 @@ public abstract class Trace extends Transformable implements IDrawable {
 
     /**
      * Constructs a Trace with a parent scene and an initial list of points.
-     *
+     * <p>
      * @param parent The scene this trace belongs to.
      * @param points The initial list of points defining the trace.
      */
@@ -39,7 +40,7 @@ public abstract class Trace extends Transformable implements IDrawable {
 
     /**
      * Constructs an empty Trace with a parent scene.
-     *
+     * <p>
      * @param parent The scene this trace belongs to.
      */
     public Trace(Scene parent) {
@@ -48,7 +49,7 @@ public abstract class Trace extends Transformable implements IDrawable {
 
     /**
      * Adds a new point to the trace and recalculates its geometry and length.
-     *
+     * <p>
      * @param point The point to add to the trace.
      */
     public void addPoint(Vec3D point) {
@@ -77,7 +78,7 @@ public abstract class Trace extends Transformable implements IDrawable {
 
     /**
      * Gets the last point of the trace.
-     *
+     * <p>
      */
     public Vec3D last(){
         return points.getLast();
@@ -91,27 +92,27 @@ public abstract class Trace extends Transformable implements IDrawable {
 
     /**
      * Abstract method for subclasses to implement the drawing of the trace's lines.
-     *
+     * <p>
      * @param g The Graphics context on which to draw.
      */
     public abstract void drawLines(Graphics g);
 
     /**
      * Abstract method to get the specific type of the trace.
-     *
+     * <p>
      * @return The {@link TraceType} of the trace.
      */
 
     /**
      * Abstract method to get the specific type of the trace.
-     *
+     * <p>
      * @return The {@link TraceType} of the trace.
      */
     public abstract TraceType getType();
 
     /**
      * Draws the individual points of the trace if debug mode is enabled.
-     *
+     * <p>
      * @param g The Graphics context on which to draw the points.
      */
     public void drawPoints(Graphics g) {
@@ -121,7 +122,7 @@ public abstract class Trace extends Transformable implements IDrawable {
     /**
      * Draws the entire trace, including its lines and, if enabled, its points.
      * It applies the trace's transformation to the Graphics context.
-     *
+     * <p>
      * @param g The Graphics context to draw on.
      */
     @Override

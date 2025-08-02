@@ -15,7 +15,7 @@ public class TitledRoundedPanel extends JPanel {
 
     /**
      * Constructs a TitledRoundedPanel with a title, border color, and inner content panel.
-     *
+     * <p>
      * @param title       The title text displayed at the top of the panel.
      * @param borderColor The color used for the border and title text.
      */

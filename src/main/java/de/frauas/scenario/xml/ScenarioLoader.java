@@ -7,10 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * @author Scenario-Group
  * A utility class for loading and parsing scenario definitions from XML files.
  * This class provides a static method to deserialize an XML resource file
  * into a {@link Scenario} object.
+ * @author Scenario
  */
 public class ScenarioLoader {
     /**
