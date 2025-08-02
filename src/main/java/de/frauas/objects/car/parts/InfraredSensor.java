@@ -9,8 +9,7 @@ import de.frauas.objects.trace.ShiftedTrace;
 import java.awt.*;
 
 /**
- * Author: Infared-Team
- *
+ * @author Infared-Team,
  * Represents a single infrared sensor that is attached to a car.
  * The sensor is positioned relative to its parent (the car)
  * and is used to determine whether it is currently located on the track.

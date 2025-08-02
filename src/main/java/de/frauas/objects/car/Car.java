@@ -168,14 +168,13 @@ public class Car extends Transformable implements IDrawable {
     }
 
     /**
-     * Author: Infrared-Team
-     * Controls the movement of the car based on infrared sensor input
+     * @author Infrared-Team
+     * Controls the movement of the car based on infrared sensor input.
      *
-     * - forward() moves the car straight ahead at a fixed speed of 300 mm/s
-     * - left() rotates the car left using a random angle between 88–143°/s
-     *   left turns are intentionally faster than right turns, based on observations
-     * - right() rotates the car right using a random angle between 30–57°/s
-     * All movement is scaled by the time step defined in CHECK_DELAY_MS
+     * forward() moves the car straight ahead at a fixed speed of 300 mm/s;
+     * left() rotates the car left using a random angle between 88–143°/s and turns are intentionally faster than right turns, based on observations;
+     * right() rotates the car right using a random angle between 30–57°/s.
+     * Every movement is scaled by the time step defined in CHECK_DELAY_MS
      */
     private void forward(){
         double dt = Settings.CAR.INFRARED.CHECK_DELAY_MS / 1000.0;
@@ -209,7 +208,7 @@ public class Car extends Transformable implements IDrawable {
     }
 
     /**
-     * Determines the car's movement based on the infrared sensor input.
+     * @author Infrared-Team, Determines the car's movement based on the infrared sensor input.
      * Left, right, forward, or finishes depending on sensor values.
      *
      * @param sensorStatus boolean array representing sensor hits (L, M, R)
@@ -309,7 +308,7 @@ public class Car extends Transformable implements IDrawable {
     }
 
     /**
-     * Author: Infrared-Team
+     * @author Infrared-Team,
      * Continuously checks the state of all infrared sensors and updates the car's
      * movement instructions accordingly.
      *

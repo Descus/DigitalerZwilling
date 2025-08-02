@@ -22,7 +22,7 @@ public class Line3D extends Transformable implements IDrawable {
     }
 
     /**
-     * Author: Infrared-Team
+     * @author Infrared-Team,
      * Determines whether a given point lies to the right of the directed line
      * segment defined by this line's start and end points.
      * The method uses the dot product between the vector from the start to the point
