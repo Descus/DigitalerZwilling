@@ -168,16 +168,20 @@ public class Car extends Transformable implements IDrawable {
     }
     
     private void forward(){
+        // Current speed is 300 mm/s based on measurements
         double dt = Settings.CAR.INFRARED.CHECK_DELAY_MS / 1000.0;
         transform.translate(forwardVector().normalize().scale(Settings.CAR.MOVEMENT.SPEED_MM_P_S * dt));
     }
     
     private void left(){
+        // Turning left varying, so we chose a random value within a interval for rotation
+        // Left turns are faster than right turns to reflect observed behavior
         double dt = Settings.CAR.INFRARED.CHECK_DELAY_MS / 1000.0;
         transform.rotate(random.nextDouble(88, 143) * dt);
     }
     
     private void right(){
+        // Turning right varying, so we chose a random value within a interval for rotation
         double dt = Settings.CAR.INFRARED.CHECK_DELAY_MS / 1000.0;
         transform.rotate(-random.nextDouble(30, 57) * dt);
     }
