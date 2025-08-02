@@ -8,31 +8,64 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+
+/**
+ * @author Scenario-Group
+ * A utility class for handling scenario definition files in XML format.
+ * It provides methods to create an object representation from a file path
+ * and to load and parse the XML file into a {@link Scenario} data transfer object (DTO).
+ */
 public class ScenarioXmlFile {
     private final String filePath;
+
+    /**
+     * Private constructor to initialize with a file path.
+     * Use the static factory methods {@code fromPath} or {@code fromExample} to create instances.
+     *
+     * @param filePath The path to the scenario XML file.
+     */
     private ScenarioXmlFile(String filePath){
         this.filePath = filePath;
     }
 
+    /**
+     * Creates a {ScenarioXmlFile} instance from a given file path string.
+     * It validates that the path is not null or empty.
+     *
+     * @param filePath The path to the XML file.
+     */
     public static ScenarioXmlFile fromPath(String filePath) throws IllegalArgumentException{
         if(filePath == null || filePath.isEmpty()){
+            // Show an error message to the user and throw an exception for the developer.
             NotificationHelper.showError("File path must not be null or empty");
             throw new IllegalArgumentException("File path must not be null or empty");
         }
         return new ScenarioXmlFile(filePath);
     }
-    
+
+    /**
+     * Creates a {ScenarioXmlFile} instance from a default example scenario file defined in the settings.
+     *
+     * @return A new instance of {@link ScenarioXmlFile} pointing to the example file.
+     * @throws IllegalArgumentException if the default scenario file cannot be found in the resources.
+     */
     public static ScenarioXmlFile fromExample(){
+        // Get the URL of the resource from the classpath.
         URL resource = ScenarioXmlFile.class.getClassLoader().getResource(Settings.SCENE.DEFAULT_SCENARIO_FILE);
         if (resource == null) {
+            // Handle cases where the example file is missing.
             NotificationHelper.showError("File not found!");
             throw new IllegalArgumentException("File not found!");
         }
+        // Create an instance using the found file's path.
         return fromPath(resource.getFile());
     }
-    
+    /**
+     * Reads the XML file from the stored file path and deserializes it into a {Scenario} object.
+     */
     public Scenario read() throws IOException {
         File file = new File(filePath);
+        // Use Jackson's XmlMapper to map the XML content to the Scenario class.
         XmlMapper xmlMapper = new XmlMapper();
         return xmlMapper.readValue(file, Scenario.class);
     }

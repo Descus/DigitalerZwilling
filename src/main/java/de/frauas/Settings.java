@@ -32,7 +32,7 @@ public class Settings {
     }
     
     public static class SCENE {
-        public static String DEFAULT_SCENARIO_FILE = "Scenario/example.xml";
+        public static String DEFAULT_SCENARIO_FILE = "Scenario/ScenarioRightTurnObstacle.xml";
         public static final Vec3D CANVAS = new Vec3D(1000, 500, 0);
         
         public static class TRACE {

@@ -8,6 +8,8 @@ import de.frauas.objects.datastructures.Vec3D;
 import java.util.ArrayList;
 
 /**
+ * Author: Scenario-Group
+ *
  * Generates the upper and lower lines based on Catmull-Rom spline interpolation
  * and offsets from the interpolated path. This method performs several steps:
  * clearing existing data (line), computing interpolated points using Catmull-Rom splines,
@@ -45,39 +47,45 @@ public class ShiftedCatmullTrace extends ShiftedTrace {
 
     @Override
     public void createLines() {
-        // Zuerst alle Daten bzw Listen leeren
+        // clear all data and lists
         upperLine.clear();
         lowerLine.clear();
 
+        // two points are required to create a line
         if (points.size() < 2) {
             return;
         }
 
-        // Interpolierte Punkte werden berechnet
+        // calculate the interpolated points for the central path
         ArrayList<Vec3D> interpolatedPoints = new ArrayList<>();
+
+        // creating virtual control points
         Vec3D firstControl = points.get(1).reflect(points.getFirst());
         Vec3D lastControl = points.get(points.size() - 2).reflect(points.getLast());
 
-        // Startpunkt muss seperat ngeholt werden, da es sonst eine Exception gibt
+        // first points of the list has to be added separatly
         interpolatedPoints.add(points.getFirst());
 
-        // Hier werden Traces interpoliert alson "Kurvig" gemacht
-        // SPLINE_INTERPOLATION_SIZE kann man in SETTINGS ÄNDERN
+        // This loop interpolates the path, making it "curvy" using the Catmull-Rom algorithm.
+        // SPLINE_INTERPOLATION_STEPS can be adjusted in the Settings class.
         for (int i = 0; i < points.size() - 1; i++) {
             Vec3D p0 = (i > 0) ? points.get(i - 1) : firstControl;
             Vec3D p1 = points.get(i);
             Vec3D p2 = points.get(i + 1);
             Vec3D p3 = (i + 2 < points.size()) ? points.get(i + 2) : lastControl;
 
+            // Generate intermediate points for a smooth curve.
             for (int j = 1; j <= Settings.SCENE.TRACE.SPLINE_INTERPOLATION_STEPS; j++) {
                 double t = (double) j / Settings.SCENE.TRACE.SPLINE_INTERPOLATION_STEPS;
                 double t2 = t * t;
                 double t3 = t2 * t;
 
+                // Catmull-Rom spline formula for the x-coordinate.
                 double x = 0.5 * ((2 * p1.getX()) +
                         (-p0.getX() + p2.getX()) * t +
                         (2 * p0.getX() - 5 * p1.getX() + 4 * p2.getX() - p3.getX()) * t2 +
                         (-p0.getX() + 3 * p1.getX() - 3 * p2.getX() + p3.getX()) * t3);
+                // Catmull-Rom spline formula for the x-coordinate.
                 double y = 0.5 * ((2 * p1.getY()) +
                         (-p0.getY() + p2.getY()) * t +
                         (2 * p0.getY() - 5 * p1.getY() + 4 * p2.getY() - p3.getY()) * t2 +
@@ -87,22 +95,24 @@ public class ShiftedCatmullTrace extends ShiftedTrace {
             }
         }
 
-        // Traces verschieben mit der interpolierten Trace
+        // Shift the interpolated trace to create upper and lower boundary lines.
         ArrayList<Vec3D> shiftedPointsUp = new ArrayList<>();
         ArrayList<Vec3D> shiftedPointsDown = new ArrayList<>();
 
         for (int i = 0; i < interpolatedPoints.size(); i++) {
             Vec3D current = interpolatedPoints.get(i);
+
+            // Determine previous and next points to calculate the tangent.
             Vec3D prev = (i > 0) ? interpolatedPoints.get(i - 1) : current;
             Vec3D next = (i < interpolatedPoints.size() - 1) ? interpolatedPoints.get(i + 1) : current;
 
-            // Tangente, direction
+            // The tangent represents the direction of the curve at the current point.
             Vec3D tangent = next.subtract(prev).normalize();
 
-            // Punkte verschieben, jeweils nach unten und oben
-            // Orthogonaler Vektor
+            // Calculate the normal vector, which is perpendicular to the tangent.
             Vec3D normal = tangent.perpendicular();
 
+            // Shift the current point outwards along the normal vector to create the upper and lower points.
             shiftedPointsUp.add(current.add(normal.scale(Settings.SCENE.TRACE.LINE_WIDTH / 2)));
             shiftedPointsDown.add(current.add(normal.scale(-Settings.SCENE.TRACE.LINE_WIDTH / 2)));
         }

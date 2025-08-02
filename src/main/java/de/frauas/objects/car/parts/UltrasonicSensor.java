@@ -193,6 +193,3 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
         return (int) calculateDistance(getWorldPosition(), getClosestPoint());
     }
 }
-
-
-

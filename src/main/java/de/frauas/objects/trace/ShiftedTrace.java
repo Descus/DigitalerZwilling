@@ -10,10 +10,23 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * @author Scenario-Group
+ * Represents a trace defined by two parallel lines (upper and lower) shifted
+ * from a central path of points. This class is used to create road-like
+ * structures with a specific width. It calculates the geometry of these parallel
+ * lines based on tangents and normals at each point of the central path.
+ * It also provides methods for drawing the trace and checking if a point
+ * lies within its boundaries.
+ */
+
 @Getter
 public class ShiftedTrace extends Trace {
 
+    //The list of line segments forming the upper boundary of the trace.
     public final List<Line3D> upperLine;
+     //The list of line segments forming the lower boundary of the trace.
     public final List<Line3D> lowerLine;
 
     public ShiftedTrace(Scene parent, ArrayList<Vec3D> points) {
@@ -30,6 +43,12 @@ public class ShiftedTrace extends Trace {
         createLines();
     }
 
+
+    /**
+     * Generates the upper and lower line segments based on the central path points.
+     * It calculates a normal for each point on the path and shifts points along this
+     * normal to create the parallel boundaries.
+     */
     @Override
     public void createLines() {
         upperLine.clear();
@@ -37,8 +56,7 @@ public class ShiftedTrace extends Trace {
 
         if (points.size() < 2) return;
 
-        // Abstand für die verschobenen Traces zur originalen Trace (15 cm nach oben und unten)
-
+        // Lists to hold the calculated points for the upper and lower trace boundaries.
         ArrayList<Vec3D> shiftedPointsUp = new ArrayList<>();
         ArrayList<Vec3D> shiftedPointsDown = new ArrayList<>();
 
@@ -47,13 +65,13 @@ public class ShiftedTrace extends Trace {
             Vec3D next = i < points.size() - 1 ? points.get(i + 1) : points.get(i);
 
 
-            // Tangente, direction
+            // Calculate the tangent, which represents the direction of the path.
             Vec3D tangent = next.subtract(prev).normalize();
 
-            // Orthogonaler Vektor: (-dy, dx)
+            // The normal is a vector perpendicular to the tangent.
             Vec3D normal = tangent.perpendicular();
 
-            // Punkte verschieben, jeweils nach unten und oben
+            // Shift the original point along the normal for the upper and lower lines.
             Vec3D shiftedUp = points.get(i).add(normal.scale(Settings.SCENE.TRACE.LINE_WIDTH / 2));
             Vec3D shiftedDown = points.get(i).add(normal.scale(-Settings.SCENE.TRACE.LINE_WIDTH / 2));
 
@@ -61,6 +79,7 @@ public class ShiftedTrace extends Trace {
             shiftedPointsDown.add(shiftedDown);
         }
 
+        // Create the line segments from the shifted points.
         for (int i = 0; i < shiftedPointsUp.size() - 1; i++) {
             upperLine.add(new Line3D(this, shiftedPointsUp.get(i), shiftedPointsUp.get(i + 1)));
             lowerLine.add(new Line3D(this, shiftedPointsDown.get(i), shiftedPointsDown.get(i + 1)));
@@ -99,14 +118,24 @@ public class ShiftedTrace extends Trace {
         return false;
     }
 
+    /**
+     * Draws the upper and lower lines of the trace on the given Graphics context.
+     *
+     * @param g The Graphics context on which to draw the lines.
+     */
+
     @Override
     public void drawLines(Graphics g) {
         upperLine.forEach(l -> l.draw(g));
         lowerLine.forEach(l -> l.draw(g));
     }
 
+    /**
+    * Returns the type of this trace.
+    *
+    */
     @Override
-    public TraceType getType() {
-        return TraceType.WORKING;
+        public TraceType getType() {
+            return TraceType.WORKING;
+        }
     }
-}
