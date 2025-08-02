@@ -73,6 +73,7 @@ public class Car extends Transformable implements IDrawable {
         ultraSonicSensors.add(new UltrasonicSensor(this, "RC", new Vec3D(0, -117.5, 0), 180, parent));
         ultraSonicSensors.add(new UltrasonicSensor(this, "RR", new Vec3D(45, -117.5, 0), SENSOR_ANGLE_REAR + 180, parent));
 
+        // Adds all the InfraredSensors for the Car with the position offset
         infraredSensors.add(new InfraredSensor(this, new Vec3D(10, 90, 0)));
         infraredSensors.add(new InfraredSensor(this, new Vec3D(0, 90, 0)));
         infraredSensors.add(new InfraredSensor(this, new Vec3D(-10, 90, 0)));
@@ -213,15 +214,19 @@ public class Car extends Transformable implements IDrawable {
         infraredStatus.add(M);
         infraredStatus.add(R);
 
+        // If only the left sensor detects the track turn left.
         if (L && !R) {
-            left(); // links abbiegen
+            left();
         } else if (!L && R) {
-            right(); // rechts abbiegen
-        } else { // wenn links und rechts false
+            // If only the right sensor detects the track turn right.
+            right();
+        } else {
+            // If only the middle sensor detects the track → drive forward.
             if (M) {
                 forward();
             } 
             else {
+                // If no sensor detects the track stop.
                 finish();
             }
         }
@@ -294,9 +299,16 @@ public class Car extends Transformable implements IDrawable {
     }
 
     /**
-     * Reads infrared sensors and updates movement instructions
-     * based on whether the car is on track.
+     * Author: Infrared-Team
+     * Continuously checks the state of all infrared sensors and updates the car's
+     * movement instructions accordingly.
      *
+     * After an initial delay, the method repeatedly checks whether each sensor
+     * detects the track using isOnTrack(), and passes the resulting
+     * sensor states to getMovementInstructionFromSensors().
+     *
+     * This method runs in its own thread and only executes updates while the
+     * car is in CarStatus.RUNNING.
      */
     private void infraredUpdate() {
         try {
@@ -305,6 +317,7 @@ public class Car extends Transformable implements IDrawable {
             while (true) {
                 if (status.get() != CarStatus.RUNNING) continue;
                 boolean[] irHit = new boolean[infraredSensors.size()];
+
                 for (int s = 0; s < infraredSensors.size(); s++) {
                     IInfraredSensor ir = infraredSensors.get(s);
                     irHit[s] = ir.isOnTrack((ShiftedTrace) trace);

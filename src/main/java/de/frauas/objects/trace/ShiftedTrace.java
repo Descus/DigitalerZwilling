@@ -70,6 +70,9 @@ public class ShiftedTrace extends Trace {
     /**
      * Checks if the given point lies between the upper, lower and left, right lines
      * of any segment in the trace.
+     * These checks are performed using the method rightOfLine(), which evaluates
+     * whether a point lies to the right of a directed line segment. If all conditions are met
+     * for any segment, the point is considered to be within the trace bounds.
      *
      * @param globalSpacePoint the point to check
      * @return true if the point is within the trace bounds, false otherwise
