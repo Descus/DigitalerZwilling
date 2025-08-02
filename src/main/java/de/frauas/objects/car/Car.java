@@ -166,22 +166,28 @@ public class Car extends Transformable implements IDrawable {
     public void finish() {
         status.set(CarStatus.FINISHED);
     }
-    
+
+    /**
+     * Author: Infrared-Team
+     * Controls the movement of the car based on infrared sensor input
+     *
+     * - forward() moves the car straight ahead at a fixed speed of 300 mm/s
+     * - left() rotates the car left using a random angle between 88–143°/s
+     *   left turns are intentionally faster than right turns, based on observations
+     * - right() rotates the car right using a random angle between 30–57°/s
+     * All movement is scaled by the time step defined in CHECK_DELAY_MS
+     */
     private void forward(){
-        // Current speed is 300 mm/s based on measurements
         double dt = Settings.CAR.INFRARED.CHECK_DELAY_MS / 1000.0;
         transform.translate(forwardVector().normalize().scale(Settings.CAR.MOVEMENT.SPEED_MM_P_S * dt));
     }
     
     private void left(){
-        // Turning left varying, so we chose a random value within a interval for rotation
-        // Left turns are faster than right turns to reflect observed behavior
         double dt = Settings.CAR.INFRARED.CHECK_DELAY_MS / 1000.0;
         transform.rotate(random.nextDouble(88, 143) * dt);
     }
     
     private void right(){
-        // Turning right varying, so we chose a random value within a interval for rotation
         double dt = Settings.CAR.INFRARED.CHECK_DELAY_MS / 1000.0;
         transform.rotate(-random.nextDouble(30, 57) * dt);
     }
