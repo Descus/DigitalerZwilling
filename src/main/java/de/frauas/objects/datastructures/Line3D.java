@@ -20,7 +20,17 @@ public class Line3D extends Transformable implements IDrawable {
     public double length(){
         return end.subtract(start).length();
     }
-    
+
+    /**
+     * Author: Infrared-Team
+     * Determines whether a given point lies to the right of the directed line
+     * segment defined by this line's start and end points.
+     * The method uses the dot product between the vector from the start to the point
+     * and a perpendicular vector to the line direction.
+     *
+     * @param point the point to check
+     * @return true if the point is to the right of the line; false otherwise
+     */
     public boolean rightOfLine(Vec3D point) {
         Vec3D ap = point.subtract(start);
         Vec3D abPerp = end.subtract(start).perpendicular();
