@@ -24,9 +24,13 @@ import java.util.List;
 @Getter
 public class ShiftedTrace extends Trace {
 
-    //The list of line segments forming the upper boundary of the trace.
+    /**
+     * The list of line segments forming the upper boundary of the trace.
+     */
     public final List<Line3D> upperLine;
-     //The list of line segments forming the lower boundary of the trace.
+    /**
+     * The list of line segments forming the lower boundary of the trace.
+     */
     public final List<Line3D> lowerLine;
 
     public ShiftedTrace(Scene parent, ArrayList<Vec3D> points) {
@@ -56,7 +60,9 @@ public class ShiftedTrace extends Trace {
 
         if (points.size() < 2) return;
 
-        // Lists to hold the calculated points for the upper and lower trace boundaries.
+        /**
+         * Lists to hold the calculated points for the upper and lower trace boundaries.
+         */
         ArrayList<Vec3D> shiftedPointsUp = new ArrayList<>();
         ArrayList<Vec3D> shiftedPointsDown = new ArrayList<>();
 
@@ -65,13 +71,19 @@ public class ShiftedTrace extends Trace {
             Vec3D next = i < points.size() - 1 ? points.get(i + 1) : points.get(i);
 
 
-            // Calculate the tangent, which represents the direction of the path.
+            /**
+             * Calculate the tangent, which represents the direction of the path.
+             */
             Vec3D tangent = next.subtract(prev).normalize();
 
-            // The normal is a vector perpendicular to the tangent.
+            /**
+             * The normal is a vector perpendicular to the tangent.
+             */
             Vec3D normal = tangent.perpendicular();
 
-            // Shift the original point along the normal for the upper and lower lines.
+            /**
+             * Shift the original point along the normal for the upper and lower lines.
+             */
             Vec3D shiftedUp = points.get(i).add(normal.scale(Settings.SCENE.TRACE.LINE_WIDTH / 2));
             Vec3D shiftedDown = points.get(i).add(normal.scale(-Settings.SCENE.TRACE.LINE_WIDTH / 2));
 
@@ -79,7 +91,9 @@ public class ShiftedTrace extends Trace {
             shiftedPointsDown.add(shiftedDown);
         }
 
-        // Create the line segments from the shifted points.
+        /**
+         * Create the line segments from the shifted points.
+         */
         for (int i = 0; i < shiftedPointsUp.size() - 1; i++) {
             upperLine.add(new Line3D(this, shiftedPointsUp.get(i), shiftedPointsUp.get(i + 1)));
             lowerLine.add(new Line3D(this, shiftedPointsDown.get(i), shiftedPointsDown.get(i + 1)));

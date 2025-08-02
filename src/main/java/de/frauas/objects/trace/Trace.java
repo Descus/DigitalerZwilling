@@ -13,6 +13,7 @@ import java.util.List;
 
 
 /**
+ * @Author Scenario-Group
  * Represents an abstract trace defined by a sequence of points.
  * This class serves as a base for different types of traces (e.g., straight, curved)
  * and provides fundamental functionalities like storing points, calculating length,
