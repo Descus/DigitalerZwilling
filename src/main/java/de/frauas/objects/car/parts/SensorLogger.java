@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 /**
- * Done by Ultrasonic Team
+ * Part of Ultrasonic Team
  *
  * The SensorLogger class implements a logging system for ultrasonic sensor measurements of a vehicle.
  *
@@ -27,7 +27,7 @@ public class SensorLogger implements ICarObserver {
     }
 
     /**
-     *Done by Ultrasonic Team
+     *Part of Ultrasonic Team
      *
      * Creates a new log file with the current timestamp.
      *
@@ -55,7 +55,7 @@ public class SensorLogger implements ICarObserver {
         }
     }
     /**
-     * Done by Ultrasonic Team
+     * Part of Ultrasonic Team
      *
      * Logs a single measurement entry to the CSV file.
      *
@@ -79,7 +79,7 @@ public class SensorLogger implements ICarObserver {
     }
 
     /**
-     * Done by Ultrasonic Team
+     * Part of Ultrasonic Team
      *
      * This method is called whenever the car updates its state.
      *

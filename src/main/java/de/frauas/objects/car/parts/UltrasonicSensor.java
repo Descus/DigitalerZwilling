@@ -12,7 +12,15 @@ import java.util.Random;
 import java.awt.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-// part of Ultrasonic Team
+/**
+ * Part of Ultrasonic Team
+ *
+ * Represents an ultrasonic sensor used to detect obstacles within a scene
+ * using ray marching and Signed Distance Fields (SDFs).
+ *
+ * The sensor casts rays in a configurable angle and distance range to detect
+ * the nearest obstacle in front of it.
+ */
 public class UltrasonicSensor extends Transformable implements IUltrasonicSensor, IDrawable {
 
     public String name;
@@ -23,8 +31,18 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
     ConcurrentLinkedQueue<Vec3D> steps = new ConcurrentLinkedQueue<>();
     ConcurrentLinkedQueue<Line3D> lines = new ConcurrentLinkedQueue<>();
 
-    //part of Ultrasonic Team
-    //Sets the Ultrasonic Sensor Position and Orientation in the Scene
+    /**
+     * Part of Ultrasonic Team
+     *
+     * Constructs a new UltrasonicSensor attached to a parent transform,
+     * placed with a given offset and rotation, and interacting with a provided SDF scene.
+     *
+     * @param parent            The parent object to which this sensor is attached.
+     * @param name              The name of the sensor.
+     * @param positionOffset    The position offset relative to the parent.
+     * @param orientationAngle  The orientation angle of the sensor.
+     * @param sceneDistanceField The SDF scene used for ray marching.
+     */
     public UltrasonicSensor(Transformable parent, String name, Vec3D positionOffset, double orientationAngle, ISdf sceneDistanceField) {
         this.name = name;
         this.sceneDistanceField = sceneDistanceField;
@@ -34,7 +52,7 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
     }
 
     /**
-     * part of Ultrasonic Team
+     * Part of Ultrasonic Team
      *
      * Detects the closest obstacle within the sensor's defined range and angle by casting rays
      * in different directions and evaluating their intersection with a Signed Distance Field (SDF).
@@ -92,8 +110,16 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
         Random r = new Random();
         return direction.scale(r.nextInt(7960,8030));
     }
-    //Part of XML Team
-    //Draws the Ultrasonic Sensors onto the car
+
+    /**
+     * Part of XML Team
+     *
+     * Renders the sensor's body on the car (top-down view).
+     * Used for visualizing the sensor itself.
+     *
+     * @param g The graphics context.
+     */
+
     @Override
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
@@ -104,8 +130,17 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
         }
         g2d.dispose();
     }
-    //part of XML Team
-    //Draws the Rays of the RayMarching Algorithm in our scene and colors Objects hit in Red. Important for testing Purposes
+
+    /**
+     * Part of XML Team
+     *
+     * Renders the ray marching visualization in the scene.
+     * Includes ray paths (blue), step points (green), and hits (red),
+     * if debug mode is enabled.
+     *
+     * @param g The graphics context.
+     */
+
     @Override
     public void drawInScene(Graphics g) {
         if (Settings.DEBUG.ENABLED) {
@@ -132,14 +167,27 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
         }
     }
 
-    /* part of the Ultrasonic Team
-    calculate the distance from the Sensor to the closest Point*/
+    /**
+     * Part of Ultrasonic Team
+     *
+     * Calculates the Euclidean distance between two 3D points.
+     *
+     * @param pos1 First position.
+     * @param pos2 Second position.
+     * @return Distance between the two positions.
+     */
     public double calculateDistance(Vec3D pos1, Vec3D pos2){
         return pos1.subtract(pos2).length();
     }
 
-    //part of the Ultrasonic Team
-    //calculates the distance to the closest Obstacle from the World Position for further calculations.
+    /**
+     * Part of Ultrasonic Team
+     *
+     * Calculates the distance from the sensor to the nearest detected obstacle.
+     *
+     * @return Distance in integer form (rounded down).
+     */
+
     @Override
     public int distanceToClosestObstacle() {
         return (int) calculateDistance(getWorldPosition(), getClosestPoint());

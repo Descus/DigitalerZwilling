@@ -235,7 +235,23 @@ public class Car extends Transformable implements IDrawable {
             }
         }
     }
-    // class to update the Ultrasonic Sensors part of the Ultrasonic Team
+    /**
+     * Part of Ultrasonic Team
+     *
+     * Continuously updates the measurements from the ultrasonic sensors.
+     *
+     * The method runs in an infinite loop and:
+     *
+     *  Collects measurements from the front and rear ultrasonic sensors</li>
+     *  Converts distances from mm to cm</li>
+     *  Stops the car if any measured distance is less than 3 cm</li>
+     *  Stores all measurements in a unified list</li>
+     *  Notifies observers of new data</li>
+     *
+     *
+     * The update frequency is controlled by sleeping for 1/6 of the last timestamp duration
+     * between each individual sensor reading to simulate realistic delays.
+     */
     private void ultrasonicUpdate() {
         while (true) {
             try {
@@ -305,6 +321,7 @@ public class Car extends Transformable implements IDrawable {
             while (true) {
                 if (status.get() != CarStatus.RUNNING) continue;
                 boolean[] irHit = new boolean[infraredSensors.size()];
+
                 for (int s = 0; s < infraredSensors.size(); s++) {
                     IInfraredSensor ir = infraredSensors.get(s);
                     irHit[s] = ir.isOnTrack((ShiftedTrace) trace);
@@ -319,7 +336,14 @@ public class Car extends Transformable implements IDrawable {
             throw new RuntimeException(e);
         }
     }
-    //part of the Ultrasonic Team creates a semi random new Time to be added onto the Timestamp later
+    /**
+     * Part of the Ultrasonic Team.
+     *
+     * Generates a semi-random time step to be added to the global timestamp later.
+     * This simulates realistic variation in sensor processing time.
+     *
+     * @return A randomly generated time interval in milliseconds.
+     */
     public static int iterateUSTimestamp() {
         return (int)(random.nextGaussian(250, 50)); // 200 - 300
     }
