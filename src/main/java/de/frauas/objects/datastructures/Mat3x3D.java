@@ -17,7 +17,7 @@ public class Mat3x3D {
 
     /**
      * Constructs a 3x3 matrix with the specified elements.
-     * <p>
+     *
      * @param m00 the element at the first row and first column of the matrix
      * @param m01 the element at the first row and second column of the matrix
      * @param m02 the element at the first row and third column of the matrix
@@ -79,7 +79,7 @@ public class Mat3x3D {
 
     /**
      * Adds the elements of the given matrix to this matrix and returns the resulting matrix.
-     * <p>
+     *
      * @param other the matrix to be added to this matrix
      * @return a new Mat3x3D instance representing the result of the addition
      */
@@ -92,7 +92,7 @@ public class Mat3x3D {
 
     /**
      * Subtracts the elements of the given matrix from this matrix and returns the resulting matrix.
-     * <p>
+     *
      * @param other the matrix to be subtracted from this matrix
      * @return a new Mat3x3D instance representing the result of the subtraction
      */
@@ -105,7 +105,7 @@ public class Mat3x3D {
 
     /**
      * Multiplies this 3x3 matrix with a 3D vector and returns the resulting vector.
-     * <p>
+     *
      * @param other the 3D vector to be multiplied with this matrix
      * @return a new Vec3D instance representing the result of the multiplication
      */
@@ -117,11 +117,11 @@ public class Mat3x3D {
     }
 
     /**
-     * Returns a rotation matrix for the given angle in degrees around the z-axis.
-     * 
-     * x/y-rotations are not needed for our usecase
-     * @param angleDeg
-     * @return
+     * Generates a 2D rotation matrix for the specified angle in degrees.
+     * The rotation matrix represents a counterclockwise rotation about the origin.
+     *
+     * @param angleDeg the angle of rotation in degrees
+     * @return a new Mat3x3D instance representing the 2D rotation matrix
      */
     public static Mat3x3D RotationMatrix(double angleDeg){
         double angleRad = Math.toRadians(angleDeg);
@@ -134,9 +134,12 @@ public class Mat3x3D {
     }
 
     /**
-     * Returns a Scale matrix for the Given vector.
-     * @param scale
-     * @return
+     * Creates a 2D scaling matrix using the specified scale factors.
+     * The x and y components of the scale vector determine the scaling
+     * factors along the x and y axes respectively. The z-component is ignored.
+     *
+     * @param scale the vector containing the scaling factors for the x and y axes
+     * @return a new Mat3x3D instance representing the scaling matrix
      */
     public static Mat3x3D ScaleMatrix(Vec3D scale){
         return new Mat3x3D(
@@ -146,10 +149,13 @@ public class Mat3x3D {
     }
 
     /**
-     * Returns a Translation matrix for the Given vector.
-     * This is 2D only, so the z-component of the vector is ignored.
-     * @param translation
-     * @return
+     * Generates a 2D translation matrix based on the specified translation vector.
+     * The resulting matrix can be used to translate points in 2D space by the
+     * given x and y offsets contained in the translation vector. The z-component
+     * of the translation vector is ignored.
+     *
+     * @param translation the vector containing the translation offsets for the x and y axes
+     * @return a new Mat3x3D instance representing the 2D translation matrix
      */
     public static Mat3x3D TranslationMatrix(Vec3D translation){
         return new Mat3x3D(
@@ -162,7 +168,7 @@ public class Mat3x3D {
      * Computes and returns the inverse of this 3x3 matrix. If the matrix
      * is not invertible (i.e., its determinant is zero), an
      * {@link ArithmeticException} is thrown.
-     * <p>
+     *
      * @return a new Mat3x3D instance representing the inverse of this matrix
      * @throws ArithmeticException if the matrix is not invertible
      */

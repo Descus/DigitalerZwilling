@@ -19,7 +19,7 @@ public class CatmullRomTrace extends RoadTrace {
     /**
      * Constructs a CatmullRomTrace with a parent scene and an initial list of control points.
      * The spline curve is generated immediately upon construction.
-     * <p>
+     *
      * @param parent The scene this trace belongs to.
      * @param points The list of control points used to generate the spline.
      */
@@ -31,7 +31,7 @@ public class CatmullRomTrace extends RoadTrace {
     /**
      * Constructs an empty CatmullRomTrace with a parent scene.
      * Points can be added later, and {@link #createLines()} must be called to generate the trace.
-     * <p>
+     *
      * @param parent The scene this trace belongs to.
      */
     public CatmullRomTrace(Scene parent) {

@@ -15,7 +15,7 @@ import java.awt.*;
  * (e.g., rotation, translation, scaling) from a parent Transformable object.
  * It also implements the IDrawable interface, enabling visual rendering
  * of the line in a 2D graphical context.
- * <p>
+ *
  * @author Scenario
  */
 @Getter
@@ -37,7 +37,7 @@ public class Line3D extends Transformable implements IDrawable {
 
     /**
      * Constructs a new Line3D object representing a directed line segment in 3D space.
-     * <p>
+     *
      * @param parent the parent object in the transformation hierarchy. It can be used to apply transformations
      *               and establish relationships between the line and other objects. Must not be null.
      * @param start  the starting point of the line segment as a 3D vector. Must not be null.
@@ -52,7 +52,7 @@ public class Line3D extends Transformable implements IDrawable {
     /**
      * Calculates the length of the directed line segment represented by this object.
      * The length is computed as the Euclidean distance between the start and end points in 3D space.
-     * <p>
+     *
      * @return the length of the line segment as a double
      */
     public double length(){
@@ -60,14 +60,14 @@ public class Line3D extends Transformable implements IDrawable {
     }
 
     /**
-     * @author Infrared-Team,
      * Determines whether a given point lies to the right of the directed line
      * segment defined by this line's start and end points.
      * The method uses the dot product between the vector from the start to the point
      * and a perpendicular vector to the line direction.
-     * <p>
+     *
      * @param point the point to check
      * @return true if the point is to the right of the line; false otherwise
+     * @author Infrared-Team
      */
     public boolean rightOfLine(Vec3D point) {
         Vec3D ap = point.subtract(start);
@@ -79,7 +79,7 @@ public class Line3D extends Transformable implements IDrawable {
      * Returns a string representation of the Line3D object.
      * The string is formatted as "start -> end", where "start" and "end"
      * are the string representations of the start and end points of the line.
-     * <p>
+     *
      * @return a string representation of this Line3D object
      */
     public String toString(){
@@ -112,7 +112,7 @@ public class Line3D extends Transformable implements IDrawable {
      * of this Line3D object within the given scene. The method utilizes the
      * specified graphical context to draw a straight line between the start
      * and end points after applying necessary transformations.
-     * <p>
+     *
      * @param g the graphical context used for rendering the line. It must not be null.
      */
     @Override

@@ -8,7 +8,7 @@ import lombok.Getter;
  * An abstract class that represents a transformable object in a 2D or 3D space.
  * Each Transformable instance can have a parent Transformable, forming a transformation hierarchy.
  * Provides methods to transform points and vectors between local and global coordinate spaces.
- * <p>
+ *
  * @author Scenario
  */
 public abstract class Transformable {
@@ -33,7 +33,7 @@ public abstract class Transformable {
      * Transforms a point from the local coordinate space of this object
      * to the global coordinate space, taking into account the transformations
      * of all parent objects in the hierarchy.
-     * <p>
+     *
      * @param point the point in the local coordinate space to be transformed to global space
      * @return the transformed point in the global coordinate space
      */
@@ -48,7 +48,7 @@ public abstract class Transformable {
      * Transforms a point from the global coordinate space to the local coordinate space
      * of this object, taking into account the transformations of all parent objects
      * in the hierarchy.
-     * <p>
+     *
      * @param point the point in the global coordinate space to be transformed to local space
      * @return the transformed point in the local coordinate space
      */
@@ -64,7 +64,7 @@ public abstract class Transformable {
      * Computes the global position of the current {@code Transformable} object by transforming
      * the local origin point ({@code Vec3D.identity}) to the global coordinate space,
      * taking into account the transformations of all parent objects in the hierarchy.
-     * <p>
+     *
      * @return the global position as a {@code Vec3D} object, representing the position
      *         of this object in the global coordinate space.
      */
@@ -77,7 +77,7 @@ public abstract class Transformable {
      * If the object has a parent, the forward vector is transformed to the global coordinate
      * space based on the parent's transformations. Otherwise, the forward vector is returned
      * in the local coordinate space.
-     * <p>
+     *
      * @return the forward vector of the object, either in the global or local coordinate space
      */
     public Vec3D forwardVector(){
@@ -91,7 +91,7 @@ public abstract class Transformable {
      * Computes the global scale of the current {@code Transformable} object by
      * recursively applying scaling transformations of its parent objects, if any.
      * If the object does not have a parent, the local scale is returned as the global scale.
-     * <p>
+     *
      * @return the global scale as a {@code Vec3D} object, representing the scale
      *         of this object in the global coordinate space.
      */

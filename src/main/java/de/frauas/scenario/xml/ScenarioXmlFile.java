@@ -16,6 +16,13 @@ import java.net.URL;
  * @author Scenario
  */
 public class ScenarioXmlFile {
+    /**
+     * The file path of the scenario XML file.
+     * This variable stores the location of the XML file that is used to define or load
+     * a {@link Scenario} instance. It is initialized during the creation of a
+     * {@link ScenarioXmlFile} instance and remains constant throughout its lifecycle.
+     * The file path must not be null or empty to ensure proper functionality.
+     */
     private final String filePath;
 
     /**
@@ -29,10 +36,13 @@ public class ScenarioXmlFile {
     }
 
     /**
-     * Creates a {ScenarioXmlFile} instance from a given file path string.
-     * It validates that the path is not null or empty.
-     * <p>
-     * @param filePath The path to the XML file.
+     * Creates a {@code ScenarioXmlFile} instance from the provided file path.
+     * Validates the input to ensure the file path is neither null nor empty.
+     * Throws an {@code IllegalArgumentException} if the validation fails.
+     *
+     * @param filePath the path to the scenario XML file
+     * @return a new instance of {@code ScenarioXmlFile} initialized with the provided file path
+     * @throws IllegalArgumentException if the provided file path is null or empty
      */
     public static ScenarioXmlFile fromPath(String filePath) throws IllegalArgumentException{
         if(filePath == null || filePath.isEmpty()){
@@ -45,7 +55,7 @@ public class ScenarioXmlFile {
 
     /**
      * Creates a {ScenarioXmlFile} instance from a default example scenario file defined in the settings.
-     * <p>
+     *
      * @return A new instance of {@link ScenarioXmlFile} pointing to the example file.
      * @throws IllegalArgumentException if the default scenario file cannot be found in the resources.
      */
@@ -61,7 +71,12 @@ public class ScenarioXmlFile {
         return fromPath(resource.getFile());
     }
     /**
-     * Reads the XML file from the stored file path and deserializes it into a {Scenario} object.
+     * Reads the scenario XML file from the specified file path and deserializes its content
+     * into a {@link Scenario} object. The method uses Jackson's {@link XmlMapper} to map
+     * the XML structure of the file to the {@code Scenario} class.
+     *
+     * @return The parsed {@link Scenario} object representing the content of the XML file.
+     * @throws IOException If an I/O error occurs while reading the XML file.
      */
     public Scenario read() throws IOException {
         File file = new File(filePath);

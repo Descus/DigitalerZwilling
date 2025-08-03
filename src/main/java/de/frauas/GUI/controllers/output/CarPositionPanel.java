@@ -21,11 +21,70 @@ import java.util.Date;
  */
 public class CarPositionPanel extends TitledRoundedPanel implements ICarObserver {
 
+    /**
+     * The {@code timer} is a {@link Timer} instance used to schedule periodic updates in the panel.
+     * It triggers actions, such as logging or UI updates, at regular intervals based on a configurable time.
+     * The interval can be adjusted dynamically during runtime, ensuring flexibility in update frequency.
+     * <p>
+     * The timer is primarily managed by methods like {@code startLoggingTimer} and {@code restartLoggingTimer},
+     * which initialize or reset the timer with a specified interval in milliseconds.
+     * <p>
+     * When active, the timer invokes periodic updates that interact with the simulation model,
+     * logging or processing the latest information from the observed car.
+     */
     private Timer timer;
+    /**
+     * Holds the most recent information about the car's state, represented
+     * as an instance of {@link CarUpdateInformation}.
+     * This variable is updated whenever a new update is available, providing
+     * access to the car's latest position, status, sensor data, and other details.
+     * Used as a central reference for displaying and logging the car's current state.
+     */
     private CarUpdateInformation latestInfo;
+    /**
+     * Represents the interval time in milliseconds for periodic actions such as logging
+     * or updates in the associated panel. This value determines the frequency at which
+     * updates occur (e.g., sensor data logging or position updates).
+     * <p>
+     * The default value for this variable is set to 1000 milliseconds (1 second).
+     * <p>
+     * Used by methods to configure and control the timer behavior for periodic functionalities.
+     */
     private int intervalTime = 1000;
+    /**
+     * A thread-safe data model that stores a list of car state updates.
+     * <p>
+     * This model is used to manage and display the log of formatted entries
+     * representing the car's state updates over time, including status, position,
+     * and timestamps.
+     * <p>
+     * The list is populated dynamically, typically during periodic updates triggered
+     * by an observer pattern or a timer event. Each update reflects the current car
+     * status formatted as a string entry.
+     * <p>
+     * This model is bound to a JList for display in the UI, enabling real-time
+     * visualization of the logged entries.
+     */
     private final DefaultListModel<String> infoModel = new DefaultListModel<>();
+    /**
+     * A graphical list component used to display real-time information updates
+     * about the car's position and status.
+     * <p>
+     * This list is backed by the {@code infoModel} data model, which dynamically
+     * updates as new information is received from the simulation. It provides a
+     * scrollable view for displaying the history of logged positions and statuses.
+     * <p>
+     * The list ensures the most recent entry is always visible by automatically
+     * scrolling to it when a new entry is added to the model.
+     */
     private final JList<String> infoList = new JList<>(infoModel);
+    /**
+     * A JTextField component used to specify the update interval time in milliseconds for sensor logging.
+     * <p>
+     * This field initializes with the default interval time value (`intervalTime`) and has a fixed column
+     * size of 5 for a compact display. The input provided in this field is parsed and validated before
+     * restarting the logging timer with the new interval.
+     */
     private final JTextField intervalField = new JTextField(String.valueOf(intervalTime), 5);
 
 

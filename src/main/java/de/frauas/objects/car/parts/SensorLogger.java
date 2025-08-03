@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * The SensorLogger class implements a logging system for ultrasonic sensor measurements of a vehicle.
  * <p>
  * Sensor values are written to a CSV file every time the car is updated.
- * <p>
+ *
  * @author Ultrasonic
  */
 

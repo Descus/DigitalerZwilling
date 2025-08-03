@@ -18,7 +18,7 @@ import java.util.ArrayList;
  * - The starting position (`startPosition`), which specifies the initial point and heading.
  * - A series of trace points (`trace`), each representing coordinates in a two-dimensional space.
  * - A list of objects (`objects`) representing entities with spatial and dimensional properties.
- * <p>
+ *
  * @author Scenario
  */
 @Getter

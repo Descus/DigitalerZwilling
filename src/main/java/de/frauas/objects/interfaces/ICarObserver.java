@@ -24,7 +24,7 @@ public interface ICarObserver {
      * whenever there are changes in the car's operational status, sensor readings, position,
      * heading, or other relevant attributes encapsulated within the provided
      * {@link CarUpdateInformation} object.
-     * <p>
+     *
      * @param info the {@link CarUpdateInformation} object containing the updated state
      *             and details about the car
      */

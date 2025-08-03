@@ -13,7 +13,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * The Main class serves as the entry point for the application, responsible for
+ * initializing the graphical user interface (GUI), setting up the layout, and
+ * integrating various panels and components to simulate a given scenario.
+ * It parses configuration data, constructs key components, and arranges them
+ * within the application window.
+ */
 public class Main {
+    /**
+     * The main method serves as the entry point for the application. It initializes
+     * the GUI, sets up the layout, and handles the creation of panels and components.
+     * The application simulates a scenario using the provided configuration files.
+     *
+     * @param args command-line arguments passed to the program
+     */
     public static void main(String[] args) {
         JFrame frame = new JFrame(Settings.WINDOW.TITLE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

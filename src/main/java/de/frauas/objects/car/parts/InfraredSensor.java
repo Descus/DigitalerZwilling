@@ -12,14 +12,14 @@ import java.awt.*;
  * Represents a single infrared sensor that is attached to a car.
  * The sensor is positioned relative to its parent (the car)
  * and is used to determine whether it is currently located on the track.
- * <p>
+ *
  * @author Infrared
  */
 public class InfraredSensor extends Transformable implements IInfraredSensor, IDrawable {
 
     /**
      * Creates a new infrared sensor with a position offset relative to its parent.
-     * <p>
+     *
      * @param parent          the parent transformable object (the car)
      * @param positionOffset  the sensor's position relative to the parent's origin
      */
@@ -32,7 +32,7 @@ public class InfraredSensor extends Transformable implements IInfraredSensor, ID
      * Determines whether the infrared sensor is currently positioned
      * on the track by checking if its world position lies between
      * the trace boundaries using isPointBetweenLines().
-     * <p>
+     *
      * @param trace the shifted trace representing the visual track
      * @return true if the sensor is on the track, false otherwise
      */
@@ -47,7 +47,7 @@ public class InfraredSensor extends Transformable implements IInfraredSensor, ID
      * The method applies the sensor's transformation settings to position
      * and orient the sensor correctly, sets its color to green, and renders
      * it as a filled oval shape at its transformed position.
-     * <p>
+     *
      * @param g the Graphics object used to perform drawing operations
      */
     @Override

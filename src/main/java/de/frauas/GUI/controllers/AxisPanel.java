@@ -22,7 +22,7 @@ public class AxisPanel extends TitledRoundedPanel implements ISimulationObserver
     /**
      * Constructor: Initializes the panel according to the simulation model.
      * It registers itself as an observer to receive update notifications.
-     * <p>
+     *
      * @param model the simulation model providing data and transformation settings
      */
     public AxisPanel(SimulationModel model){

@@ -9,7 +9,7 @@ package de.frauas.objects.car.movement;
  * left - Indicates that the object should turn or move to the left.
  * right - Indicates that the object should turn or move to the right.
  * stop - Indicates that the object should cease movement or actions.
- * <p>
+ *
  * @author Infrared
  */
 public enum MovementInstruction {

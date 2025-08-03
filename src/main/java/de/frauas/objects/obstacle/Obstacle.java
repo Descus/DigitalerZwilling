@@ -18,7 +18,7 @@ import java.awt.*;
  * transforming its position, scale, and rotation within a hierarchical coordinate space.
  * Additionally, it implements the {@code ISdf} and {@code IDrawable} interfaces, enabling
  * interaction with SDF-based methods and rendering in a graphical context.
- * <p>
+ *
  * @author Scenario
  */
 @Getter

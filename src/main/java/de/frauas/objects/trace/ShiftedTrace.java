@@ -18,7 +18,7 @@ import java.util.List;
  * lines based on tangents and normals at each point of the central path.
  * It also provides methods for drawing the trace and checking if a point
  * lies within its boundaries.
- * <p>
+ *
  * @author Scenario
  */
 

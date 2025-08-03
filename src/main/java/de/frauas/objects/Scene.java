@@ -25,7 +25,7 @@ import java.util.List;
  * It extends {@code Transformable} to allow hierarchical transformations
  * and implements {@code ISdf} and {@code IDrawable} to provide signed distance field
  * calculations and rendering functionality.
- * <p>
+ *
  * @author Scenario
  */
 @Getter
@@ -152,7 +152,7 @@ public class Scene extends Transformable implements ISdf, IDrawable {
     /**
      * Retrieves the Signed Distance Field (SDF) value for a specified position within the scene.
      * If the SDF is not baked, it computes and initializes the SDF fields before returning the value.
-     * <p>
+     *
      * @param otherPosition the position as a Vec3D object for which the SDF value is to be retrieved.
      *                      Only the x and y components of the position are used, and they are clamped
      *                      based on the scene's canvas size.
@@ -197,7 +197,7 @@ public class Scene extends Transformable implements ISdf, IDrawable {
      * Calculates the minimum Signed Distance Field (SDF) value between a specified position
      * and all obstacles present in the scene. The SDF value indicates the shortest distance
      * to any obstacle and is computed by iterating over all obstacles and evaluating their SDF values.
-     * <p>
+     *
      * @param otherPosition a Vec3D object representing the position for which the SDF value is calculated.
      *                      Only the x and y components of the position are considered in the computation.
      * @return the minimum SDF value between the provided position and all obstacles.
@@ -258,7 +258,7 @@ public class Scene extends Transformable implements ISdf, IDrawable {
     /**
      * Renders the current scene, including the trace, obstacles, car, and additional overlays, onto the provided Graphics context.
      * This method applies transformations, draws multiple scene components, and optionally displays debug overlays based on settings.
-     * <p>
+     *
      * @param g the Graphics context used for rendering the scene and all its elements.
      */
     @Override
@@ -289,7 +289,7 @@ public class Scene extends Transformable implements ISdf, IDrawable {
     /**
      * Adds an observer to the car in the scene. The observer will be notified
      * of updates and changes from the car.
-     * <p>
+     *
      * @param observer an implementation of the {@code ICarObserver} interface
      *                 that will receive update notifications from the car.
      */
@@ -301,7 +301,7 @@ public class Scene extends Transformable implements ISdf, IDrawable {
     /**
      * Removes an observer from the car in the scene. The observer will no longer
      * receive updates or notifications from the car.
-     * <p>
+     *
      * @param observer an implementation of the {@code ICarObserver} interface
      *                 that is to be removed from the car's list of observers.
      */
@@ -313,7 +313,7 @@ public class Scene extends Transformable implements ISdf, IDrawable {
     /**
      * Renders the scene by drawing its components, including the trace, obstacles, and the car,
      * onto the provided Graphics context.
-     * <p>
+     *
      * @param g the Graphics context used for rendering the scene and its elements.
      */
     @Override

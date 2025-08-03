@@ -126,7 +126,7 @@ public class UltrasonicSensor extends Transformable implements IUltrasonicSensor
      * Casts a ray in a specified direction while interacting with a Signed Distance Field (SDF)
      * until an intersection is detected or the maximum travel distance is exceeded.
      * The method iteratively increments the ray's position based on the SDF value at the current position.
-     * If an intersection with the surface is detected (SDF value <= 0), the method returns the intersected position.
+     * If an intersection with the surface is detected (SDF value {@literal <}= 0), the method returns the intersected position.
      * If no intersection occurs within the maximum permitted distance, a fallback random scaled vector is returned.
      * <p>
      * @param direction the direction vector in which the ray is to be cast.

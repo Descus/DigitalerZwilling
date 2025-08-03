@@ -18,7 +18,7 @@ public interface IInfraredSensor extends IDrawable {
      * Determines whether the infrared sensor is currently positioned on the track
      * defined by the given ShiftedTrace object. The determination is based on the
      * boundaries of the track (upper and lower lines) provided by the ShiftedTrace.
-     * <p>
+     *
      * @param trace the ShiftedTrace object representing the track boundaries to check against
      * @return true if the infrared sensor is on the track, false otherwise
      */

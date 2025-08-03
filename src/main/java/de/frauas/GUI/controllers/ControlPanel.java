@@ -16,13 +16,55 @@ import java.io.File;
  */
 public class ControlPanel extends TitledRoundedPanel implements ICarObserver {
 
+    /**
+     * Indicates whether the simulation has been started.
+     * This flag is used to track the current execution state of the simulation.
+     * It is set to true when the simulation starts and remains false otherwise.
+     */
     private boolean started = false;
+    /**
+     * Indicates whether the simulation is currently paused.
+     * This flag is used to control the behavior of the simulation,
+     * such as halting updates or animations while paused.
+     */
     private boolean paused  = false;
+    /**
+     * Represents the current working directory used by the ControlPanel class.
+     * Initialized to the "Documents/Scenarien" folder within the user's home directory.
+     * This directory may be used to read or write simulation-related files.
+     */
     private File currentDir = new File(System.getProperty("user.home") + "/Documents/Scenarien");
+    /**
+     * Stores the most recent state update information about the car, encapsulated
+     * within a CarUpdateInformation object. This variable is updated whenever the
+     * car's state changes and is used to reflect the latest car-related details,
+     * such as status, sensor data, position, and heading. It plays a key role in
+     * managing and displaying up-to-date simulation information within the ControlPanel.
+     */
     private CarUpdateInformation latestInfo;
 
+    /**
+     * Represents the "Start" button used to initiate the simulation in the control panel.
+     * This button is created with the text "Start" and is a component of the ControlPanel class.
+     * It is used to trigger actions related to starting the simulation when interacted with by the user.
+     */
     private final JButton startBtn = new JButton("Start");
+    /**
+     * Represents a button used to manage the pause state of the simulation.
+     * This button toggles the simulation between paused and running states.
+     * It is initialized with the label "Pause" and is part of the control panel
+     * that allows user interaction with the simulation.
+     */
     private final JButton pauseBtn = new JButton("Pause");
+    /**
+     * A JButton instance that provides options to configure or manage
+     * simulation scenarios. The button is labeled as "Scenario Option(s)".
+     * It is part of the ControlPanel and facilitates user interaction
+     * to select or modify simulation scenarios.
+     *
+     * This button is initialized when the ControlPanel object is created
+     * and is designed to be a final, unchangeable component of the UI.
+     */
     private final JButton scenarioBtn = new JButton("Scenario Option(s)");
 
     /**

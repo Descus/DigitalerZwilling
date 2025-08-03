@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * <p> * The car is equipped with ultrasonic and infrared sensors to navigate and detect
  * obstacles or track edges. Sensor measurements and car state are logged and
  * communicated to observers through a notification system.
- * <p>
+ *
  * @author Scenario
  */
 @Getter
@@ -234,7 +234,7 @@ public class Car extends Transformable implements IDrawable {
      * Constructs a new Car object with the provided parent scene, initial position,
      * and heading angle in degrees. The Car is initialized with multiple sensors,
      * logs data to a sensor logger, and starts threads for updating sensor data.
-     * <p>
+     *
      * @param parent The parent Scene object the Car belongs to.
      * @param position The initial position of the Car represented as a Vec3D object.
      * @param headingDegree Initial heading angle of the Car in degrees.
@@ -317,7 +317,7 @@ public class Car extends Transformable implements IDrawable {
      * Renders the car's sensors within the current scene context. This method iterates
      * through all the car's ultrasonic and infrared sensors and delegates the rendering
      * of each sensor to their respective {@code drawInScene} methods.
-     * <p>
+     *
      * @param g the Graphics context used for rendering the sensors within the scene.
      */
     @Override
@@ -330,7 +330,7 @@ public class Car extends Transformable implements IDrawable {
      * Resets the car's position and heading to the specified values, clears sensor data,
      * and reinitializes internal states to prepare for subsequent operations.
      * Notifies observers once the reset is complete.
-     * <p>
+     *
      * @param position The new position of the car represented as a Vec3D object.
      * @param headingDegree The new heading angle of the car in degrees.
      */
@@ -468,7 +468,7 @@ public class Car extends Transformable implements IDrawable {
      * to respond to changes such as sensor readings, position updates, or other events.
      * <p>
      * If the observer is already registered, it will not be added again.
-     * <p>
+     *
      * @param observer The observer to be added, implementing the {@link ICarObserver} interface.
      */
     public void addObserver(ICarObserver observer) {
@@ -481,7 +481,7 @@ public class Car extends Transformable implements IDrawable {
      * Removes the specified observer from the list of observers monitoring the car's state.
      * Once removed, the observer will no longer receive updates or notifications about
      * the car's operations, such as changes in position, sensor readings, or status changes.
-     * <p>
+     *
      * @param observer The observer to be removed, which must implement the {@link ICarObserver} interface.
      */
     public void removeObserver(ICarObserver observer) {
@@ -491,7 +491,7 @@ public class Car extends Transformable implements IDrawable {
     /**
      * Determines the car's movement based on the infrared sensor input.
      * Left, right, forward, or finishes depending on sensor values.
-     * <p>
+     *
      * @param sensorStatus boolean array representing sensor hits (L, M, R)
      * @author Infrared-Team
      */
@@ -527,12 +527,11 @@ public class Car extends Transformable implements IDrawable {
      * <p>
      * The method runs in an infinite loop and:
      * <p>
-     *  Collects measurements from the front and rear ultrasonic sensors</li>
-     *  Converts distances from mm to cm</li>
-     *  Stops the car if any measured distance is less than 3 cm</li>
-     *  Stores all measurements in a unified list</li>
-     *  Notifies observers of new data</li>
-     * <p>
+     *  Collects measurements from the front and rear ultrasonic sensors
+     *  Converts distances from mm to cm
+     *  Stops the car if any measured distance is less than 3 cm
+     *  Stores all measurements in a unified list
+     *  Notifies observers of new data
      * <p>
      * The update frequency is controlled by sleeping for 1/6 of the last timestamp duration
      * between each individual sensor reading to simulate realistic delays.
@@ -626,7 +625,7 @@ public class Car extends Transformable implements IDrawable {
      * <p>
      * Generates a semi-random time step to be added to the global timestamp later.
      * This simulates realistic variation in sensor processing time.
-     * <p>
+     *
      * @return A randomly generated time interval in milliseconds.
      * @author Ultrasonic
      */

@@ -19,17 +19,27 @@ import java.awt.geom.RoundRectangle2D;
  *     <li>Custom title with consistent font and color</li>
  *     <li>Padding and layout pre-configured</li>
  * </ul>
- * </p>
  *
  * @author GUI-Group
  */
 public class TitledRoundedPanel extends JPanel {
-    private String title;
-    private Color borderColor;
+    /**
+     * Represents the title of the TitledRoundedPanel.
+     * This title is displayed at the top of the panel and
+     * serves as a descriptive label for the panel's content.
+     */
+    private final String title;
+    /**
+     * The borderColor variable defines the color used to render the rounded border
+     * and title text of the TitledRoundedPanel. It determines the visual appearance
+     * of the panel's outline and provides a way to customize its aesthetics
+     * independently of the panel's content.
+     */
+    private final Color borderColor;
 
     /**
      * Constructs a TitledRoundedPanel with a title, border color, and inner content panel.
-     * <p>
+     *
      * @param title       The title text displayed at the top of the panel.
      * @param borderColor The color used for the border and title text.
      */

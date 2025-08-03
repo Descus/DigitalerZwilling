@@ -21,7 +21,7 @@ import lombok.Getter;
  * <p>
  * The class is designed for serialization and deserialization from XML data using annotations
  * from the Jackson XML library.
- * <p>
+ *
  * @author Scenario
  */
 @Getter
