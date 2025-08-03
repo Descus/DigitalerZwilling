@@ -10,7 +10,6 @@ import java.net.URL;
 
 
 /**
-
  * A utility class for handling scenario definition files in XML format.
  * It provides methods to create an object representation from a file path
  * and to load and parse the XML file into a {@link Scenario} data transfer object (DTO).

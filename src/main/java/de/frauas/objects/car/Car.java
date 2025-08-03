@@ -44,13 +44,13 @@ public class Car extends Transformable implements IDrawable {
      * This constant is specifically relevant to the Ultrasonic Sensors Team's operations
      * to derive accurate measurements based on the time-of-flight principle.
      */
-    // sets the angles at which the Ultrasonic Sensors are mounted on the vehicle (part of the Ultrasonic Team)
     public static final int SPEED_OF_SOUND = 34;
     /**
      * Represents the default sensor angle for the front-right (FR) ultrasonic sensor in the car.
      * This constant defines the angular position of the front-right sensor relative
      * to the car's forward direction in degrees.
-     * <p>     * The sensor angle is used to configure and calculate the field of view
+     * <p>
+     * The sensor angle is used to configure and calculate the field of view
      * or operational orientation for the front-right ultrasonic sensor during sensor
      * data collection and obstacle detection.
      */
@@ -65,11 +65,12 @@ public class Car extends Transformable implements IDrawable {
      * Represents the predefined angle in degrees for the rear sensor of the car.
      * This constant is used to configure the orientation of the rear-facing
      * sensor relative to the car's frame of reference.
-     * <p>     * Value: 35
-     * <p>     * The sensor orientation is critical in determining the detection field
+     * <p>
+     * The sensor orientation is critical in determining the detection field
      * and ensuring correct positioning for accurate obstacle measurement and
      * avoidance using the car's ultrasonic sensing system.
-     * <p>     * This configuration is typically utilized in scenarios where rearward
+     * <p>
+     * This configuration is typically utilized in scenarios where rearward
      * obstacle detection plays a role in the car's navigation or operational logic.
      */
     public static final int SENSOR_ANGLE_REAR = 35;
@@ -79,10 +80,12 @@ public class Car extends Transformable implements IDrawable {
      * throughout the Car class. This provides a consistent source of randomness
      * for various calculations or decisions, such as setting random angles or
      * delays in the car's behavior.
-     * <p>     * This field is marked as final to ensure that the same Random instance is
+     * <p>
+     * This field is marked as final to ensure that the same Random instance is
      * used, avoiding potential issues related to instantiating multiple objects
      * unnecessarily and ensuring consistent random behavior within the class.
-     * <p>     * Being static allows this instance to be shared across all instances of
+     * <p>
+     * Being static allows this instance to be shared across all instances of
      * the Car class, reducing memory usage and ensuring that the same random
      * sequence is utilized for reproducibility in certain scenarios.
      */
@@ -92,11 +95,13 @@ public class Car extends Transformable implements IDrawable {
      * A list of ultrasonic sensors used by the car to measure distances to obstacles.
      * This list is populated with instances of {@link IUltrasonicSensor}, which provide
      * distance measurements through their respective methods.
-     * <p>     * The ultrasonic sensors are integral to the car's navigation system, enabling it
+     * <p>
+     * The ultrasonic sensors are integral to the car's navigation system, enabling it
      * to detect potential obstacles in its environment. Each sensor operates
      * independently and provides distance measurements that are utilized together
      * to determine the car's movement and avoid collisions.
-     * <p>     * This variable is managed internally by the car's various systems, and its data
+     * <p>
+     * This variable is managed internally by the car's various systems, and its data
      * is processed in real-time to update the car’s state and notify associated observers.
      */
     private final List<IUltrasonicSensor> ultraSonicSensors = new ArrayList<>();
@@ -104,20 +109,24 @@ public class Car extends Transformable implements IDrawable {
      * A list of infrared sensors installed on the car, used to detect the position of the car
      * relative to the track. These sensors implement the {@link IInfraredSensor} interface and
      * are responsible for providing input data to the car's movement control logic.
-     * <p>     * The infrared sensors continuously monitor the track's boundaries and communicate
+     * <p>
+     * The infrared sensors continuously monitor the track's boundaries and communicate
      * state information (such as whether they are "on track") to assist in determining
      * appropriate movement instructions (e.g., forward, left, right).
-     * <p>     * This list is immutable and initialized as an empty list, ensuring that the car always
+     * <p>
+     * This list is immutable and initialized as an empty list, ensuring that the car always
      * maintains a constant and predetermined set of sensors throughout its lifecycle.
      */
     private final List<IInfraredSensor> infraredSensors = new ArrayList<>();
     /**
      * A thread-safe queue for managing observers subscribed to the car's updates.
-     * <p>     * This queue stores instances of {@link ICarObserver} and is used to implement
+     * <p>
+     * This queue stores instances of {@link ICarObserver} and is used to implement
      * the observer pattern for the {@code Car} class. Observers in this queue
      * are notified of updates, such as changes in the car's state, sensor readings,
      * or position, through the {@code notifyObservers()} method in the {@code Car} class.
-     * <p>     * The use of a {@code ConcurrentLinkedQueue} ensures safe handling of observer
+     * <p>
+     * The use of a {@code ConcurrentLinkedQueue} ensures safe handling of observer
      * subscriptions and notifications in a multi-threaded environment, as multiple
      * threads may add or remove observers or notify them concurrently.
      */
@@ -125,12 +134,14 @@ public class Car extends Transformable implements IDrawable {
 
     /**
      * A thread-safe queue to store the latest six ultrasonic sensor measurements.
-     * <p>     * Each element in the queue represents a measurement recorded by the sensors,
+     * <p>
+     * Each element in the queue represents a measurement recorded by the sensors,
      * initialized with default values of 0. The queue is used to maintain a consistent
      * history of six measurements, which can be utilized for sensor data processing and
      * other functionalities. The queue's size and structure ensure that it can accommodate
      * the required number of recorded measurements without manual resizing or modifications.
-     * <p>     * Note: This queue is initialized with six placeholder integers (0, 0, 0, 0, 0, 0)
+     * <p>
+     * Note: This queue is initialized with six placeholder integers (0, 0, 0, 0, 0, 0)
      * to provide a default structure for immediate access and manipulation.
      */
     private final ConcurrentLinkedQueue<Integer> measurements = new ConcurrentLinkedQueue<>(Arrays.asList(0, 0, 0, 0, 0, 0));
@@ -138,12 +149,15 @@ public class Car extends Transformable implements IDrawable {
      * A thread-safe queue storing the current state of the car’s infrared sensors.
      * Each element in the queue represents the status of one infrared sensor,
      * where {@code true} indicates that the sensor detects the track, and {@code false} means it does not.
-     * <p>     * The queue holds the statuses of three sensors as follows:
+     * <p>
+     * The queue holds the statuses of three sensors as follows:
      * - Left sensor
      * - Middle sensor
      * - Right sensor
-     * <p>     * When initialized, all sensors are set to {@code false}, indicating no track detection.
-     * <p>     * This variable is used to continuously track and update the state of the infrared sensors
+     * <p>
+     * When initialized, all sensors are set to {@code false}, indicating no track detection.
+     * <p>
+     * This variable is used to continuously track and update the state of the infrared sensors
      * as part of the car's movement control logic.
      */
     private final ConcurrentLinkedQueue<Boolean> infraredStatus = new ConcurrentLinkedQueue<>(Arrays.asList(false, false, false));
@@ -163,7 +177,7 @@ public class Car extends Transformable implements IDrawable {
      * a historical record of car sensor activity.
      * <p>     * The `sensorLogger` is a key utility within the Car class and plays a central
      * role in ensuring data consistency for the vehicle's ultrasonic measurement system.
-     * <p>     */
+     */
     private final SensorLogger sensorLogger;
     /**
      * Represents the trace of the car's movement over time.
@@ -174,9 +188,11 @@ public class Car extends Transformable implements IDrawable {
      * fundamental functionalities like storing points, calculating lengths, and
      * rendering traces. This specific trace may represent different types of paths depending
      * on the subclass of Trace used in the implementation.
-     * <p>     * The trace is utilized within the {@link Car} class to track and visualize its movements,
+     * <p>
+     * The trace is utilized within the {@link Car} class to track and visualize its movements,
      * enabling better control, monitoring, or debugging of the car's behavior in the scene.
-     * <p>     * <strong>Key Functionality:</strong>
+     * <p>
+     * <strong>Key Functionality:</strong>
      * - Captures points representing the car's trajectory.
      * - Computes the total distance covered by the car.
      * - Provides visual representation of the car's path.
@@ -200,11 +216,12 @@ public class Car extends Transformable implements IDrawable {
      * The value is randomly initialized within a specific range
      * and can be used in conjunction with time-based processes
      * such as sensor updates or car movement control logic.
-     * <p>     */
+     */
     private int currentTimeMillis = random.nextInt(4395, 4403);
     /**
      * Represents the state of the car's reset operation.
-     * <p>     * This flag is used to indicate whether the car is currently in the process of
+     * <p>
+     * This flag is used to indicate whether the car is currently in the process of
      * being reset or reinitialized. It ensures that related processes or actions
      * do not interfere with the reset operation. When set to true, the car is in
      * the resetting state, and when set to false, the reset process has completed
@@ -217,7 +234,8 @@ public class Car extends Transformable implements IDrawable {
      * Constructs a new Car object with the provided parent scene, initial position,
      * and heading angle in degrees. The Car is initialized with multiple sensors,
      * logs data to a sensor logger, and starts threads for updating sensor data.
-     * <p>     * @param parent The parent Scene object the Car belongs to.
+     * <p>
+     * @param parent The parent Scene object the Car belongs to.
      * @param position The initial position of the Car represented as a Vec3D object.
      * @param headingDegree Initial heading angle of the Car in degrees.
      */
@@ -258,7 +276,8 @@ public class Car extends Transformable implements IDrawable {
      * provided {@code Graphics} object. This method applies the car's current
      * transformation, draws its bounding box and debug points if enabled, and
      * delegates the drawing of sensors to their respective draw methods.
-     * <p>     * @param g The {@code Graphics} context used for rendering the car and its components.
+     * <p>
+     * @param g The {@code Graphics} context used for rendering the car and its components.
      */
     @Override
     public void draw(Graphics g) {
@@ -298,7 +317,8 @@ public class Car extends Transformable implements IDrawable {
      * Renders the car's sensors within the current scene context. This method iterates
      * through all the car's ultrasonic and infrared sensors and delegates the rendering
      * of each sensor to their respective {@code drawInScene} methods.
-     * <p>     * @param g the Graphics context used for rendering the sensors within the scene.
+     * <p>
+     * @param g the Graphics context used for rendering the sensors within the scene.
      */
     @Override
     public void drawInScene(Graphics g) {
@@ -310,7 +330,8 @@ public class Car extends Transformable implements IDrawable {
      * Resets the car's position and heading to the specified values, clears sensor data,
      * and reinitializes internal states to prepare for subsequent operations.
      * Notifies observers once the reset is complete.
-     * <p>     * @param position The new position of the car represented as a Vec3D object.
+     * <p>
+     * @param position The new position of the car represented as a Vec3D object.
      * @param headingDegree The new heading angle of the car in degrees.
      */
     public void reset(Vec3D position, double headingDegree) {
@@ -368,13 +389,14 @@ public class Car extends Transformable implements IDrawable {
     }
 
     /**
-     * @author Infrared-Team
      * Controls the movement of the car based on infrared sensor input.
      * <p>
      * forward() moves the car straight ahead at a fixed speed of 300 mm/s;
      * left() rotates the car left using a random angle between 88–143°/s and turns are intentionally faster than right turns, based on observations;
      * right() rotates the car right using a random angle between 30–57°/s.
-     * Every movement is scaled by the time step defined in CHECK_DELAY_MS
+     * Every movement is scaled by the time step defined in {@code CHECK_DELAY_MS}
+     *
+     * @author Infrared-Team
      */
     private void forward(){
         double dt = Settings.CAR.INFRARED.CHECK_DELAY_MS / 1000.0;
@@ -383,13 +405,17 @@ public class Car extends Transformable implements IDrawable {
 
     /**
      * Rotates the car to the left by a random angle, scaled by the time step.
-     * <p>     * The rotation angle is determined by generating a random value between 88°/s
+     * <p>
+     * The rotation angle is determined by generating a random value between 88°/s
      * and 143°/s and is then scaled by the time step calculated from the infrared
-     * sensor check delay in milliseconds (CHECK_DELAY_MS). This method simulates
+     * sensor check delay in milliseconds {@code CHECK_DELAY_MS}. This method simulates
      * the turning of the car based on the infrared sensor input.
-     * <p>     * The higher range of rotation angles for left turns supports faster and
+     * <p>
+     * The higher range of rotation angles for left turns supports faster and
      * sharper adjustments compared to right turns, enhancing maneuverability
      * in certain scenarios.
+     *
+     * @author Infrared-Team
      */
     private void left(){
         double dt = Settings.CAR.INFRARED.CHECK_DELAY_MS / 1000.0;
@@ -398,12 +424,16 @@ public class Car extends Transformable implements IDrawable {
 
     /**
      * Rotates the car to the right by a random angle, scaled by a time step.
-     * <p>     * The rotation angle is determined by generating a random value between 30°/s
+     * <p>
+     * The rotation angle is determined by generating a random value between 30°/s
      * and 57°/s. This value is then scaled by the time step, which is derived from
-     * the infrared sensor check delay (`CHECK_DELAY_MS`).
-     * <p>     * This method simulates the car's rightward turning movement based on the
+     * the infrared sensor check delay {@code CHECK_DELAY_MS}.
+     * <p>
+     * This method simulates the car's rightward turning movement based on the
      * input from the infrared sensor system, facilitating smoother adjustments
      * when navigating.
+     *
+     * @author Infrared-Team
      */
     private void right(){
         double dt = Settings.CAR.INFRARED.CHECK_DELAY_MS / 1000.0;
@@ -412,14 +442,17 @@ public class Car extends Transformable implements IDrawable {
 
     /**
      * Notifies all registered observers of updates to the car's state.
-     * <p>     * This method iterates through the list of observers and invokes their
+     * <p>
+     * This method iterates through the list of observers and invokes their
      * {@code onCarUpdate} method, passing a {@link CarUpdateInformation} object
      * containing the relevant updates. The updates include the car's current
      * operational status, sensor measurements, infrared sensor states, position,
      * rotation, and timestamp.
-     * <p>     * Observers are typically components that need to react to changes in the car's
+     * <p>
+     * Observers are typically components that need to react to changes in the car's
      * state, such as simulation components, control systems, or logging utilities.
-     * <p>     * The notification mechanism ensures that all observers remain in sync with
+     * <p>
+     * The notification mechanism ensures that all observers remain in sync with
      * the car's state at the time the method is called.
      */
     private void notifyObservers() {
@@ -433,8 +466,10 @@ public class Car extends Transformable implements IDrawable {
      * in its operational attributes. The observer must implement the {@link ICarObserver}
      * interface. Observers are notified when the car's state is updated, enabling them
      * to respond to changes such as sensor readings, position updates, or other events.
-     * <p>     * If the observer is already registered, it will not be added again.
-     * <p>     * @param observer The observer to be added, implementing the {@link ICarObserver} interface.
+     * <p>
+     * If the observer is already registered, it will not be added again.
+     * <p>
+     * @param observer The observer to be added, implementing the {@link ICarObserver} interface.
      */
     public void addObserver(ICarObserver observer) {
         if (!carObservers.contains(observer)) {
@@ -446,17 +481,19 @@ public class Car extends Transformable implements IDrawable {
      * Removes the specified observer from the list of observers monitoring the car's state.
      * Once removed, the observer will no longer receive updates or notifications about
      * the car's operations, such as changes in position, sensor readings, or status changes.
-     * <p>     * @param observer The observer to be removed, which must implement the {@link ICarObserver} interface.
+     * <p>
+     * @param observer The observer to be removed, which must implement the {@link ICarObserver} interface.
      */
     public void removeObserver(ICarObserver observer) {
         carObservers.remove(observer);
     }
 
     /**
-     * @author Infrared-Team, Determines the car's movement based on the infrared sensor input.
+     * Determines the car's movement based on the infrared sensor input.
      * Left, right, forward, or finishes depending on sensor values.
      * <p>
      * @param sensorStatus boolean array representing sensor hits (L, M, R)
+     * @author Infrared-Team
      */
     private void getMovementInstructionFromSensors(boolean[] sensorStatus) {
         boolean L = sensorStatus[2];
@@ -486,8 +523,6 @@ public class Car extends Transformable implements IDrawable {
         }
     }
     /**
-     * Part of Ultrasonic Team
-     * <p>
      * Continuously updates the measurements from the ultrasonic sensors.
      * <p>
      * The method runs in an infinite loop and:
@@ -501,6 +536,8 @@ public class Car extends Transformable implements IDrawable {
      * <p>
      * The update frequency is controlled by sleeping for 1/6 of the last timestamp duration
      * between each individual sensor reading to simulate realistic delays.
+     *
+     * @author Ultrasonic
      */
     private void ultrasonicUpdate() {
         while (true) {
@@ -553,7 +590,6 @@ public class Car extends Transformable implements IDrawable {
     }
 
     /**
-     * @author Infrared-Team,
      * Continuously checks the state of all infrared sensors and updates the car's
      * movement instructions accordingly.
      * <p>
@@ -563,6 +599,7 @@ public class Car extends Transformable implements IDrawable {
      * <p>
      * This method runs in its own thread and only executes updates while the
      * car is in CarStatus.RUNNING.
+     * @author Infrared-Team
      */
     private void infraredUpdate() {
         try {
@@ -580,19 +617,18 @@ public class Car extends Transformable implements IDrawable {
                 getMovementInstructionFromSensors(irHit);
 
                 Thread.sleep(Settings.CAR.INFRARED.CHECK_DELAY_MS);
-
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
     /**
-     * Part of the Ultrasonic Team.
      * <p>
      * Generates a semi-random time step to be added to the global timestamp later.
      * This simulates realistic variation in sensor processing time.
      * <p>
      * @return A randomly generated time interval in milliseconds.
+     * @author Ultrasonic
      */
     public static int iterateUSTimestamp() {
         return (int)(random.nextGaussian(250, 50)); // 200 - 300
