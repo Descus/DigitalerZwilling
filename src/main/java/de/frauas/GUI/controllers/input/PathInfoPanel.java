@@ -8,9 +8,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * {@code PathInfoPanel} is a GUI component that displays pairwise segment distances
+ * between consecutive points on the car's path (trace).
+ * It helps visualize and understand the route the vehicle will take.
+ *
+ * @author GUI-Group
+ */
 public class PathInfoPanel extends TitledRoundedPanel {
     private final DefaultListModel<String> listModel = new DefaultListModel<>();
 
+    /**
+     * Constructs a new PathInfoPanel and initializes it using data
+     * from the provided SimulationModel.
+     *
+     * @param model the simulation model containing the path (trace) data
+     */
     public PathInfoPanel(SimulationModel model) {
         super("Path Information", Color.BLACK);
 
@@ -22,6 +35,12 @@ public class PathInfoPanel extends TitledRoundedPanel {
         init(model);
     }
 
+    /**
+     * Populates the list with distances between each consecutive pair of trace points
+     * from the simulation model. Each entry shows two points and the distance between them.
+     *
+     * @param model the simulation model providing the trace (path) data
+     */
     private void init(SimulationModel model) {
         listModel.clear();
         List<Vec3D> points = model.getScene().getTrace().getPoints(); 

@@ -9,10 +9,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-
+/**
+ * ObstacleInfoPanel is a GUI component that displays detailed information
+ * about all obstacles present in the simulation scene. It shows start and end coordinates
+ * as well as the height of each obstacle.
+ *
+ * @author GUI-Group
+ */
 public class ObstacleInfoPanel extends TitledRoundedPanel {
     private final DefaultListModel<String> listModel = new DefaultListModel<>();
 
+    /**
+     * Constructs a new ObstacleInfoPanel using the provided simulation model.
+     * Retrieves and displays obstacle information from the current scene.
+     *
+     * @param model the simulation model containing the scene and obstacle data
+     */
     public ObstacleInfoPanel(SimulationModel model) {
         super("Obstacle Information", Color.BLACK);
 
@@ -24,6 +36,12 @@ public class ObstacleInfoPanel extends TitledRoundedPanel {
         init(model);
     }
 
+    /**
+     * Populates the list with obstacle information including start and end positions,
+     * and obstacle height, extracted from the SimulationModel's scene.
+     *
+     * @param model the simulation model providing access to the obstacle list
+     */
     private void init(SimulationModel model) {
         listModel.clear();
         List<Obstacle> obstacles = model.getScene().getObstacles();
