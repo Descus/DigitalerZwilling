@@ -6,8 +6,22 @@ import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
 /**
- * A customized Swing JPanel that draws rounded-border container with a title around another panel.
- * This is useful for creating sections in a GUI with a consistent and styled appearance.
+ * TitledRoundedPanel is a custom Swing panel that draws a rounded rectangle
+ * around its content and displays a styled title at the top.
+ * <p>
+ * It enhances visual grouping of components in the GUI by providing consistent
+ * spacing, padding, and aesthetics across all panels that extend this class.
+ * </p>
+ *
+ * <p>Features:
+ * <ul>
+ *     <li>Rounded border with anti-aliasing</li>
+ *     <li>Custom title with consistent font and color</li>
+ *     <li>Padding and layout pre-configured</li>
+ * </ul>
+ * </p>
+ *
+ * @author GUI-Group
  */
 public class TitledRoundedPanel extends JPanel {
     private String title;
@@ -28,6 +42,11 @@ public class TitledRoundedPanel extends JPanel {
         setBorder(new EmptyBorder(30, padding, padding, padding));
     }
 
+    /**
+     * Paints the rounded border and title over the panel.
+     *
+     * @param g the Graphics context used for drawing
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -55,6 +74,11 @@ public class TitledRoundedPanel extends JPanel {
         drawTitle(g);
     }
 
+    /**
+     * Draws the title text at the top-left corner of the panel.
+     *
+     * @param g the Graphics context used for drawing
+     */
     private void drawTitle(Graphics g) {
         if (title == null || title.isEmpty()) return;
         Font font = new Font("Monospaced", Font.BOLD, 18);

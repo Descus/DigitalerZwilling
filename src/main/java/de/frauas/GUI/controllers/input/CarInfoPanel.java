@@ -6,9 +6,22 @@ import de.frauas.Settings;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * CarInfoPanel is a GUI component that displays basic information
+ * about the car, including its dimensions, starting position, and heading.
+ * It extends TitledRoundedPanel for styled rendering.
+ *
+ * @author GUI-Group
+ */
 public class CarInfoPanel extends TitledRoundedPanel {
     private final DefaultListModel<String> listModel = new DefaultListModel<>();
 
+    /**
+     * Constructs a CarInfoPanel and initializes it with car information
+     * from the given simulation model.
+     *
+     * @param model from the SimulationModel containing the car and scene data
+     */
     public CarInfoPanel(SimulationModel model) {
         super("Car Information", Color.BLACK);
 
@@ -20,6 +33,12 @@ public class CarInfoPanel extends TitledRoundedPanel {
         init(model);
     }
 
+    /**
+     * Initializes the information list with details about the car such as
+     * its length, width, start position, and initial heading.
+     *
+     * @param model from SimulationModel containing the car and scene data
+     */
     private void init(SimulationModel model) {
         listModel.clear();
         String carLength = String.format(

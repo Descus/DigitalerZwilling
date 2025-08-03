@@ -13,6 +13,8 @@ import java.awt.*;
  * <p>
  * This panel extends TitledRoundedPanel and implements SimulationObserver
  * to enable real-time updates.
+ *
+ * @author GUI-Group
  */
 public class AxisPanel extends TitledRoundedPanel implements ISimulationObserver {
     private final SimulationModel model;
@@ -37,6 +39,11 @@ public class AxisPanel extends TitledRoundedPanel implements ISimulationObserver
         repaint();
     }
 
+    /**
+     * Custom painting method to draw the axes, ticks, labels, and the entire simulation scene.
+     *
+     * @param g the Graphics context used for drawing
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

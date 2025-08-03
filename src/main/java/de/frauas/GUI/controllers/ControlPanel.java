@@ -11,6 +11,8 @@ import java.io.File;
 /**
  * ControlPanel is a panel that contains buttons to control
  * the simulation flow: start/reset, pause/continue, and load scenario files.
+ *
+ * @author GUI-Group
  */
 public class ControlPanel extends TitledRoundedPanel implements ICarObserver {
 
@@ -23,6 +25,12 @@ public class ControlPanel extends TitledRoundedPanel implements ICarObserver {
     private final JButton pauseBtn = new JButton("Pause");
     private final JButton scenarioBtn = new JButton("Scenario Option(s)");
 
+    /**
+     * Constructs a new ControlPanel and wires it to the provided simulation model.
+     * Initializes the layout, buttons, and behavior for controlling simulation execution.
+     *
+     * @param model the simulation model this panel controls
+     */
     public ControlPanel(SimulationModel model) {
         super("Control Panel",Color.GREEN);
         setLayout(new FlowLayout());
@@ -90,7 +98,11 @@ public class ControlPanel extends TitledRoundedPanel implements ICarObserver {
         model.getScene().addObserverToCar(this);
     }
 
-
+    /**
+     * Reacts to car updates. If the car has finished, disables the pause button.
+     *
+     * @param info the updated car information
+     */
     @Override
     public void onCarUpdate(CarUpdateInformation info) {
         if ("FINISHED".equals(String.valueOf(info.getStatus()))) {

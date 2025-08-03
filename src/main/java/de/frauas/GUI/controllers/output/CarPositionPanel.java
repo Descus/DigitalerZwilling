@@ -16,18 +16,25 @@ import java.util.Date;
  * CarPositionPanel displays real-time updates about the car's
  * current position,status, and a timestamp.
  * It logs this data periodically in a list.
+ *
+ * @author GUI-Group
  */
 public class CarPositionPanel extends TitledRoundedPanel implements ICarObserver {
 
     private Timer timer;
     private CarUpdateInformation latestInfo;
     private int intervalTime = 1000;
-
     private final DefaultListModel<String> infoModel = new DefaultListModel<>();
     private final JList<String> infoList = new JList<>(infoModel);
     private final JTextField intervalField = new JTextField(String.valueOf(intervalTime), 5);
 
 
+    /**
+     * Constructs a CarPositionPanel which registers itself as a car observer
+     * and begins logging car state at a configurable time interval.
+     *
+     * @param simulModel the simulation model from which the scene and car updates are observed
+     */
     public CarPositionPanel(SimulationModel simulModel) {
         super("Time - Status - Position",Color.BLACK);
         setLayout(new BorderLayout(5, 5));
@@ -63,6 +70,11 @@ public class CarPositionPanel extends TitledRoundedPanel implements ICarObserver
         simulModel.getScene().addObserverToCar(this);
     }
 
+    /**
+     * Starts or restarts the logging timer with the specified interval in milliseconds.
+     *
+     * @param intervalMs update interval in milliseconds
+     */
     private void startLoggingTimer(int intervalMs) {
         if (timer != null && timer.isRunning()) {
             timer.stop();
@@ -72,7 +84,11 @@ public class CarPositionPanel extends TitledRoundedPanel implements ICarObserver
         timer.setInitialDelay(0);
         timer.start();
     }
-
+    /**
+     * Restarts the logging timer. Shortcut for {@link #startLoggingTimer(int)}.
+     *
+     * @param intervalMs the new interval time in milliseconds
+     */
     private void restartLoggingTimer(int intervalMs) {
         startLoggingTimer(intervalMs);
     }
@@ -105,7 +121,11 @@ public class CarPositionPanel extends TitledRoundedPanel implements ICarObserver
             infoList.ensureIndexIsVisible(last);
         }
     }
-
+    /**
+     * Receives car updates through the observer pattern.
+     *
+     * @param info the latest CarUpdateInformation containing car position and status
+     */
     @Override
     public void onCarUpdate(CarUpdateInformation info) {
         latestInfo = info;
