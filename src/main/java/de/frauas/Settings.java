@@ -153,7 +153,7 @@ public class Settings {
          * a visual scene, including object positions, trace points, and
          * other scene-specific settings.
          */
-        public static String DEFAULT_SCENARIO_FILE = "Scenario/ScenarioRightTurnObstacle.xml";
+        public static String DEFAULT_SCENARIO_FILE = "Scenario/example.xml";
         /**
          * Defines the dimensions of the canvas used for visual rendering
          * and scene representation in the application.
@@ -220,7 +220,7 @@ public class Settings {
          * indicators) will be displayed in the graphical interface. When set to
          * {@code false}, these rays will be hidden.
          */
-        public static final boolean SHOW_RAYS = true;
+        public static final boolean SHOW_RAYS = false;
         /**
          * A boolean constant that determines whether the map overlay feature
          * is displayed in the graphical interface during debugging. When set to {@code true},
